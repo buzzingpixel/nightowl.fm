@@ -42,6 +42,8 @@ parameters:
         - %currentWorkingDirectory%/tests/Cli/Commands/Queue/RunQueueCommandTest.php
         - %currentWorkingDirectory%/src/Context/Queue/Services/RunItem.php
         - %currentWorkingDirectory%/src/Context/Queue/Services/FetchHelper.php
+        - %currentWorkingDirectory%/tests/Context/Email/Adapters/MandrillSendMailAdapterTest.php
+        - %currentWorkingDirectory%/src/Context/Email/Adapters/MandrillSendMailAdapter.php
 
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon

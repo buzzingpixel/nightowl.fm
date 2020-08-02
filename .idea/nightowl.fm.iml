@@ -38,9 +38,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/filp/whoops" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofphp/php-cs-fixer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/hassankhan/config" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/html2text/html2text" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/intervention/httpauth" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/homestead" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/flysystem" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/mandrill/mandrill" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/marcusschwarz/lesserphp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/michelf/php-smartypants" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />

@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use App\Cli\Services\CliQuestionService;
+use App\Context\Email\Adapters\MandrillSendMailAdapter;
+use App\Context\Email\Configuration\MandrillConfig;
+use App\Context\Email\Interfaces\SendMailAdapter;
 use App\Http\AppMiddleware\StaticCacheMiddleware;
 use buzzingpixel\cookieapi\CookieApi;
 use buzzingpixel\cookieapi\interfaces\CookieApiInterface;
@@ -114,6 +117,18 @@ return [
 
         return $logger;
     },
+    Mandrill::class => static function (): Mandrill {
+        return new Mandrill(getenv('MANDRILL_API_KEY'));
+    },
+    MandrillConfig::class => static function (): MandrillConfig {
+        $conf = new MandrillConfig();
+
+        $conf->fromEmail = (string) getenv('WEBMASTER_EMAIL_ADDRESS');
+
+        $conf->fromName = (string) getenv('WEBMASTER_NAME');
+
+        return $conf;
+    },
     OrderedListenerProvider::class => static function (ContainerInterface $di): OrderedListenerProvider {
         return new OrderedListenerProvider($di);
     },
@@ -166,6 +181,7 @@ return [
         }
     },
     ResponseFactoryInterface::class => autowire(ResponseFactory::class),
+    SendMailAdapter::class => autowire(MandrillSendMailAdapter::class),
     StaticCacheMiddleware::class => autowire(StaticCacheMiddleware::class)
         ->constructorParameter(
             'staticCacheEnabled',
