@@ -13,6 +13,7 @@ export default () => {
             `${appDir}/assets/css/*/**.css`,
             `${appDir}/assets/css/*/**.pcss`,
             `!${appDir}/assets/css/lib/*/**`,
+            `!${appDir}/assets/css/Original.pcss`,
         ],
         formatter: 'string',
     })

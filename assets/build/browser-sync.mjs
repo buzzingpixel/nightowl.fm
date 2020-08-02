@@ -34,7 +34,7 @@ export default () => {
         ghostMode: false,
         injectChanges: false,
         notify: false,
-        proxy: 'https://buzzingpixel.localtest.me:26087/',
+        proxy: 'https://nightowl.localtest.me:27152/',
         reloadDelay: 100,
         reloadDebounce: 100,
         reloadThrottle: 1000,
