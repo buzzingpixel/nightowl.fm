@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Nightowl PHP" pattern="file[nightowl.fm]:config//*||file[nightowl.fm]:src//*||file:public/index.php||file:public/cli.php||file[nightowl.fm]:tests//*" />
+</component>

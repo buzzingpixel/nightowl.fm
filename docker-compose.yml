@@ -1,0 +1,62 @@
+version: '3.7'
+
+services:
+  web:
+    env_file: .env
+    build:
+      context: ./
+      dockerfile: ./docker/web/Dockerfile
+    container_name: nightowl-web
+    ports:
+      - 27152:27152
+    environment:
+      HOSTNAME: nightowl-web
+    networks:
+      default:
+        aliases:
+          - nightowl.localtest.me
+          - nightowl.fm
+          - www.nightowl.fm
+
+  php:
+    env_file: .env
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+    container_name: nightowl-php
+    environment:
+      HOSTNAME: nightowl-php
+      COMPOSER_HOME: /composer-home-volume
+    volumes:
+      - composer-home-volume:/composer-home-volume
+    networks:
+      default:
+        aliases:
+          - nightowl-php
+
+  db:
+    env_file: .env
+    build:
+      context: ./
+      dockerfile: ./docker/db/Dockerfile
+    container_name: nightowl-db
+    environment:
+      HOSTNAME: nightowl-db
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    ports:
+      - 27153:5432
+    networks:
+      default:
+        aliases:
+          - nightowl-db
+
+volumes:
+  composer-home-volume:
+  db-volume:
+
+networks:
+  default:
+    external:
+      name: proxy

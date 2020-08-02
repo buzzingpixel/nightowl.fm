@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Nightowl JS" pattern="file[nightowl.fm]:assets/js//*" />
+</component>

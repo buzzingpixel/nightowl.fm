@@ -1,0 +1,65 @@
+#------------------------------------
+# Project
+#------------------------------------
+
+# ...custom project excludes
+
+
+
+
+
+#------------------------------------
+# Tools
+#------------------------------------
+
+.php_cs.cache
+.phpunit.result.cache
+/.env
+/*-workspace
+/node_modules
+/*.sublime-*
+/vendor/*
+
+# As recommended by JetBrains for committing project-level configuration
+# https://intellij-support.jetbrains.com/hc/en-us/articles/206544839-How-to-manage-projects-under-Version-Control-Systems
+
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/usage.statistics.xml
+/.idea/dictionaries
+/.idea/shelf*
+
+# Custom addtion for .idea ignore
+/.idea/httpRequests/*
+
+
+
+
+
+#------------------------------------
+# System
+#------------------------------------
+
+.cache
+.DS_Store
+.tmp
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+error_log
+Thumbs.db
+
+
+
+
+
+#------------------------------------
+# Gitkeep
+#------------------------------------
+
+!.gitkeep

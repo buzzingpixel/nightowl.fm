@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      target: prod
+    restart: always
+    volumes:
+      - log-volume:/var/log
+
+  php:
+    build:
+      target: prod
+    restart: always
+    volumes:
+      - log-volume:/var/log
+
+  db:
+    restart: always
+    volumes:
+      - log-volume:/var/log
+
+volumes:
+  log-volume:

@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      target: dev
+    volumes:
+      - .:/opt/project:delegated
+
+  php:
+    build:
+      target: dev
+    volumes:
+      - .:/opt/project:delegated
+      - ./docker/php/xdebug-linux.ini:/usr/local/etc/php/conf.d/xdebug.ini
+
+  db:
+    volumes:
+      - .:/opt/project:delegated
