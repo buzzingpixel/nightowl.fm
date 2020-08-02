@@ -135,6 +135,7 @@
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/laravel/homestead" />
       <path value="$PROJECT_DIR$/vendor/abraham/twitteroauth" />
+      <path value="$PROJECT_DIR$/vendor/buzzingpixel/cookie-api" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

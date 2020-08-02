@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use App\Cli\Services\CliQuestionService;
 use App\Http\AppMiddleware\StaticCacheMiddleware;
+use buzzingpixel\cookieapi\CookieApi;
+use buzzingpixel\cookieapi\interfaces\CookieApiInterface;
+use buzzingpixel\cookieapi\PhpFunctions;
 use Config\Factories\TwigEnvironmentFactory;
 use Config\Logging\Logger;
 use Crell\Tukio\Dispatcher;
@@ -38,6 +41,14 @@ return [
             $di->get(ConsoleOutput::class)
         );
     },
+    CookieApi::class => static function (): CookieApi {
+        return new CookieApi(
+            $_COOKIE,
+            (string) getenv('ENCRYPTION_KEY'),
+            new PhpFunctions()
+        );
+    },
+    CookieApiInterface::class => get(CookieApi::class),
     CsrfGuard::class => static function (ContainerInterface $di): CsrfGuard {
         $responseFactory = $di->get(ResponseFactoryInterface::class);
         $guard           = new CsrfGuard($responseFactory);
@@ -113,7 +124,7 @@ return [
             /** @phpstan-ignore-next-line */
             $dbPort = getenv('DB_PORT') ?: '5432';
             /** @phpstan-ignore-next-line */
-            $dbName = getenv('DB_NAME') ?: 'buzzingpixel';
+            $dbName = getenv('DB_NAME') ?: 'nightowl';
 
             $dsn = [
                 'pgsql:host=' . $dbHost,

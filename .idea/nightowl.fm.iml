@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/abraham/twitteroauth" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/amp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/byte-stream" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/cookie-api" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-config-collector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-di" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-dumper" />

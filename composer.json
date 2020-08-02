@@ -13,6 +13,7 @@
     "require": {
         "php": "^7.4",
         "ext-PDO": "^7.3",
+        "buzzingpixel/cookie-api": "^2.0",
         "buzzingpixel/twig-smartypants": "^1.0",
         "buzzingpixel/twig-switch": "^1.0",
         "buzzingpixel/twig-widont": "^1.0",
