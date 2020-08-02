@@ -6,6 +6,8 @@ use App\Cli\Services\CliQuestionService;
 use App\Context\Email\Adapters\MandrillSendMailAdapter;
 use App\Context\Email\Configuration\MandrillConfig;
 use App\Context\Email\Interfaces\SendMailAdapter;
+use App\Context\Users\Models\LoggedInUser;
+use App\Context\Users\UserApi;
 use App\Http\AppMiddleware\StaticCacheMiddleware;
 use buzzingpixel\cookieapi\CookieApi;
 use buzzingpixel\cookieapi\interfaces\CookieApiInterface;
@@ -81,6 +83,11 @@ return [
             '/',
         ),
     ListenerProviderInterface::class => get(OrderedListenerProvider::class),
+    LoggedInUser::class => static function (ContainerInterface $di): LoggedInUser {
+        return new LoggedInUser(
+            $di->get(UserApi::class)->fetchLoggedInUser()
+        );
+    },
     LoggerInterface::class => static function (): LoggerInterface {
         /** @phpstan-ignore-next-line */
         $logLevel = getenv('LOG_LEVEL') ?: 'DEBUG';

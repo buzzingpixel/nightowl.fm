@@ -24,29 +24,5 @@ class UserRecord extends Record
 
     public string $timezone = '';
 
-    public string $first_name = '';
-
-    public string $last_name = '';
-
-    public string $display_name = '';
-
-    public string $billing_name = '';
-
-    public string $billing_company = '';
-
-    public string $billing_phone = '';
-
-    public string $billing_country = '';
-
-    public string $billing_address = '';
-
-    public string $billing_city = '';
-
-    public string $billing_state_abbr = '';
-
-    public string $billing_postal_code = '';
-
     public string $created_at = '';
-
-    public string $stripe_id = '';
 }

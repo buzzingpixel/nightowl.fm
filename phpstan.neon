@@ -44,6 +44,9 @@ parameters:
         - %currentWorkingDirectory%/src/Context/Queue/Services/FetchHelper.php
         - %currentWorkingDirectory%/tests/Context/Email/Adapters/MandrillSendMailAdapterTest.php
         - %currentWorkingDirectory%/src/Context/Email/Adapters/MandrillSendMailAdapter.php
+        - %currentWorkingDirectory%/tests/Context/Users/Services/ValidateUserPasswordTest.php
+        - %currentWorkingDirectory%/tests/Context/Users/Services/SaveUserTest.php
+        - %currentWorkingDirectory%/tests/Context/Users/Services/GeneratePasswordResetTokenTest.php
 
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
