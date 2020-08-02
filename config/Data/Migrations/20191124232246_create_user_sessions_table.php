@@ -8,33 +8,23 @@ use Phinx\Migration\AbstractMigration;
 // phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace, Squiz.Classes.ClassFileName.NoMatch
 
 /** @noinspection PhpIllegalPsrClassPathInspection */
-class CreateAnalyticsTable extends AbstractMigration
+class CreateUserSessionsTable extends AbstractMigration
 {
     public function change(): void
     {
-        $this->table('analytics', [
+        $this->table('user_sessions', [
             'id' => false,
             'primary_key' => ['id'],
         ])
             ->addColumn('id', 'uuid')
-            ->addColumn('cookie_id', 'uuid')
+            ->addColumn('user_id', 'uuid',)
             ->addColumn(
-                'user_id',
-                'uuid',
-                ['null' => true]
+                'created_at',
+                'datetime',
+                ['timezone' => true]
             )
             ->addColumn(
-                'logged_in_on_page_load',
-                'boolean',
-                ['default' => 0],
-            )
-            ->addColumn(
-                'uri',
-                'string',
-                ['default' => '']
-            )
-            ->addColumn(
-                'date',
+                'last_touched_at',
                 'datetime',
                 ['timezone' => true]
             )
