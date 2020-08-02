@@ -16,7 +16,7 @@ class CreateScheduleTrackingTable extends AbstractMigration
             'id' => false,
             'primary_key' => ['id'],
         ])
-            ->addColumn('id', 'uuid',)
+            ->addColumn('id', 'uuid')
             ->addColumn('class', 'text')
             ->addColumn('is_running', 'boolean', [
                 'default' => 0,

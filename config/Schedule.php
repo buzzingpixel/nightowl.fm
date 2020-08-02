@@ -31,7 +31,7 @@ class Schedule
         }
 
         $directory = new RecursiveDirectoryIterator(
-            dirname(__DIR__) . '/src/Schedule/Runners'
+            dirname(__DIR__) . '/src/Context/Schedule/Runners'
         );
 
         $iterator = new RecursiveIteratorIterator($directory);

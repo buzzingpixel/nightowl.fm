@@ -24,6 +24,24 @@ parameters:
         - %currentWorkingDirectory%/src/Context/Schedule/Services/TranslateRunEvery.php
         - %currentWorkingDirectory%/tests/Schedule/Models/ScheduleItemModelTest.php
         - %currentWorkingDirectory%/config/Abstractions/SimpleModel.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/RunItemTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/RestartQueuesByIdsTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/RestartAllStalledItemsTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/PostRunTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/MarkStoppedDueToErrorTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/MarkItemAsStartedTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/FetchStalledItemsTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/FetchNextQueueItemTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/FetchIncompleteTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/FetchHelperTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/DeleteQueuesByIdsTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/ClearAllStalledItemsTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Services/AddToQueueTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/QueueApiTest.php
+        - %currentWorkingDirectory%/tests/Context/Queue/Models/QueueModelTest.php
+        - %currentWorkingDirectory%/tests/Cli/Commands/Queue/RunQueueCommandTest.php
+        - %currentWorkingDirectory%/src/Context/Queue/Services/RunItem.php
+        - %currentWorkingDirectory%/src/Context/Queue/Services/FetchHelper.php
 
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon

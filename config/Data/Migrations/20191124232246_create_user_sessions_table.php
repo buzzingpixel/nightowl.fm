@@ -17,7 +17,7 @@ class CreateUserSessionsTable extends AbstractMigration
             'primary_key' => ['id'],
         ])
             ->addColumn('id', 'uuid')
-            ->addColumn('user_id', 'uuid',)
+            ->addColumn('user_id', 'uuid')
             ->addColumn(
                 'created_at',
                 'datetime',
