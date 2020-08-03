@@ -6,19 +6,15 @@ namespace App\Http\Response\Error;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Twig\Environment as TwigEnvironment;
 
 class Error404Responder
 {
     private ResponseFactoryInterface $responseFactory;
-    private TwigEnvironment $twigEnvironment;
 
     public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        TwigEnvironment $twigEnvironment
+        ResponseFactoryInterface $responseFactory
     ) {
         $this->responseFactory = $responseFactory;
-        $this->twigEnvironment = $twigEnvironment;
     }
 
     public function __invoke(): ResponseInterface

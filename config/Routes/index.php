@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Response\Home\HomeAction;
 use Slim\App;
 
 return static function (App $app): void {
@@ -10,4 +11,6 @@ return static function (App $app): void {
 
     // Match anything except a forward slash
     // {slug:[^\/]+}
+
+    $app->get('/', HomeAction::class);
 };

@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Config;
 
-use Crell\Tukio\OrderedListenerProvider;
-
 class RegisterEventListeners
 {
-    private OrderedListenerProvider $provider;
+    // private OrderedListenerProvider $provider;
+    //
+    // public function __construct(OrderedListenerProvider $provider)
+    // {
+    //     $this->provider = $provider;
+    // }
 
-    public function __construct(OrderedListenerProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
+    /**
+     * TODO: Add subscribers here
+     */
     public function __invoke(): void
     {
         // Method names in subscriber classes must start with `on`. The event

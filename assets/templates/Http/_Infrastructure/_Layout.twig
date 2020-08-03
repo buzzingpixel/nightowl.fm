@@ -1,0 +1,88 @@
+{# @var \Config\General GeneralConfig #}
+{# @var \App\Http\Models\Meta meta #}
+
+<!doctype html>
+<html lang="en">
+<head>
+    {# Reporting for duty #}
+    <title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ GeneralConfig.siteName }}</title>
+
+    {% if meta.description %}
+    <meta name="description" content="{{ meta.description }}">
+    {% endif %}
+
+    {% if meta.noIndex %}
+    <meta name="robots" content="noindex">
+    {% endif %}
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# Icons #}
+    <link rel="apple-touch-icon" href="/touchicon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    {# OG Metadata #}
+    <meta property="og:type" content="{{ meta.ogType }}">
+    <meta property="og:site_name" content="{{ GeneralConfig.siteName }}">
+    <meta property="og:title" content="{{ meta.title|default(GeneralConfig.siteName) }}" itemprop="name">
+    {% if meta.description %}
+    <meta property="og:description" content="{{ meta.description }}">
+    {% endif %}
+    <meta property="og:image" content="{{ meta.shareImage }}" itemprop="image">
+    {{ block('ogData') ?? '' }}
+
+    {# Twitter card data #}
+    <meta name="twitter:card" content="{{ meta.twitterCardType }}">
+    {% if GeneralConfig.twitterHandle %}
+    <meta name="twitter:site" content="@{{ GeneralConfig.twitterHandle }}">
+    {% endif %}
+    <meta name="twitter:title" content="{{ meta.title|default(GeneralConfig.siteName) }}">
+    {% if meta.description %}
+    <meta property="twitter:description" content="{{ meta.description }}">
+    {% endif %}
+    <meta property="twitter:image" content="{{ meta.shareImage }}">
+    {{ block('twitterData') ?? '' }}
+
+    {# CSS #}
+    {% for stylesheet in GeneralConfig.stylesheets %}
+    <link rel="stylesheet" href="{{ stylesheet }}">
+    {% endfor %}
+    <link
+        rel="stylesheet"
+        href="/assets/css/{{ readJson(GeneralConfig.rootPath ~ '/public/assets/css/manifest.json')['style.min.css'] }}"
+    >
+
+    {# Get any queued up scripts and styles for head #}
+    {{ block('endHead') ?? '' }}
+</head>
+<body>
+    {# Get any queued up body items #}
+    {{ block('beginBody') ?? '' }}
+
+    <div class="site-wrapper">
+        {{ block('content') }}
+    </div>
+
+    {# Output JS from globals #}
+    {% for jsFile in GeneralConfig.jsFiles %}
+        {% if jsFile is iterable %}
+            <script
+                src="{{ jsFile.src }}"
+                {% if jsFile['type'] is defined %}
+                    type="{{ jsFile.type }}"
+                {% endif %}
+            ></script>
+        {% else %}
+            <script src="{{ jsFile }}"></script>
+        {% endif %}
+    {% endfor %}
+    <script
+        src="/assets/js/{{ readJson(GeneralConfig.rootPath ~ '/public/assets/js/manifest.json')['main.js'] }}"
+        type="module"
+    ></script>
+
+    {# Get any queued up body items #}
+    {{ block('endBody') ?? '' }}
+</body>

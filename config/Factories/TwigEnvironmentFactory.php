@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Config\Factories;
 
 use App\Templating\TwigExtensions\PhpFunctions;
+use App\Templating\TwigExtensions\ReadJson;
 use App\Templating\TwigExtensions\TemplateExists;
 use App\Templating\TwigExtensions\TwigSlimFlashMessages;
 use BuzzingPixel\TwigDumper\TwigDumper;
@@ -65,6 +66,8 @@ class TwigEnvironmentFactory
         $twig->addExtension($di->get(SwitchTwigExtension::class));
 
         $twig->addExtension(new TemplateExists($twig->getLoader()));
+
+        $twig->addExtension($di->get(ReadJson::class));
 
         if (session_id() !== '') {
             $twigMessages = $di->get(TwigSlimFlashMessages::class);

@@ -16,6 +16,7 @@ use function getenv;
  * @method string pathToStorageDirectory()
  * @method string siteUrl()
  * @method string siteName()
+ * @method string twitterHandle()
  * @method array stylesheets()
  * @method array jsFiles()
  */
@@ -59,6 +60,8 @@ class General extends SimpleModel
     public static string $siteUrl = 'https://www.nightowl.fm';
 
     public static string $siteName = 'NightOwl';
+
+    public static string $twitterHandle = 'nightowlfm';
 
     /** @var string[] */
     public static array $stylesheets = [];

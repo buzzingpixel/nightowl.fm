@@ -14,7 +14,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Factory\ResponseFactory;
-use Twig\Environment as TwigEnvironment;
 
 class HttpErrorActionTest extends TestCase
 {
@@ -26,29 +25,20 @@ class HttpErrorActionTest extends TestCase
     /** @var MockObject&LoggerInterface */
     private $logger;
 
-    /** @var MockObject&TwigEnvironment */
-    private $twigEnvironment;
-
     protected function setUp(): void
     {
         $this->logger = $this->createMock(
             LoggerInterface::class
         );
 
-        $this->twigEnvironment = $this->createMock(
-            TwigEnvironment::class,
-        );
-
         $responseFactory = new ResponseFactory();
 
         $this->action = new HttpErrorAction(
             new Error404Responder(
-                $responseFactory,
-                $this->twigEnvironment
+                $responseFactory
             ),
             new Error500Responder(
                 $responseFactory,
-                $this->twigEnvironment,
                 $this->logger
             )
         );
