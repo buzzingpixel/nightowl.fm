@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Config\Factories;
 
+use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\PhpFunctions;
 use App\Templating\TwigExtensions\ReadJson;
 use App\Templating\TwigExtensions\TemplateExists;
@@ -76,6 +77,8 @@ class TwigEnvironmentFactory
 
             $postMessage = $twigMessages->getMessages('PostMessage');
         }
+
+        $twig->addExtension($di->get(FetchLoggedInUser::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
 

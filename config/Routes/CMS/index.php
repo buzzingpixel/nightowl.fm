@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Response\CMS\IndexAction;
+use App\Http\Response\CMS\Shows\ShowsAction;
 use App\Http\RouteMiddleware\RequireLogInAction;
 use Config\NoOp;
 use Slim\App;
@@ -14,5 +15,7 @@ return static function (App $app): void {
         $this->get(NoOp::class)();
 
         $r->get('', IndexAction::class);
+
+        $r->get('/shows', ShowsAction::class);
     })->add(RequireLogInAction::class);
 };
