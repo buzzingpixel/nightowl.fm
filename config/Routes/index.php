@@ -13,4 +13,8 @@ return static function (App $app): void {
     // {slug:[^\/]+}
 
     $app->get('/', HomeAction::class);
+
+    // CMS
+    $cmsRoutes = require __DIR__ . '/CMS/index.php';
+    $cmsRoutes($app);
 };

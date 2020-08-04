@@ -57,13 +57,20 @@
     {# Get any queued up scripts and styles for head #}
     {{ block('endHead') ?? '' }}
 </head>
-<body>
+<body
+    data-app-info='{
+        "csrf": {
+            "tokenNameKey": "{!--csrfTokenNameKey--}",
+            "tokenName": "{!--csrfTokenName--}",
+            "tokenValueKey": "{!--csrfTokenValueKey--}",
+            "tokenValue": "{!--csrfTokenValue--}"
+        }
+    }'
+>
     {# Get any queued up body items #}
     {{ block('beginBody') ?? '' }}
 
-    <div class="site-wrapper">
-        {{ block('content') }}
-    </div>
+    {{ block('content') }}
 
     {# Output JS from globals #}
     {% for jsFile in GeneralConfig.jsFiles %}
