@@ -23,6 +23,9 @@ class NewShowAction
 
         $meta->title = 'Create New Show';
 
-        return $this->responder->__invoke($meta);
+        return $this->responder->__invoke(
+            $meta,
+            'Create New Show',
+        );
     }
 }

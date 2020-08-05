@@ -22,13 +22,18 @@ class NewShowResponder
         $this->twig            = $twig;
     }
 
-    public function __invoke(Meta $meta): ResponseInterface
-    {
+    public function __invoke(
+        Meta $meta,
+        string $pageTitle
+    ): ResponseInterface {
         $response = $this->responseFactory->createResponse();
 
         $response->getBody()->write($this->twig->render(
             'Http/CMS/Shows/NewShow.twig',
-            ['meta' => $meta]
+            [
+                'meta' => $meta,
+                'title' => $pageTitle,
+            ]
         ));
 
         return $response;
