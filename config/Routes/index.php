@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Response\Home\HomeAction;
 use App\Http\Response\LogIn\PostLogInAction;
+use App\Http\Response\LogIn\PostLogOutAction;
 use Slim\App;
 
 return static function (App $app): void {
@@ -16,6 +17,8 @@ return static function (App $app): void {
     $app->get('/', HomeAction::class);
 
     $app->post('/log-in', PostLogInAction::class);
+
+    $app->post('/log-out', PostLogOutAction::class);
 
     // CMS
     $cmsRoutes = require __DIR__ . '/CMS/index.php';
