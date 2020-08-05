@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Templating\TwigExtensions;
 
-use App\Context\Users\Models\UserModel;
-use App\Context\Users\UserApi;
+use App\Context\Users\Models\LoggedInUser;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class FetchLoggedInUser extends AbstractExtension
 {
-    private UserApi $userApi;
+    private LoggedInUser $loggedInUser;
 
-    public function __construct(UserApi $userApi)
+    public function __construct(LoggedInUser $loggedInUser)
     {
-        $this->userApi = $userApi;
+        $this->loggedInUser = $loggedInUser;
     }
 
     /**
@@ -34,8 +33,8 @@ class FetchLoggedInUser extends AbstractExtension
         );
     }
 
-    public function fetchLoggedInUser(): ?UserModel
+    public function fetchLoggedInUser(): ?LoggedInUser
     {
-        return $this->userApi->fetchLoggedInUser();
+        return $this->loggedInUser;
     }
 }

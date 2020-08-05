@@ -3,7 +3,7 @@
 {% set title = title ?? '' %}
 
 {# @var \App\Context\Users\Models\UserModel user #}
-{% set user = fetchLoggedInUser() %}
+{% set user = fetchLoggedInUser().model %}
 
 {% set nav = [
     {

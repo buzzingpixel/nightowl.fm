@@ -12,9 +12,18 @@ class LoggedInUser
 {
     private UserModel $model;
 
-    public function __construct(UserModel $model)
+    public function __construct(?UserModel $model)
     {
+        if ($model === null) {
+            return;
+        }
+
         $this->model = $model;
+    }
+
+    public function hasModel(): bool
+    {
+        return isset($this->model);
     }
 
     public function model(): UserModel

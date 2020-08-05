@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\Shows;
+namespace App\Http\Response\CMS\Shows\NewShow;
 
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment as TwigEnvironment;
 
-class ShowsResponder
+class NewShowResponder
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
@@ -22,20 +22,14 @@ class ShowsResponder
         $this->twig            = $twig;
     }
 
-    public function __invoke(): ResponseInterface
+    public function __invoke(Meta $meta): ResponseInterface
     {
         $response = $this->responseFactory->createResponse();
 
-        $meta = new Meta();
-
-        $meta->title = 'Shows | CMS';
-
-        $response->getBody()->write(
-            $this->twig->render(
-                'Http/CMS/Shows/Index.twig',
-                ['meta' => $meta],
-            ),
-        );
+        $response->getBody()->write($this->twig->render(
+            'Http/CMS/Shows/NewShow.twig',
+            ['meta' => $meta]
+        ));
 
         return $response;
     }

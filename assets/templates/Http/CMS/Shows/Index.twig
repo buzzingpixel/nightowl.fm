@@ -1,0 +1,17 @@
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{# @var \App\Context\Users\Models\UserModel user #}
+{% set user = fetchLoggedInUser().model %}
+
+{% block cmsContent %}
+    {% if user.isAdmin %}
+        <div class="mb-10 text-right">
+            <span class="inline-flex rounded-md shadow-sm">
+                <a href="/cms/shows/new" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white hover:text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+                    New Show
+                </a>
+            </span>
+        </div>
+    {% endif %}
+    <div class="border-4 border-dashed border-gray-200 rounded-lg h-96 text-center pt-40">todo</div>
+{% endblock %}
