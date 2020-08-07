@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="12">
+          <list size="13">
             <item index="0" class="java.lang.String" itemvalue="x-data" />
             <item index="1" class="java.lang.String" itemvalue="x-show" />
             <item index="2" class="java.lang.String" itemvalue="x-transition:enter" />
@@ -17,6 +17,7 @@
             <item index="9" class="java.lang.String" itemvalue=":class" />
             <item index="10" class="java.lang.String" itemvalue="@keydown.space.prevent" />
             <item index="11" class="java.lang.String" itemvalue=":aria-checked" />
+            <item index="12" class="java.lang.String" itemvalue="ref" />
           </list>
         </value>
       </option>
@@ -30,7 +31,7 @@
       <option name="CODING_STANDARD" value="Custom" />
       <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/phpcs.xml" />
       <option name="INSTALLED_PATHS" value="$PROJECT_DIR$/vendor/doctrine/coding-standard/lib/Doctrine" />
-      <option name="EXTENSIONS" value="php,js,css,inc" />
+      <option name="EXTENSIONS" value="php" />
     </inspection_tool>
     <inspection_tool class="PhpDocMissingReturnTagInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="SKIP_ON_PRESENT_TYPE_HINT" value="true" />
