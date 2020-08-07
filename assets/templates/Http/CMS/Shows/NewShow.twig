@@ -3,6 +3,7 @@
 {% block cmsContent %}
     <form>
         <div>
+
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-1 {#sm:border-t sm:border-gray-200 sm:pt-5#}">
                 <label for="title" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Title
@@ -13,6 +14,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="slug" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Slug
@@ -23,6 +25,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-6 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="cover_photo" class="block text-sm leading-5 font-medium text-gray-700 sm:mt-px sm:pt-2">
                     Show Art
@@ -46,6 +49,75 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mt-6 sm:mt-5 sm:border-t sm:border-gray-200 sm:pt-5">
+                <div role="group" aria-labelledby="label-notifications">
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
+                        <div>
+                            <div class="text-base leading-6 font-medium text-gray-900 sm:text-sm sm:leading-5 sm:text-gray-700" id="label-notifications">
+                                Show Status
+                            </div>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <div class="max-w-lg">
+                                {# <p class="text-sm leading-5 text-gray-500">Another Description</p>  #}
+                                <div class="mt-4">
+                                    <div class="flex items-center">
+                                        <input
+                                            id="show_status_live"
+                                            name="status"
+                                            value="live"
+                                            type="radio"
+                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                            checked
+                                        >
+                                        <label for="show_status_live" class="ml-3">
+                                            <span class="block text-sm leading-5 font-medium text-gray-700">Live</span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-4 flex items-center">
+                                        <input
+                                            id="show_status_coming_soon"
+                                            name="status"
+                                            value="coming_soon"
+                                            type="radio"
+                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                        >
+                                        <label for="show_status_coming_soon" class="ml-3">
+                                            <span class="block text-sm leading-5 font-medium text-gray-700">Coming Soon</span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-4 flex items-center">
+                                        <input
+                                            id="show_status_hidden"
+                                            name="status"
+                                            value="hidden"
+                                            type="radio"
+                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                        >
+                                        <label for="show_status_hidden" class="ml-3">
+                                            <span class="block text-sm leading-5 font-medium text-gray-700">Hidden</span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-4 flex items-center">
+                                        <input
+                                            id="show_status_retired"
+                                            name="status"
+                                            value="retired"
+                                            type="radio"
+                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                        >
+                                        <label for="show_status_retired" class="ml-3">
+                                            <span class="block text-sm leading-5 font-medium text-gray-700">Hidden</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="slug" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Explicit?
@@ -88,6 +160,7 @@
                     </span>
                 </div>
             </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="itunes_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     iTunes Link
@@ -98,6 +171,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="google_play_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Google Play Link
@@ -108,6 +182,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="stitcher_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Stitcher Link
@@ -118,6 +193,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="spotify_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
                     Spotify Link
@@ -129,6 +205,7 @@
                 </div>
             </div>
         </div>
+
         <div class="mt-8 border-t border-gray-200 pt-5">
             <div class="flex justify-end">
                 <span class="inline-flex rounded-md shadow-sm">
