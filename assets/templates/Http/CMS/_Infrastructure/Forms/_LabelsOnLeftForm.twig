@@ -1,0 +1,38 @@
+{% set submitContent = submitContent ?? 'Submit' %}
+{% set cancelAction = cancelAction ?? '' %}
+{% set inputs = inputs ?? [] %}
+
+{% set buttons %}
+    <div class="flex justify-end">
+        {% if cancelAction %}
+            <span class="inline-flex rounded-md shadow-sm">
+                <a href="{{ cancelAction }}" type="button" class="py-2 px-4 border border-gray-300 rounded-md text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
+                    Cancel
+                </a>
+            </span>
+        {% endif %}
+        <span class="ml-3 inline-flex rounded-md shadow-sm">
+            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                {{ submitContent|smartypants }}
+            </button>
+        </span>
+    </div>
+{% endset %}
+
+<form
+    method="POST"
+    accept-charset="UTF-8"
+    enctype="multipart/form-data"
+>
+    <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+    <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+    <div>
+        {{ buttons }}
+        {% for input in inputs %}
+            {% include 'Http/CMS/_Infrastructure/Forms/LabelsOnLeftInput.twig' with input only %}
+        {% endfor %}
+    </div>
+    <div class="mt-8 border-t border-gray-200 pt-5">
+        {{ buttons }}
+    </div>
+</form>

@@ -1,0 +1,164 @@
+{% set isFirst = isFirst ?? false  %}
+{% set label = label ?? '' %}
+{% set subLabel = subLabel ?? '' %}
+{% set name = name ?? '' %}
+{% set id = id ?? name %}
+{% set type = type ?? 'text' %}
+{% set description = description ?? '' %}
+
+{% set textSwitchTypes = [
+    'color',
+    'date',
+    'datetime-local',
+    'email',
+    'month',
+    'number',
+    'password',
+    'range',
+    'search',
+    'tel',
+    'time',
+    'url',
+    'week',
+] %}
+
+{% set switchType = type %}
+
+{% if switchType in textSwitchTypes %}
+    {% set switchType = 'text' %}
+{% endif %}
+
+<div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start{% if not isFirst%} mt-6 sm:border-t sm:border-gray-200 sm:pt-5{% endif %}">
+    <label for="{{ id }}" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
+        {{ label|smartypants|widont }}
+        <small class="block mt-1 text-xs text-gray-500">{{ subLabel|smartypants|widont }}</small>
+    </label>
+    <div class="mt-1 sm:mt-0 sm:col-span-2">
+        {% switch switchType %}
+            {% case 'text' %}
+                <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
+                    <input
+                        type="{{ type }}"
+                        name="{{ name }}"
+                        id="{{ id }}"
+                        class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    >
+                </div>
+            {% case 'textarea' %}
+                <div class="max-w-lg flex rounded-md shadow-sm">
+                    <textarea
+                        name="{{ name }}"
+                        id="{{ id }}"
+                        rows="3"
+                        class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    ></textarea>
+                </div>
+            {% case 'file_upload' %}
+                <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div class="text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p class="mt-1 text-sm text-gray-600">
+                            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
+                                Upload a file
+                            </button>
+                            or drag and drop
+                        </p>
+                        {% if description %}
+                            <p class="mt-1 text-xs text-gray-500">
+                                {{ description|smartypants|widont }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% case 'radio' %}
+                {% if description %}
+                    <p class="text-sm leading-5 text-gray-500">Another Description</p>
+                {% endif %}
+                <div class="mt-4">
+                    {% set options = options ?? [] %}
+                    {% for option in options %}
+                        {% set radioId = id ~ option.value %}
+                        <div class="{% if not loop.first %}mt-4 {% endif %}flex items-center">
+                            <input
+                                id="{{ radioId }}"
+                                name="{{ name }}"
+                                value="{{ option.value }}"
+                                type="{{ type }}"
+                                class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                {% if loop.first %}
+                                checked
+                                {% endif %}
+                            >
+                            <label for="{{ radioId }}" class="ml-3">
+                                <span class="block text-sm leading-5 font-medium text-gray-700">
+                                    {{ option.label|smartypants|widont }}
+                                </span>
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% case 'select' %}
+                {% set multiple = multiple ?? false %}
+                <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
+                    <select
+                        id="{{ id }}"
+                        class="block form-select w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                        style="background-image: none"
+                        ref="select"
+                        {% if multiple %}
+                        multiple
+                        {% endif %}
+                    >
+                        {% set options = options ?? [] %}
+                        {% for option in options %}
+                            <option
+                                value="{{ option.value }}"
+                            >
+                                {{ option.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% case 'lightswitch' %}
+                <span
+                    role="checkbox"
+                    tabindex="0"
+                    aria-checked="false"
+                    class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline"
+                    x-data="{ on: false }"
+                    :class="{ 'bg-gray-200': !on, 'bg-indigo-600': on }"
+                    @click="on = !on"
+                    @keydown.space.prevent="on = !on"
+                    :aria-checked="on.toString()"
+                >
+                    <input type="hidden" name="{{ name }}" value="false" x-bind:value="on.toString()">
+                    <span
+                        aria-hidden="true"
+                        class="translate-x-0 relative inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"
+                        :class="{ 'translate-x-5': on, 'translate-x-0': !on }"
+                    >
+                        <span
+                            class="opacity-100 ease-in duration-200 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity"
+                            :class="{ 'opacity-0 ease-out duration-100': on, 'opacity-100 ease-in duration-200': !on }"
+                        >
+                            <svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
+                                <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span
+                            class="opacity-0 ease-out duration-100 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity"
+                            :class="{ 'opacity-100 ease-in duration-200': on, 'opacity-0 ease-out duration-100': !on }"
+                        >
+                            <svg class="h-3 w-3 text-indigo-600" fill="currentColor" viewBox="0 0 12 12">
+                                <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
+                            </svg>
+                        </span>
+                    </span>
+                </span>
+            {% default %}
+                TODO: Implement {{ switchType }}
+        {% endswitch %}
+    </div>
+</div>

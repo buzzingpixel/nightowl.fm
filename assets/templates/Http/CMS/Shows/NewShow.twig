@@ -1,270 +1,104 @@
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
 {% block cmsContent %}
-    <form>
-        <div>
-
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-1 {#sm:border-t sm:border-gray-200 sm:pt-5#}">
-                <label for="title" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Title
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="title" id="title" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="slug" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Slug
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="slug" id="slug" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="cover_photo" class="block text-sm leading-5 font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    Show Art
-                </label>
-                <div class="mt-2 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                        <div class="text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <p class="mt-1 text-sm text-gray-600">
-                                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
-                                    Upload a file
-                                </button>
-                                or drag and drop
-                            </p>
-                            {#<p class="mt-1 text-xs text-gray-500">
-                                PNG, JPG, GIF up to 10MB
-                            </p>#}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="description" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Description
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg flex rounded-md shadow-sm">
-                        <textarea name="description" id="description" rows="3" class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"></textarea>
-                    </div>
-                    {# <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p> #}
-                </div>
-            </div>
-
-            <div class="mt-6 sm:mt-5 sm:border-t sm:border-gray-200 sm:pt-5">
-                <div role="group" aria-labelledby="label-notifications">
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
-                        <div>
-                            <div class="text-base leading-6 font-medium text-gray-900 sm:text-sm sm:leading-5 sm:text-gray-700" id="label-notifications">
-                                Show Status
-                            </div>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <div class="max-w-lg">
-                                {# <p class="text-sm leading-5 text-gray-500">Another Description</p>  #}
-                                <div class="mt-4">
-                                    <div class="flex items-center">
-                                        <input
-                                            id="show_status_live"
-                                            name="status"
-                                            value="live"
-                                            type="radio"
-                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                            checked
-                                        >
-                                        <label for="show_status_live" class="ml-3">
-                                            <span class="block text-sm leading-5 font-medium text-gray-700">Live</span>
-                                        </label>
-                                    </div>
-                                    <div class="mt-4 flex items-center">
-                                        <input
-                                            id="show_status_coming_soon"
-                                            name="status"
-                                            value="coming_soon"
-                                            type="radio"
-                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                        >
-                                        <label for="show_status_coming_soon" class="ml-3">
-                                            <span class="block text-sm leading-5 font-medium text-gray-700">Coming Soon</span>
-                                        </label>
-                                    </div>
-                                    <div class="mt-4 flex items-center">
-                                        <input
-                                            id="show_status_hidden"
-                                            name="status"
-                                            value="hidden"
-                                            type="radio"
-                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                        >
-                                        <label for="show_status_hidden" class="ml-3">
-                                            <span class="block text-sm leading-5 font-medium text-gray-700">Hidden</span>
-                                        </label>
-                                    </div>
-                                    <div class="mt-4 flex items-center">
-                                        <input
-                                            id="show_status_retired"
-                                            name="status"
-                                            value="retired"
-                                            type="radio"
-                                            class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                        >
-                                        <label for="show_status_retired" class="ml-3">
-                                            <span class="block text-sm leading-5 font-medium text-gray-700">Hidden</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="slug" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Explicit?
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <span
-                        role="checkbox"
-                        tabindex="0"
-                        aria-checked="false"
-                        class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline"
-                        x-data="{ on: false }"
-                        :class="{ 'bg-gray-200': !on, 'bg-indigo-600': on }"
-                        @click="on = !on"
-                        @keydown.space.prevent="on = !on"
-                        :aria-checked="on.toString()"
-                    >
-                        <input type="hidden" name="explicit" value="" x-bind:value="on.toString()">
-                        <span
-                            aria-hidden="true"
-                            class="translate-x-0 relative inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"
-                            :class="{ 'translate-x-5': on, 'translate-x-0': !on }"
-                        >
-                            <span
-                                class="opacity-100 ease-in duration-200 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity"
-                                :class="{ 'opacity-0 ease-out duration-100': on, 'opacity-100 ease-in duration-200': !on }"
-                            >
-                                <svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
-                                    <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                            <span
-                                class="opacity-0 ease-out duration-100 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity"
-                                :class="{ 'opacity-100 ease-in duration-200': on, 'opacity-0 ease-out duration-100': !on }"
-                            >
-                                <svg class="h-3 w-3 text-indigo-600" fill="currentColor" viewBox="0 0 12 12">
-                                    <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
-                                </svg>
-                            </span>
-                        </span>
-                    </span>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="itunes_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    iTunes Link
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="itunes_link" id="itunes_link" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="google_play_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Google Play Link
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="google_play_link" id="google_play_link" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="stitcher_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Stitcher Link
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="stitcher_link" id="stitcher_link" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="spotify_link" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Spotify Link
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <input name="spotify_link" id="spotify_link" class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="keywords" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Keywords
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg flex rounded-md shadow-sm">
-                        <textarea name="keywords" id="keywords" rows="3" class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"></textarea>
-                    </div>
-                    <p class="mt-2 text-sm text-gray-500">Separate keywords by comma.</p>
-                </div>
-            </div>
-
-            <div class="mt-6 sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label for="hosts" class="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-                    Hosts
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
-                        <select
-                            id="hosts"
-                            class="block form-select w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                            style="background-image: none"
-                            ref="select"
-                            multiple
-                        >
-                            <option>TODO 1</option>
-                            <option>TODO 2</option>
-                            <option>TODO 3</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-8 border-t border-gray-200 pt-5">
-            <div class="flex justify-end">
-                <span class="inline-flex rounded-md shadow-sm">
-                    <button type="button" class="py-2 px-4 border border-gray-300 rounded-md text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
-                        Cancel
-                    </button>
-                </span>
-                <span class="ml-3 inline-flex rounded-md shadow-sm">
-                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
-                        Save
-                    </button>
-                </span>
-            </div>
-        </div>
-    </form>
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: 'Create',
+        cancelAction: '/cms/shows',
+        inputs: [
+            {
+                label: 'Title',
+                subLabel: "The show's name. Obviously should be unique",
+                name: 'title',
+            },
+            {
+                label: 'Slug',
+                subLabel: 'Must be unique to the show',
+                name: 'slug',
+            },
+            {
+                label: 'Show Art',
+                subLabel: 'Should be an optimized JPG, 1400px square',
+                name: 'artwork',
+                type: 'file_upload',
+                description: 'Should be an optimized JPG, 1400px square',
+            },
+            {
+                label: 'Description',
+                subLabel: 'A short description of the show',
+                name: 'description',
+                type: 'textarea',
+            },
+            {
+                label: 'Show Status',
+                name: 'status',
+                type: 'radio',
+                options: [
+                    {
+                        label: 'Live',
+                        value: 'live',
+                    },
+                    {
+                        label: 'Coming Soon',
+                        value: 'coming_soon',
+                    },
+                    {
+                        label: 'Hidden',
+                        value: 'hidden',
+                    },
+                    {
+                        label: 'Retired',
+                        value: 'retired',
+                    },
+                ],
+            },
+            {
+                label: 'Explicit?',
+                name: 'explicit',
+                type: 'lightswitch',
+            },
+            {
+                label: 'iTunes Link',
+                name: 'itunes_link',
+            },
+            {
+                label: 'Google Play Link',
+                name: 'google_play_link',
+            },
+            {
+                label: 'Stitcher Link',
+                name: 'stitcher_link',
+            },
+            {
+                label: 'Spotify Link',
+                name: 'spotify_link',
+            },
+            {
+                label: 'Keywords',
+                subLabel: 'A short description of the show',
+                name: 'keywords',
+                type: 'textarea',
+            },
+            {
+                label: 'Hosts',
+                name: 'hosts',
+                type: 'select',
+                multiple: true,
+                options: [
+                    {
+                        label: 'TODO 1',
+                        value: 'todo-1',
+                    },
+                    {
+                        label: 'TODO 2',
+                        value: 'todo-2',
+                    },
+                    {
+                        label: 'TODO 3',
+                        value: 'todo-3',
+                    },
+                ],
+            },
+        ],
+    } only %}
 {% endblock %}
 
