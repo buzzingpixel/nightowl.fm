@@ -97,6 +97,7 @@
                         {# Incompatible browser overlay #}
                         <div
                             class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            style="display: none;"
                             x-show="data.mode === 'incompatible'"
                         >
                             <span
@@ -110,6 +111,7 @@
                         {# Drag in progress overlay #}
                         <div
                             class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            style="display: none;"
                             x-show="data.mode === 'dragInProgress'"
                         >
                         </div>
@@ -117,6 +119,7 @@
                         {# Upload in progress overlay #}
                         <div
                             class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            style="display: none;"
                             x-show="data.uploadInProgress"
                         >
                             <div
