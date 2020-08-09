@@ -35,7 +35,7 @@ class ShowsResponder
                 'Http/CMS/Shows/Index.twig',
                 [
                     'meta' => $meta,
-                    'activeHref' => '/cms/shows',
+                    'activeNavHref' => '/cms/shows',
                 ],
             ),
         );

@@ -33,7 +33,13 @@ class NewShowResponder
             [
                 'meta' => $meta,
                 'title' => $pageTitle,
-                'activeHref' => '/cms/shows',
+                'activeNavHref' => '/cms/shows',
+                'breadcrumbs' => [
+                    [
+                        'href' => '/cms/shows',
+                        'content' => 'Shows',
+                    ],
+                ],
             ]
         ));
 

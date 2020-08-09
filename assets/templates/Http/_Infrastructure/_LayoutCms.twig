@@ -2,7 +2,9 @@
 
 {% set title = title ?? '' %}
 
-{% set activeHref = activeHref ?? '/cms/shows' %}
+{% set breadcrumbs = breadcrumbs ?? false %}
+
+{% set activeNavHref = activeNavHref ?? '/cms/shows' %}
 
 {# @var \App\Context\Users\Models\UserModel user #}
 {% set user = fetchLoggedInUser().model %}
@@ -138,7 +140,7 @@
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                         <nav class="px-2 space-y-1">
                             {% for navItemParams in nav %}
-                                {{ _self.navItem(navItemParams, activeHref) }}
+                                {{ _self.navItem(navItemParams, activeNavHref) }}
                             {% endfor %}
                         </nav>
                     </div>
@@ -170,7 +172,7 @@
                     <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                         <nav class="flex-1 px-2 bg-white space-y-1">
                             {% for navItemParams in nav %}
-                                {{ _self.navItem(navItemParams, activeHref) }}
+                                {{ _self.navItem(navItemParams, activeNavHref) }}
                             {% endfor %}
                         </nav>
                     </div>
@@ -207,6 +209,11 @@
                 <div class="pt-2 pb-6 md:py-6">
                     {% if title %}
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                            {% if breadcrumbs %}
+                                {% include 'Http/CMS/_Infrastructure/Includes/BreadCrumbs.twig' with {
+                                    breadcrumbs: breadcrumbs,
+                                } only %}
+                            {% endif %}
                             <h1 class="text-2xl font-semibold text-gray-900">
                                 {{ title }}
                             </h1>
