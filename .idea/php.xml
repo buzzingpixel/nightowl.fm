@@ -148,6 +148,7 @@
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/cookie-api" />
       <path value="$PROJECT_DIR$/vendor/mandrill/mandrill" />
       <path value="$PROJECT_DIR$/vendor/html2text/html2text" />
+      <path value="$PROJECT_DIR$/vendor/cocur/slugify" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

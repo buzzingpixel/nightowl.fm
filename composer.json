@@ -17,6 +17,7 @@
         "buzzingpixel/twig-smartypants": "^1.0",
         "buzzingpixel/twig-switch": "^1.0",
         "buzzingpixel/twig-widont": "^1.0",
+        "cocur/slugify": "^4.0",
         "crell/tukio": "^1.1",
         "html2text/html2text": "^4.3",
         "league/flysystem": "^1.0",

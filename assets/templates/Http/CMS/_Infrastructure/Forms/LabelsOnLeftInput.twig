@@ -54,22 +54,92 @@
                     ></textarea>
                 </div>
             {% case 'file_upload' %}
-                <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div class="text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <p class="mt-1 text-sm text-gray-600">
-                            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out">
-                                Upload a file
-                            </button>
-                            or drag and drop
-                        </p>
-                        {% if description %}
-                            <p class="mt-1 text-xs text-gray-500">
-                                {{ description|smartypants|widont }}
+                <div
+                    x-init="RunWhenReady('FileUploadField', {
+                        data: data,
+                        el: $el
+                    })"
+                    x-data="{
+                        data: {
+                            mode: 'incompatible',
+                            message: '',
+                            messageType: '',
+                            uploadInProgress: false,
+                            filePath: '',
+                            fileName: '',
+                        },
+                    }"
+                >
+                    <input
+                        type="hidden"
+                        name="file_path"
+                        x-model="data.filePath"
+                    >
+                    <input
+                        type="hidden"
+                        name="file_path"
+                        x-model="data.fileName"
+                    >
+
+                    {# Error message #}
+                    <div
+                        class="mb-2 text-green-600"
+                        x-text="data.message"
+                        :class="{
+                            'text-red-700': data.messageType === 'error',
+                            'text-green-600': data.messageType !== 'error'
+                        }"
+                    >
+                    </div>
+                    <div
+                        class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md relative"
+                    >
+                        {# Incompatible browser overlay #}
+                        <div
+                            class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            x-show="data.mode === 'incompatible'"
+                        >
+                            <span
+                                class="font-bold p-2 block absolute w-full text-center"
+                                style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                            >
+                                Your browser does not support file uploads
+                            </span>
+                        </div>
+
+                        {# Drag in progress overlay #}
+                        <div
+                            class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            x-show="data.mode === 'dragInProgress'"
+                        >
+                        </div>
+
+                        {# Upload in progress overlay #}
+                        <div
+                            class="absolute inset-0 bg-gray-300 bg-opacity-75 z-10 rounded-md"
+                            x-show="data.uploadInProgress"
+                        >
+                        </div>
+
+                        <div class="text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <p class="mt-1 text-sm text-gray-600">
+                                {# <button
+                                    type="button"
+                                    class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition duration-150 ease-in-out"
+                                >
+                                    Upload a file
+                                </button>
+                                or  #}drag and drop a file to upload
                             </p>
-                        {% endif %}
+                            {% if description %}
+                                <p class="mt-1 text-xs text-gray-500">
+                                    {{ description|smartypants|widont }}
+                                </p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% case 'radio' %}

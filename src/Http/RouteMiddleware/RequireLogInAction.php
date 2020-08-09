@@ -15,11 +15,11 @@ use Throwable;
 class RequireLogInAction implements MiddlewareInterface
 {
     private UserApi $userApi;
-    private RequireLoginResponder $responder;
+    private RequireLogInResponder $responder;
 
     public function __construct(
         UserApi $userApi,
-        RequireLoginResponder $responder
+        RequireLogInResponder $responder
     ) {
         $this->userApi   = $userApi;
         $this->responder = $responder;
