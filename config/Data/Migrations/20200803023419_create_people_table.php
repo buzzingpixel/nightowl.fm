@@ -20,6 +20,7 @@ class CreatePeopleTable extends AbstractMigration
             ->addColumn('first_name', 'string')
             ->addColumn('last_name', 'string')
             ->addColumn('slug', 'string')
+            ->addColumn('email', 'string')
             ->addColumn('photo_file_location', 'string')
             ->addColumn('photo_preference', 'string')
             ->addColumn('bio', 'text')

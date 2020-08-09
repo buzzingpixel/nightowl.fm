@@ -72,12 +72,12 @@
                 >
                     <input
                         type="hidden"
-                        name="file_path"
+                        name="{{ name }}[file_path]"
                         x-model="data.filePath"
                     >
                     <input
                         type="hidden"
-                        name="file_path"
+                        name="{{ name }}[file_name]"
                         x-model="data.fileName"
                     >
 
@@ -236,6 +236,91 @@
                         </span>
                     </span>
                 </span>
+            {% case 'markdown' %}
+                <div class="max-w-2xl">
+                    <p class="mt-1 text-xs text-gray-500">
+                        Format using Markdown (Github Flavored)
+                    </p>
+                    <textarea
+                        name="{{ name }}"
+                        id="{{ id }}"
+                        rows="10"
+                        class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                        x-init="RunWhenReady('MarkdownTextArea', {
+                            el: $el
+                        })"
+                        x-data="{
+                            data: {
+                            },
+                        }"
+                    ></textarea>
+                </div>
+            {% case 'simple_table' %}
+                {% set fieldConfig = fieldConfig ?? [] %}
+                <div
+                    class="flex flex-col"
+                    x-init="RunWhenReady('SimpleTable', {
+                        el: $el
+                    })"
+                    x-data="{
+                        data: {
+                        },
+                    }"
+                >
+                    <template ref="rowTemplate" style="display: none;">
+                        <tr class="bg-white" ref="row">
+                            <td class="p-1 text-center">
+                                <div class="w-4 h-4 inline-block cursor-move js-drag-sort-handle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M507.353,245.245l-83.692-78.769c-4.289-4.039-10.57-5.141-15.98-2.803c-5.409,2.337-8.911,7.665-8.911,13.558v34.462 h-98.462v-98.462h34.462c5.892,0,11.221-3.502,13.558-8.911c2.337-5.409,1.236-11.69-2.803-15.98L266.755,4.647 C263.964,1.682,260.072,0,256,0s-7.964,1.682-10.755,4.647L166.476,88.34c-4.039,4.29-5.14,10.571-2.803,15.98 c2.337,5.409,7.665,8.911,13.558,8.911h34.462v98.462h-98.462v-34.462c0-5.892-3.502-11.221-8.911-13.558 c-5.41-2.337-11.69-1.236-15.98,2.803L4.647,245.245C1.682,248.036,0,251.928,0,256c0,4.072,1.682,7.964,4.647,10.755 l83.692,78.769c4.29,4.039,10.57,5.141,15.98,2.803c5.409-2.337,8.911-7.665,8.911-13.558v-34.462h98.462v98.462h-34.462 c-5.892,0-11.221,3.502-13.558,8.911c-2.337,5.409-1.236,11.69,2.803,15.98l78.769,83.692c2.79,2.966,6.683,4.647,10.755,4.647 c4.072,0,7.964-1.682,10.755-4.647l78.769-83.692c4.039-4.29,5.14-10.571,2.803-15.98c-2.337-5.409-7.665-8.911-13.558-8.911 h-34.462v-98.462h98.462v34.462c0,5.892,3.502,11.221,8.911,13.558c5.41,2.337,11.691,1.236,15.98-2.803l83.692-78.769 c2.966-2.79,4.647-6.683,4.647-10.755S510.318,248.036,507.353,245.245z"/></svg>
+                                </div>
+                            </td>
+                            {% for col in fieldConfig %}
+                                <td class="px-3 py-2 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                                    <div class="rounded-md shadow-sm">
+                                        <input
+                                            type="text"
+                                            name="{{ name }}[{{ col.name }}][]"
+                                            class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                                        >
+                                    </div>
+                                </td>
+                            {% endfor %}
+                            <td class="p-1 text-center" ref="deleteRow">
+                                <div
+                                    class="w-4 h-4 inline-block cursor-pointer"
+                                >
+                                    <svg viewBox="0 0 365.696 365.696" xmlns="http://www.w3.org/2000/svg"><path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/></svg>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    <div class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-gray-50"></th>
+                                        {% for col in fieldConfig %}
+                                            <th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                {{ col.label|smartypants|widont }}
+                                            </th>
+                                        {% endfor %}
+                                        <th class="bg-gray-50"></th>
+                                    </tr>
+                                </thead>
+                                <tbody ref="tableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div
+                        class="w-5 h-5 inline-block cursor-pointer"
+                        ref="addRow"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.867 477.867"><path d="M392.533,0h-307.2C38.228,0.056,0.056,38.228,0,85.333v307.2c0.056,47.105,38.228,85.277,85.333,85.333h307.2 c47.105-0.056,85.277-38.228,85.333-85.333v-307.2C477.81,38.228,439.638,0.056,392.533,0z M324.267,256H256v68.267 c0,9.426-7.641,17.067-17.067,17.067s-17.067-7.641-17.067-17.067V256H153.6c-9.426,0-17.067-7.641-17.067-17.067 s7.641-17.067,17.067-17.067h68.267V153.6c0-9.426,7.641-17.067,17.067-17.067S256,144.174,256,153.6v68.267h68.267 c9.426,0,17.067,7.641,17.067,17.067S333.692,256,324.267,256z"/>
+                        </svg>
+                    </div>
+                </div>
             {% default %}
                 TODO: Implement {{ switchType }}
         {% endswitch %}

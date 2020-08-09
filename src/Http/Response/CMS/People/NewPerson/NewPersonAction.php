@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\Shows\NewShow;
+namespace App\Http\Response\CMS\People\NewPerson;
 
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseInterface;
 
-class NewShowAction
+class NewPersonAction
 {
-    private NewShowResponder $responder;
+    private NewPersonResponder $responder;
 
     public function __construct(
-        NewShowResponder $responder
+        NewPersonResponder $responder
     ) {
         $this->responder = $responder;
     }
@@ -21,11 +21,11 @@ class NewShowAction
     {
         $meta = new Meta();
 
-        $meta->title = 'Create New Show | CMS';
+        $meta->title = 'Create New Person | CMS';
 
         return $this->responder->__invoke(
             $meta,
-            'Create New Show',
+            'Create New Person',
         );
     }
 }

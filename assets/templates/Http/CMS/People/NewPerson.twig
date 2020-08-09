@@ -1,0 +1,80 @@
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsContent %}
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: 'Create',
+        cancelAction: '/cms/people',
+        inputs: [
+            {
+                label: 'First Name',
+                name: 'first_name',
+            },
+            {
+                label: 'Last Name',
+                name: 'last_name',
+            },
+            {
+                label: 'Slug',
+                name: 'slug',
+            },
+            {
+                label: 'Email',
+                name: 'email',
+                type: 'email',
+            },
+            {
+                label: 'Photo',
+                name: 'photo',
+                type: 'file_upload',
+            },
+            {
+                label: 'Photo Preference',
+                name: 'photo_preference',
+                type: 'radio',
+                options: [
+                    {
+                        label: 'Prefer Gravatar',
+                        value: 'gravatar',
+                    },
+                    {
+                        label: 'Prefer CMS Photo',
+                        value: 'cms',
+                    },
+                ],
+            },
+            {
+                label: 'Bio',
+                name: 'bio',
+                type: 'markdown',
+            },
+            {
+                label: 'Location',
+                name: 'location',
+            },
+            {
+                label: 'Facebook Page Slug',
+                name: 'facebook_page_slug',
+            },
+            {
+                label: 'Twitter Handle',
+                name: 'twitter_handle',
+            },
+            {
+                label: 'Links',
+                name: 'links',
+                type: 'simple_table',
+                fieldConfig: [
+                    {
+                        label: 'Link Title',
+                        name: 'link_title',
+                    },
+                    {
+                        label: 'Link URL',
+                        name: 'link_url',
+                    },
+                ],
+            },
+        ],
+    } only %}
+{% endblock %}
+

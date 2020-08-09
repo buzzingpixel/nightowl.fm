@@ -4,7 +4,9 @@
 import Events from './Events.js';
 import SetGlobalData from './SetUp/SetGlobalData.js';
 import LoadAxios from './SetUp/LoadAxios.js';
+import MarkdownTextArea from './Components/MarkdownTextArea.js';
 // import Analytics from './SetUp/Analytics.js';
+import SimpleTable from './Components/SimpleTable.js';
 
 // Components
 import FileUploadField from './Components/FileUploadField.js';
@@ -16,6 +18,8 @@ SetGlobalData();
 LoadAxios();
 // Analytics();
 window.Methods.FileUploadField = FileUploadField;
+window.Methods.MarkdownTextArea = MarkdownTextArea;
+window.Methods.SimpleTable = SimpleTable;
 
 // Components
 
