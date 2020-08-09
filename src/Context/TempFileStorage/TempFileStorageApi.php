@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\TempFileStorage;
 
 use App\Context\TempFileStorage\Models\TempFileStorageModel;
+use App\Context\TempFileStorage\Services\CleanUploadedFiles;
 use App\Context\TempFileStorage\Services\SaveUploadedFile;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -28,5 +29,14 @@ class TempFileStorageApi
         assert($service instanceof SaveUploadedFile);
 
         return $service($uploadedFile);
+    }
+
+    public function cleanUploadedFiles(): void
+    {
+        $service = $this->di->get(CleanUploadedFiles::class);
+
+        assert($service instanceof CleanUploadedFiles);
+
+        $service();
     }
 }

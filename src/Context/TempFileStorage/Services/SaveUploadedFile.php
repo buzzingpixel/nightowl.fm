@@ -6,6 +6,7 @@ namespace App\Context\TempFileStorage\Services;
 
 use App\Context\TempFileStorage\Models\TempFileStorageModel;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
+use App\Utilities\SystemClock;
 use Cocur\Slugify\Slugify;
 use Config\General;
 use League\Flysystem\Filesystem;
@@ -19,27 +20,32 @@ class SaveUploadedFile
     private Filesystem $filesystem;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
     private Slugify $slugify;
+    private SystemClock $clock;
 
     public function __construct(
         General $generalConfig,
         Filesystem $filesystem,
         UuidFactoryWithOrderedTimeCodec $uuidFactory,
-        Slugify $slugify
+        Slugify $slugify,
+        SystemClock $clock
     ) {
         $this->generalConfig = $generalConfig;
         $this->filesystem    = $filesystem;
         $this->uuidFactory   = $uuidFactory;
         $this->slugify       = $slugify;
+        $this->clock         = $clock;
     }
 
     public function __invoke(
         UploadedFileInterface $uploadedFile
     ): TempFileStorageModel {
+        $timeStamp = $this->clock->getCurrentTime()->getTimestamp();
+
         $uuid = $this->uuidFactory->uuid1()->toString();
 
         $directory = $this->generalConfig->pathToStorageDirectory();
 
-        $directory .= '/temp/' . $uuid;
+        $directory .= '/temp/' . $timeStamp . '/' . $uuid;
 
         $this->filesystem->createDir($directory);
 
@@ -57,7 +63,7 @@ class SaveUploadedFile
         $uploadedFile->moveTo($filePath);
 
         return new TempFileStorageModel(
-            $uuid . '/' . $name,
+            $timeStamp . '/' . $uuid . '/' . $name,
             $name,
         );
     }
