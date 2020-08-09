@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment as TwigEnvironment;
 
-class ShowsResponder
+class ShowsIndexResponder
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
@@ -22,19 +22,18 @@ class ShowsResponder
         $this->twig            = $twig;
     }
 
-    public function __invoke(): ResponseInterface
-    {
+    public function __invoke(
+        Meta $meta,
+        string $pageTitle
+    ): ResponseInterface {
         $response = $this->responseFactory->createResponse();
-
-        $meta = new Meta();
-
-        $meta->title = 'Shows | CMS';
 
         $response->getBody()->write(
             $this->twig->render(
                 'Http/CMS/Shows/Index.twig',
                 [
                     'meta' => $meta,
+                    'title' => $pageTitle,
                     'activeNavHref' => '/cms/shows',
                 ],
             ),
