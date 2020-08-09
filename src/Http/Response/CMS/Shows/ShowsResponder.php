@@ -33,7 +33,10 @@ class ShowsResponder
         $response->getBody()->write(
             $this->twig->render(
                 'Http/CMS/Shows/Index.twig',
-                ['meta' => $meta],
+                [
+                    'meta' => $meta,
+                    'activeHref' => '/cms/shows',
+                ],
             ),
         );
 

@@ -33,6 +33,7 @@ class NewShowResponder
             [
                 'meta' => $meta,
                 'title' => $pageTitle,
+                'activeHref' => '/cms/shows',
             ]
         ));
 

@@ -7,7 +7,7 @@ import LoadAxios from './SetUp/LoadAxios.js';
 // import Analytics from './SetUp/Analytics.js';
 
 // Components
-import FileUploadField from "./Components/FileUploadField.js";
+import FileUploadField from './Components/FileUploadField.js';
 import Selects from './Components/Selects.js';
 
 // Setup

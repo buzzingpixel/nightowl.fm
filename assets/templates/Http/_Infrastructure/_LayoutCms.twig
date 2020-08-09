@@ -2,6 +2,8 @@
 
 {% set title = title ?? '' %}
 
+{% set activeHref = activeHref ?? '/cms/shows' %}
+
 {# @var \App\Context\Users\Models\UserModel user #}
 {% set user = fetchLoggedInUser().model %}
 
@@ -10,7 +12,10 @@
         href: '/cms/shows',
         content: 'Shows',
         isFirst: true,
-        isActive: true,
+    },
+    {
+        href: '/cms/people',
+        content: 'People',
     },
     {
         href: '/cms/reports',
@@ -18,13 +23,14 @@
     },
 ] %}
 
-{% macro navItem(params) %}
+{% macro navItem(params, activeHref) %}
     {% set params = {
         href: '',
         content: '',
-        isActive: false,
         isFirst: false,
     }|merge(params) %}
+
+    {% set isActive = (activeHref == params.href) %}
 
     {% set classes = [
         'group',
@@ -43,7 +49,7 @@
         'duration-150',
     ] %}
 
-    {% if params.isActive %}
+    {% if isActive %}
         {% set classes = classes|merge([
             'text-gray-900',
             'bg-gray-100',
@@ -131,8 +137,8 @@
                     </div>
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                         <nav class="px-2 space-y-1">
-                            {% for navItem in nav %}
-                                {{ _self.navItem(navItem) }}
+                            {% for navItemParams in nav %}
+                                {{ _self.navItem(navItemParams, activeHref) }}
                             {% endfor %}
                         </nav>
                     </div>
@@ -163,8 +169,8 @@
                 <div class="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
                     <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                         <nav class="flex-1 px-2 bg-white space-y-1">
-                            {% for navItem in nav %}
-                                {{ _self.navItem(navItem) }}
+                            {% for navItemParams in nav %}
+                                {{ _self.navItem(navItemParams, activeHref) }}
                             {% endfor %}
                         </nav>
                     </div>
