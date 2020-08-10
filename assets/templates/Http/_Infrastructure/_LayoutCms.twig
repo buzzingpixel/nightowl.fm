@@ -206,6 +206,35 @@
                 </button>
             </div>
             <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
+                {# Message #}
+                {% if PostMessage['status'] is defined %}
+                    {% set isError = PostMessage.status != 'SUCCESSFUL' %}
+
+                    {% set message =  PostMessage.result.message|default('') %}
+
+                    {% set bgClass = 'bg-green-300' %}
+                    {% set borderColorClass = 'border-green-600' %}
+                    {% set title = 'Success!' %}
+
+                    {% if isError %}
+                        {% set bgClass = 'bg-red-400' %}
+                        {% set borderColorClass = 'border-red-800' %}
+                        {% set title = 'Oops, something went wrong' %}
+                    {% endif %}
+
+                    <div class="pb-2">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                            <div class="{{ bgClass }} py-4 px-2 rounded-b-md {{ borderColorClass}} border-top-0 border-l border-r border-b">
+                                <h2 class="text-xl{% if  message %} mb-2{% else %} mb-0{% endif %}">
+                                    {{ title|smartypants|widont }}
+                                </h2>
+                                {% if message %}
+                                    <p>{{ message|smartypants|widont }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="pt-2 pb-6 md:py-6">
                     {% if title %}
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">

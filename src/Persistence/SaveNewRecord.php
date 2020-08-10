@@ -22,6 +22,11 @@ class SaveNewRecord
 
     public function __invoke(Record $record): Payload
     {
+        return $this->save($record);
+    }
+
+    public function save(Record $record): Payload
+    {
         $into = implode(', ', $record->getFields());
 
         $values = implode(

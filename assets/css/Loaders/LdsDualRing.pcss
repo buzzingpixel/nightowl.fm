@@ -1,6 +1,6 @@
 /**
- * @see https://loading.io/css/
- */
+* @see https://loading.io/css/
+*/
 
 .lds-dual-ring {
     display: inline-block;
@@ -8,15 +8,16 @@
     height: 80px;
 }
 
-.lds-dual-ring:after {
+.lds-dual-ring::after {
     content: " ";
     display: block;
     width: 64px;
     height: 64px;
     margin: 8px;
     border-radius: 50%;
-    /*border: 6px solid #fff;
-    border-color: #fff transparent #fff transparent;*/
+
+    /* border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent; */
     border: 6px solid theme('colors.indigo.600');
     border-color: theme('colors.indigo.600') transparent theme('colors.indigo.600') transparent;
     animation: lds-dual-ring 1.2s linear infinite;
@@ -26,6 +27,7 @@
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }

@@ -50,8 +50,8 @@ class SimpleTable {
 
         $existingItems.detach();
 
-        $existingItems.each(() => {
-            const $item = $(this);
+        $existingItems.each((i, el) => {
+            const $item = $(el);
 
             $tableBody.append($item);
 

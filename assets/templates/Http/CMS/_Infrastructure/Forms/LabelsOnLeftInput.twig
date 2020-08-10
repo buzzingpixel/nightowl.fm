@@ -6,6 +6,9 @@
 {% set type = type ?? 'text' %}
 {% set description = description ?? '' %}
 
+{% set postBackValue = PostMessage['result']['inputValues'][name] ?? null %}
+{% set postBackMessages = PostMessage['result']['inputMessages'][name] ?? [] %}
+
 {% set textSwitchTypes = [
     'color',
     'date',
@@ -41,7 +44,10 @@
                         type="{{ type }}"
                         name="{{ name }}"
                         id="{{ id }}"
-                        class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                        class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5{% if postBackMessages|length > 0 %} border-red-800{% endif %}"
+                        {% if postBackValue %}
+                        value="{{ postBackValue }}"
+                        {% endif %}
                     >
                 </div>
             {% case 'textarea' %}
@@ -51,9 +57,13 @@
                         id="{{ id }}"
                         rows="3"
                         class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                    ></textarea>
+                    >{% if postBackValue %}{{ postBackValue }}{% endif %}</textarea>
                 </div>
             {% case 'file_upload' %}
+                {% set messageType = '' %}
+                {% if (postBackValue['file_name'] ?? '') %}
+                    {% set messageType = 'success' %}
+                {% endif %}
                 <div
                     x-init="RunWhenReady('FileUploadField', {
                         data: data,
@@ -62,11 +72,11 @@
                     x-data="{
                         data: {
                             mode: 'incompatible',
-                            message: '',
-                            messageType: '',
+                            message: '{{ postBackValue['file_name'] ?? '' }}',
+                            messageType: '{{ messageType }}',
                             uploadInProgress: false,
-                            filePath: '',
-                            fileName: '',
+                            filePath: '{{ postBackValue['file_path'] ?? '' }}',
+                            fileName: '{{ postBackValue['file_name'] ?? '' }}',
                         },
                     }"
                 >
@@ -166,8 +176,12 @@
                                 value="{{ option.value }}"
                                 type="{{ type }}"
                                 class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                {% if loop.first %}
-                                checked
+                                {% if postBackValue %}
+                                    {% if postBackValue == option.value %}
+                                        checked
+                                    {% endif %}
+                                {% elseif loop.first %}
+                                    checked
                                 {% endif %}
                             >
                             <label for="{{ radioId }}" class="ml-3">
@@ -194,6 +208,13 @@
                         {% for option in options %}
                             <option
                                 value="{{ option.value }}"
+                                {% if postBackValue %}
+                                    {% if postBackValue == option.value %}
+                                        selected
+                                    {% endif %}
+                                {% elseif loop.first %}
+                                    selected
+                                {% endif %}
                             >
                                 {{ option.label }}
                             </option>
@@ -206,7 +227,7 @@
                     tabindex="0"
                     aria-checked="false"
                     class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline"
-                    x-data="{ on: false }"
+                    x-data="{ on: {{ postBackValue == 'true' ? 'true' : 'false' }} }"
                     :class="{ 'bg-gray-200': !on, 'bg-indigo-600': on }"
                     @click="on = !on"
                     @keydown.space.prevent="on = !on"
@@ -253,7 +274,7 @@
                             data: {
                             },
                         }"
-                    ></textarea>
+                    >{{ postBackValue }}</textarea>
                 </div>
             {% case 'simple_table' %}
                 {% set fieldConfig = fieldConfig ?? [] %}
@@ -309,6 +330,34 @@
                                     </tr>
                                 </thead>
                                 <tbody ref="tableBody">
+                                    {% for row in formatSimpleTablePostBackValue(postBackValue) %}
+                                        <tr class="bg-white" ref="row">
+                                            <td class="p-1 text-center">
+                                                <div class="w-4 h-4 inline-block cursor-move js-drag-sort-handle">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M507.353,245.245l-83.692-78.769c-4.289-4.039-10.57-5.141-15.98-2.803c-5.409,2.337-8.911,7.665-8.911,13.558v34.462 h-98.462v-98.462h34.462c5.892,0,11.221-3.502,13.558-8.911c2.337-5.409,1.236-11.69-2.803-15.98L266.755,4.647 C263.964,1.682,260.072,0,256,0s-7.964,1.682-10.755,4.647L166.476,88.34c-4.039,4.29-5.14,10.571-2.803,15.98 c2.337,5.409,7.665,8.911,13.558,8.911h34.462v98.462h-98.462v-34.462c0-5.892-3.502-11.221-8.911-13.558 c-5.41-2.337-11.69-1.236-15.98,2.803L4.647,245.245C1.682,248.036,0,251.928,0,256c0,4.072,1.682,7.964,4.647,10.755 l83.692,78.769c4.29,4.039,10.57,5.141,15.98,2.803c5.409-2.337,8.911-7.665,8.911-13.558v-34.462h98.462v98.462h-34.462 c-5.892,0-11.221,3.502-13.558,8.911c-2.337,5.409-1.236,11.69,2.803,15.98l78.769,83.692c2.79,2.966,6.683,4.647,10.755,4.647 c4.072,0,7.964-1.682,10.755-4.647l78.769-83.692c4.039-4.29,5.14-10.571,2.803-15.98c-2.337-5.409-7.665-8.911-13.558-8.911 h-34.462v-98.462h98.462v34.462c0,5.892,3.502,11.221,8.911,13.558c5.41,2.337,11.691,1.236,15.98-2.803l83.692-78.769 c2.966-2.79,4.647-6.683,4.647-10.755S510.318,248.036,507.353,245.245z"/></svg>
+                                                </div>
+                                            </td>
+                                            {% for col in fieldConfig %}
+                                                <td class="px-3 py-2 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                                                    <div class="rounded-md shadow-sm">
+                                                        <input
+                                                            type="text"
+                                                            name="{{ name }}[{{ col.name }}][]"
+                                                            class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                                                            value="{{ row[col.name] ?? '' }}"
+                                                        >
+                                                    </div>
+                                                </td>
+                                            {% endfor %}
+                                            <td class="p-1 text-center" ref="deleteRow">
+                                                <div
+                                                    class="w-4 h-4 inline-block cursor-pointer"
+                                                >
+                                                    <svg viewBox="0 0 365.696 365.696" xmlns="http://www.w3.org/2000/svg"><path d="m243.1875 182.859375 113.132812-113.132813c12.5-12.5 12.5-32.765624 0-45.246093l-15.082031-15.082031c-12.503906-12.503907-32.769531-12.503907-45.25 0l-113.128906 113.128906-113.132813-113.152344c-12.5-12.5-32.765624-12.5-45.246093 0l-15.105469 15.082031c-12.5 12.503907-12.5 32.769531 0 45.25l113.152344 113.152344-113.128906 113.128906c-12.503907 12.503907-12.503907 32.769531 0 45.25l15.082031 15.082031c12.5 12.5 32.765625 12.5 45.246093 0l113.132813-113.132812 113.128906 113.132812c12.503907 12.5 32.769531 12.5 45.25 0l15.082031-15.082031c12.5-12.503906 12.5-32.769531 0-45.25zm0 0"/></svg>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -324,5 +373,12 @@
             {% default %}
                 TODO: Implement {{ switchType }}
         {% endswitch %}
+        {% if postBackMessages|length > 0 %}
+            <ul class="list-none m-0 mt-2 text-red-800">
+                {% for message in postBackMessages %}
+                    <li class="mb-1">{{ message|smartypants|widont }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>

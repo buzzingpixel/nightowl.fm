@@ -12,6 +12,7 @@ use function getenv;
 /**
  * @method bool devMode()
  * @method string rootPath()
+ * @method string publicPath()
  * @method string pathToContentDirectory()
  * @method string pathToStorageDirectory()
  * @method string siteUrl()
@@ -29,6 +30,8 @@ class General extends SimpleModel
         static::$devMode = getenv('DEV_MODE') === 'true';
 
         static::$rootPath = $rootPath;
+
+        static::$publicPath = $rootPath . '/public';
 
         static::$pathToContentDirectory = $rootPath . '/content';
 
@@ -52,6 +55,8 @@ class General extends SimpleModel
     public static bool $devMode = false;
 
     public static string $rootPath = '';
+
+    public static string $publicPath = '';
 
     public static string $pathToContentDirectory = '';
 
