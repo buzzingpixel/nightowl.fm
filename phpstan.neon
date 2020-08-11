@@ -1,5 +1,6 @@
 parameters:
     level: max
+    treatPhpDocTypesAsCertain: false
     bootstrapFiles:
         - phpstan-bootstrap.php
     ignoreErrors:

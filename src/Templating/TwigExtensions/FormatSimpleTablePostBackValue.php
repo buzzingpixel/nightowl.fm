@@ -40,12 +40,15 @@ class FormatSimpleTablePostBackValue extends AbstractExtension
 
         $rows = [];
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($val as $colName => $colRows) {
             if (! is_array($colRows)) {
                 continue;
             }
 
+            /** @psalm-suppress MixedAssignment */
             foreach ($colRows as $rowKey => $colValue) {
+                /** @psalm-suppress MixedAssignment */
                 $rows[$rowKey][$colName] = $colValue;
             }
         }

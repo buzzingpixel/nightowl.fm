@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\People;
 
+use App\Context\People\Models\PersonModel;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -22,9 +23,13 @@ class PeopleIndexResponder
         $this->twig            = $twig;
     }
 
-    public function __invoke(
+    /**
+     * @param PersonModel[] $people
+     */
+    public function respond(
         Meta $meta,
-        string $pageTitle
+        string $pageTitle,
+        array $people
     ): ResponseInterface {
         $response = $this->responseFactory->createResponse();
 
@@ -35,6 +40,7 @@ class PeopleIndexResponder
                     'meta' => $meta,
                     'title' => $pageTitle,
                     'activeNavHref' => '/cms/people',
+                    'people' => $people,
                 ],
             ),
         );

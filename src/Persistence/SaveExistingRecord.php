@@ -22,6 +22,11 @@ class SaveExistingRecord
 
     public function __invoke(Record $record): Payload
     {
+        return $this->save($record);
+    }
+
+    public function save(Record $record): Payload
+    {
         if (! $record->id) {
             return new Payload(
                 Payload::STATUS_NOT_UPDATED,

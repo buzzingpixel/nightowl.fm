@@ -90,9 +90,11 @@ class PostNewPersonAction
             ));
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach (($post['links']['link_title'] ?? []) as $key => $title) {
             $title = (string) $title;
-            $url   = (string) ($post['links']['link_url'][$key] ?? '');
+            /** @psalm-suppress MixedArrayOffset */
+            $url = (string) ($post['links']['link_url'][$key] ?? '');
 
             if ($title === '' || $url === '') {
                 continue;

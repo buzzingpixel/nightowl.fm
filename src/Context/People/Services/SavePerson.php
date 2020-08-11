@@ -50,7 +50,7 @@ class SavePerson
                 $isNew = true;
             }
 
-            if ($person->newPhotoFileLocation) {
+            if ($person->newPhotoFileLocation !== '') {
                 $this->saveNewProfilePhoto->save($person);
             }
 

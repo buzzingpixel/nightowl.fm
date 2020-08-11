@@ -51,7 +51,7 @@ class PostNewPersonResponder
         return $this->responseFactory->createResponse(303)
             ->withHeader(
                 'Location',
-                '/cms/people/' . $payload->getResult()['id'],
+                '/cms/people/' . ((string) $payload->getResult()['id']),
             );
     }
 }

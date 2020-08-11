@@ -9,6 +9,9 @@ COPY ./docker/.profile /root/.bashrc
 
 # Install application requirements
 RUN apt-get update && apt-get install -my --no-install-recommends \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     libmagick++-dev \
     libmagickwand-dev \
     libpq-dev \
@@ -26,11 +29,11 @@ RUN apt-get update && apt-get install -my --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-jpeg --with-freetype --with-xpm --with-webp \
+    && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install bz2 \
     && docker-php-ext-install exif \
-    && docker-php-ext-install gd \
     && docker-php-ext-install iconv \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install opcache \

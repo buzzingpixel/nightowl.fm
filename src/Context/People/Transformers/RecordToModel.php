@@ -15,6 +15,11 @@ use function Safe\json_decode;
 
 class RecordToModel
 {
+    public function __invoke(PersonRecord $record): PersonModel
+    {
+        return $this->transform($record);
+    }
+
     public function transform(PersonRecord $record): PersonModel
     {
         $model = new PersonModel();
@@ -31,7 +36,7 @@ class RecordToModel
 
         $model->photoFileLocation = $record->photo_file_location;
 
-        $model->photoPreference = $record->photo_file_location;
+        $model->photoPreference = $record->photo_preference;
 
         $model->bio = $record->bio;
 
@@ -41,8 +46,10 @@ class RecordToModel
 
         $model->twitterHandle = $record->twitter_handle;
 
+        /** @psalm-suppress MixedAssignment */
         $linksArray = json_decode($record->links, true);
 
+        /** @psalm-suppress MixedArgument */
         $model->links = array_map(
             /**
              * @param array<string, string> $linkArray

@@ -80,6 +80,7 @@ class PersonModel
 
         assert(is_array($val));
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         $this->setLinks($val);
     }
 

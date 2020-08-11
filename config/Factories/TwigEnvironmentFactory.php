@@ -6,6 +6,7 @@ namespace Config\Factories;
 
 use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\FormatSimpleTablePostBackValue;
+use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
 use App\Templating\TwigExtensions\PhpFunctions;
 use App\Templating\TwigExtensions\ReadJson;
 use App\Templating\TwigExtensions\TemplateExists;
@@ -83,6 +84,10 @@ class TwigEnvironmentFactory
 
         $twig->addExtension(
             $di->get(FormatSimpleTablePostBackValue::class)
+        );
+
+        $twig->addExtension(
+            $di->get(GetPersonProfilePhotoUrl::class)
         );
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));

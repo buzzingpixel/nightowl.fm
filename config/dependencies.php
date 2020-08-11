@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Cli\Services\CliQuestionService;
+use App\Context\DatabaseCache\CacheItemPool;
 use App\Context\Email\Adapters\MandrillSendMailAdapter;
 use App\Context\Email\Configuration\MandrillConfig;
 use App\Context\Email\Interfaces\SendMailAdapter;
@@ -20,6 +21,7 @@ use League\Flysystem\Adapter\Local as FlysystemLocalAdapter;
 use League\Flysystem\Filesystem;
 use Monolog\Handler\RollbarHandler;
 use Monolog\Handler\StreamHandler as MonologStreamHandler;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
@@ -39,6 +41,7 @@ use function DI\autowire;
 use function DI\get;
 
 return [
+    CacheItemPoolInterface::class => autowire(CacheItemPool::class),
     CliQuestionService::class => static function (ContainerInterface $di): CliQuestionService {
         return new CliQuestionService(
             $di->get(QuestionHelper::class),

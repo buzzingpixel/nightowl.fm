@@ -9,6 +9,9 @@ use Awurth\SlimValidation\ValidatorInterface;
 
 class ValidationFactory
 {
+    /**
+     * @param string[] $defaultMessages
+     */
     public function make(array $defaultMessages = []): ValidatorInterface
     {
         return new Validator(

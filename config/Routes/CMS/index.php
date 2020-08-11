@@ -36,7 +36,6 @@ return static function (App $app): void {
 
         // $r->group('', function (RouteCollectorProxy $ri): void {
         //     // $this so PHPCS will be happy and not convert to static function.
-        //     /** @phpstan-ignore-next-line */
         //     $this->get(NoOp::class)();
         //     $ri->get('/shows/new', NewShowAction::class);
         // })->add(RequireAdminAction::class);

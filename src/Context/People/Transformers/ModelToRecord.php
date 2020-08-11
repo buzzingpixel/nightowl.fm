@@ -15,6 +15,11 @@ use function Safe\json_encode;
 
 class ModelToRecord
 {
+    public function __invoke(PersonModel $model): PersonRecord
+    {
+        return $this->transform($model);
+    }
+
     public function transform(PersonModel $model): PersonRecord
     {
         $record = new PersonRecord();
