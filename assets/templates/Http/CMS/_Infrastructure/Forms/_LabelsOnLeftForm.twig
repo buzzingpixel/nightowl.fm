@@ -1,11 +1,18 @@
 {% set submitContent = submitContent ?? 'Submit' %}
+{% set deleteAction = deleteAction ?? '' %}
 {% set cancelAction = cancelAction ?? '' %}
 {% set inputs = inputs ?? [] %}
 
 {% set buttons %}
     <div class="flex justify-end">
+        {% if deleteAction %}
+            {# TODO: Figure out how to hook this up #}
+            <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out">
+                DELETE
+            </button>
+        {% endif %}
         {% if cancelAction %}
-            <span class="inline-flex rounded-md shadow-sm">
+            <span class="ml-3  inline-flex rounded-md shadow-sm">
                 <a href="{{ cancelAction }}" type="button" class="py-2 px-4 border border-gray-300 rounded-md text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
                     Cancel
                 </a>

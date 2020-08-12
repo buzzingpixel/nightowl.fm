@@ -37,6 +37,7 @@ class EditPersonResponder
                 'title' => $pageTitle,
                 'activeNavHref' => '/cms/people',
                 'person' => $person,
+                'deleteAction' => '/cms/people/delete/' . $person->id,
                 'breadcrumbs' => [
                     [
                         'href' => '/cms/people',

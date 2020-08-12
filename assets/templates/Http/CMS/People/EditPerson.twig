@@ -15,6 +15,7 @@
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
         submitContent: person is defined ? 'Save' : 'Create',
         cancelAction: '/cms/people',
+        deleteAction: deleteAction ?? '',
         inputs: [
             {
                 label: 'First Name',
