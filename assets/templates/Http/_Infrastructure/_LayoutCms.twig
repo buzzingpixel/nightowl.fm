@@ -138,7 +138,17 @@
                         </button>
                     </div>
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-                        <nav class="px-2 space-y-1">
+                        <div class="flex-shrink-0 flex items-center px-4">
+                            <img
+                                class="h-8 w-auto inline-block align-middle"
+                                src="/assets/img/logos/night-owl-eye.svg"
+                                alt="NightOwl Logo"
+                            >
+                            <span class="ml-2 mt-2 inline-block align-middle">
+                                NightOwl CMS
+                            </span>
+                        </div>
+                        <nav class="mt-5 px-2 space-y-1">
                             {% for navItemParams in nav %}
                                 {{ _self.navItem(navItemParams, activeNavHref) }}
                             {% endfor %}
@@ -170,7 +180,17 @@
             <div class="flex flex-col w-64">
                 <div class="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
                     <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                        <nav class="flex-1 px-2 bg-white space-y-1">
+                        <div class="flex items-center flex-shrink-0 px-4">
+                            <img
+                                class="h-8 w-auto inline-block align-middle"
+                                src="/assets/img/logos/night-owl-eye.svg"
+                                alt="NightOwl Logo"
+                            >
+                            <span class="ml-2 mt-2 inline-block align-middle">
+                                NightOwl CMS
+                            </span>
+                        </div>
+                        <nav class="mt-5 flex-1 px-2 bg-white space-y-1">
                             {% for navItemParams in nav %}
                                 {{ _self.navItem(navItemParams, activeNavHref) }}
                             {% endfor %}
