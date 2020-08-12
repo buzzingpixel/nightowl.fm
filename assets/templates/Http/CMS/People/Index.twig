@@ -36,7 +36,7 @@
                             {% for person in people %}
                                 <tr>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="flex items-center">
+                                        <a href="/cms/people/edit/{{ person.id }}" class="block flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 <img
                                                     class="h-10 w-10 rounded-full"
@@ -54,7 +54,7 @@
                                                     {{ person.email }}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="text-sm leading-5 text-gray-900">
