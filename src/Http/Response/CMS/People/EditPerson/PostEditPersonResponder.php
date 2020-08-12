@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\People\NewPerson;
+namespace App\Http\Response\CMS\People\EditPerson;
 
+use App\Context\People\Models\PersonModel;
 use App\Payload\Payload;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Flash\Messages as FlashMessages;
 
-class PostNewPersonResponder
+class PostEditPersonResponder
 {
     private FlashMessages $flashMessages;
     private ResponseFactoryInterface $responseFactory;
@@ -22,9 +23,11 @@ class PostNewPersonResponder
         $this->responseFactory = $responseFactory;
     }
 
-    public function respond(Payload $payload): ResponseInterface
-    {
-        if ($payload->getStatus() !== Payload::STATUS_CREATED) {
+    public function respond(
+        Payload $payload,
+        PersonModel $person
+    ): ResponseInterface {
+        if ($payload->getStatus() !== Payload::STATUS_UPDATED) {
             $this->flashMessages->addMessage(
                 'PostMessage',
                 [
@@ -36,7 +39,7 @@ class PostNewPersonResponder
             return $this->responseFactory->createResponse(303)
                 ->withHeader(
                     'Location',
-                    '/cms/people/new',
+                    '/cms/people/edit/' . $person->id,
                 );
         }
 
@@ -44,14 +47,14 @@ class PostNewPersonResponder
             'PostMessage',
             [
                 'status' => Payload::STATUS_SUCCESSFUL,
-                'result' => ['message' => 'New person created successfully'],
+                'result' => ['message' => $person->getFullName() . ' updated successfully'],
             ]
         );
 
         return $this->responseFactory->createResponse(303)
             ->withHeader(
                 'Location',
-                '/cms/people/edit/' . ((string) $payload->getResult()['id']),
+                '/cms/people/edit/' . $person->id,
             );
     }
 }

@@ -13,7 +13,7 @@
 
 {% block cmsContent %}
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
-        submitContent: 'Create',
+        submitContent: person is defined ? 'Save' : 'Create',
         cancelAction: '/cms/people',
         inputs: [
             {

@@ -6,22 +6,25 @@ namespace App\Http\Response\CMS\People\EditPerson;
 
 use App\Context\People\Models\FetchModel;
 use App\Context\People\PeopleApi;
-use App\Http\Models\Meta;
+use App\Http\Response\CMS\People\Shared\SavePersonFromPost;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
-class EditPersonAction
+class PostEditPersonAction
 {
-    private EditPersonResponder $responder;
     private PeopleApi $peopleApi;
+    private PostEditPersonResponder $responder;
+    private SavePersonFromPost $savePersonFromPost;
 
     public function __construct(
-        EditPersonResponder $responder,
-        PeopleApi $peopleApi
+        PeopleApi $peopleApi,
+        PostEditPersonResponder $responder,
+        SavePersonFromPost $savePersonFromPost
     ) {
-        $this->responder = $responder;
-        $this->peopleApi = $peopleApi;
+        $this->peopleApi          = $peopleApi;
+        $this->responder          = $responder;
+        $this->savePersonFromPost = $savePersonFromPost;
     }
 
     /**
@@ -39,14 +42,10 @@ class EditPersonAction
             throw new HttpNotFoundException($request);
         }
 
-        $meta = new Meta();
-
-        $meta->title = 'Edit ' . $person->getFullName() . ' | CMS';
-
-        return $this->responder->respond(
-            $meta,
-            'Edit ' . $person->getFullName(),
+        return $this->savePersonFromPost->save(
+            $request,
             $person,
+            $this->responder
         );
     }
 }

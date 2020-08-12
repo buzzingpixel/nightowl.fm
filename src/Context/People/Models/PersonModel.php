@@ -61,6 +61,8 @@ class PersonModel
      */
     public function setLinks(array $links): void
     {
+        $this->links = [];
+
         array_walk($links, [$this, 'addLink']);
     }
 
