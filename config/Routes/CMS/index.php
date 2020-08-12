@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\IndexAction;
+use App\Http\Response\CMS\People\DeletePerson\PostDeletePersonAction;
 use App\Http\Response\CMS\People\EditPerson\EditPersonAction;
 use App\Http\Response\CMS\People\EditPerson\PostEditPersonAction;
 use App\Http\Response\CMS\People\NewPerson\NewPersonAction;
@@ -37,6 +38,7 @@ return static function (App $app): void {
         $r->post('/people/new', PostNewPersonAction::class);
         $r->get('/people/edit/{id}', EditPersonAction::class);
         $r->post('/people/edit/{id}', PostEditPersonAction::class);
+        $r->post('/people/delete/{id}', PostDeletePersonAction::class);
 
         // $r->group('', function (RouteCollectorProxy $ri): void {
         //     // $this so PHPCS will be happy and not convert to static function.

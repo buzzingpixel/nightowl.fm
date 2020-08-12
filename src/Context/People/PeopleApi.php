@@ -6,6 +6,7 @@ namespace App\Context\People;
 
 use App\Context\People\Models\FetchModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\People\Services\DeletePerson;
 use App\Context\People\Services\FetchPeople;
 use App\Context\People\Services\GetPersonProfilePhotoUrl;
 use App\Context\People\Services\SavePerson;
@@ -66,5 +67,14 @@ class PeopleApi
         assert($service instanceof GetPersonProfilePhotoUrl);
 
         return $service->get($person, $opt);
+    }
+
+    public function deletePerson(PersonModel $person): Payload
+    {
+        $service = $this->di->get(DeletePerson::class);
+
+        assert($service instanceof DeletePerson);
+
+        return $service->delete($person);
     }
 }
