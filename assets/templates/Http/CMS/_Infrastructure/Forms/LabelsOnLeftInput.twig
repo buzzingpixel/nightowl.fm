@@ -5,6 +5,7 @@
 {% set id = id ?? name %}
 {% set type = type ?? 'text' %}
 {% set description = description ?? '' %}
+{% set value = value ?? '' %}
 
 {% set postBackValue = PostMessage['result']['inputValues'][name] ?? null %}
 {% set postBackMessages = PostMessage['result']['inputMessages'][name] ?? [] %}
@@ -45,9 +46,7 @@
                         name="{{ name }}"
                         id="{{ id }}"
                         class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5{% if postBackMessages|length > 0 %} border-red-800{% endif %}"
-                        {% if postBackValue %}
-                        value="{{ postBackValue }}"
-                        {% endif %}
+                        value="{{ postBackValue ?: value }}"
                     >
                 </div>
             {% case 'textarea' %}
@@ -57,13 +56,9 @@
                         id="{{ id }}"
                         rows="3"
                         class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                    >{% if postBackValue %}{{ postBackValue }}{% endif %}</textarea>
+                    >{{ postBackValue ?: value }}</textarea>
                 </div>
             {% case 'file_upload' %}
-                {% set messageType = '' %}
-                {% if (postBackValue['file_name'] ?? '') %}
-                    {% set messageType = 'success' %}
-                {% endif %}
                 <div
                     x-init="RunWhenReady('FileUploadField', {
                         data: data,
@@ -72,8 +67,8 @@
                     x-data="{
                         data: {
                             mode: 'incompatible',
-                            message: '{{ postBackValue['file_name'] ?? '' }}',
-                            messageType: '{{ messageType }}',
+                            message: '{{ postBackValue['file_name'] ?? value }}',
+                            messageType: 'success',
                             uploadInProgress: false,
                             filePath: '{{ postBackValue['file_path'] ?? '' }}',
                             fileName: '{{ postBackValue['file_name'] ?? '' }}',
@@ -91,7 +86,7 @@
                         x-model="data.fileName"
                     >
 
-                    {# Error message #}
+                    {# Message #}
                     <div
                         class="mb-2 text-green-600"
                         x-text="data.message"
@@ -180,6 +175,10 @@
                                     {% if postBackValue == option.value %}
                                         checked
                                     {% endif %}
+                                {% elseif value %}
+                                    {% if value == option.value %}
+                                        checked
+                                    {% endif %}
                                 {% elseif loop.first %}
                                     checked
                                 {% endif %}
@@ -212,6 +211,10 @@
                                     {% if postBackValue == option.value %}
                                         selected
                                     {% endif %}
+                                {% elseif value %}
+                                    {% if value == option.value %}
+                                        selected
+                                    {% endif %}
                                 {% elseif loop.first %}
                                     selected
                                 {% endif %}
@@ -227,7 +230,7 @@
                     tabindex="0"
                     aria-checked="false"
                     class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline"
-                    x-data="{ on: {{ postBackValue == 'true' ? 'true' : 'false' }} }"
+                    x-data="{ on: {{ (postBackValue == 'true' or value == 'true') ? 'true' : 'false' }} }"
                     :class="{ 'bg-gray-200': !on, 'bg-indigo-600': on }"
                     @click="on = !on"
                     @keydown.space.prevent="on = !on"
@@ -274,7 +277,7 @@
                             data: {
                             },
                         }"
-                    >{{ postBackValue }}</textarea>
+                    >{{ postBackValue ?: value }}</textarea>
                 </div>
             {% case 'simple_table' %}
                 {% set fieldConfig = fieldConfig ?? [] %}
@@ -330,7 +333,11 @@
                                     </tr>
                                 </thead>
                                 <tbody ref="tableBody">
-                                    {% for row in formatSimpleTablePostBackValue(postBackValue) %}
+                                    {% set valueFormatted = formatSimpleTablePostBackValue(postBackValue) %}
+                                    {% if valueFormatted|length < 1 %}
+                                        {% set valueFormatted = value %}
+                                    {% endif %}
+                                    {% for row in valueFormatted %}
                                         <tr class="bg-white" ref="row">
                                             <td class="p-1 text-center">
                                                 <div class="w-4 h-4 inline-block cursor-move js-drag-sort-handle">

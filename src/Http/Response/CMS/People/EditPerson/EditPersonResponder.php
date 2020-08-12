@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\People\NewPerson;
+namespace App\Http\Response\CMS\People\EditPerson;
 
+use App\Context\People\Models\PersonModel;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment as TwigEnvironment;
 
-class NewPersonResponder
+class EditPersonResponder
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
@@ -24,7 +25,8 @@ class NewPersonResponder
 
     public function respond(
         Meta $meta,
-        string $pageTitle
+        string $pageTitle,
+        PersonModel $person
     ): ResponseInterface {
         $response = $this->responseFactory->createResponse();
 
@@ -34,6 +36,7 @@ class NewPersonResponder
                 'meta' => $meta,
                 'title' => $pageTitle,
                 'activeNavHref' => '/cms/people',
+                'person' => $person,
                 'breadcrumbs' => [
                     [
                         'href' => '/cms/people',

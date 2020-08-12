@@ -10,6 +10,7 @@ use LogicException;
 use function array_walk;
 use function assert;
 use function is_array;
+use function pathinfo;
 
 /**
  * @property LinkModel[] $links
@@ -27,6 +28,13 @@ class PersonModel
     public string $email = '';
 
     public string $photoFileLocation = '';
+
+    public function getPhotoFileName(): string
+    {
+        $pathInfo = pathinfo($this->photoFileLocation);
+
+        return (string) $pathInfo['basename'];
+    }
 
     public string $newPhotoFileLocation = '';
 

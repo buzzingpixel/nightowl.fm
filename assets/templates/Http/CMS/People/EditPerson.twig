@@ -1,4 +1,15 @@
+{# @var \App\Context\People\Models\PersonModel|null person #}
+
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% set personLinks = [] %}
+
+{% for link in (person.links ?? []) %}
+    {% set personLinks = personLinks|merge([{
+        link_title: link.title,
+        link_url: link.url,
+    }]) %}
+{% endfor %}
 
 {% block cmsContent %}
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
@@ -8,24 +19,29 @@
             {
                 label: 'First Name',
                 name: 'first_name',
+                value: person.firstName ?? '',
             },
             {
                 label: 'Last Name',
                 name: 'last_name',
+                value: person.lastName ?? '',
             },
             {
                 label: 'Slug',
                 name: 'slug',
+                value: person.slug ?? '',
             },
             {
                 label: 'Email',
                 name: 'email',
                 type: 'email',
+                value: person.email ?? '',
             },
             {
                 label: 'Photo',
                 name: 'photo',
                 type: 'file_upload',
+                value: person.photoFileName ?? '',
             },
             {
                 label: 'Photo Preference',
@@ -41,23 +57,28 @@
                         value: 'cms',
                     },
                 ],
+                value: person.photoPreference ?? '',
             },
             {
                 label: 'Bio',
                 name: 'bio',
                 type: 'markdown',
+                value: person.bio ?? '',
             },
             {
                 label: 'Location',
                 name: 'location',
+                value: person.location ?? '',
             },
             {
                 label: 'Facebook Page Slug',
                 name: 'facebook_page_slug',
+                value: person.facebookPageSlug ?? '',
             },
             {
                 label: 'Twitter Handle',
                 name: 'twitter_handle',
+                value: person.twitterHandle ?? '',
             },
             {
                 label: 'Links',
@@ -73,6 +94,7 @@
                         name: 'link_url',
                     },
                 ],
+                value: personLinks,
             },
         ],
     } only %}

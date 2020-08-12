@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\People;
 
-use App\Context\People\Models\FetchPeopleModel;
+use App\Context\People\Models\FetchModel;
 use App\Context\People\Models\PersonModel;
 use App\Context\People\Services\FetchPeople;
 use App\Context\People\Services\GetPersonProfilePhotoUrl;
@@ -35,13 +35,23 @@ class PeopleApi
     /**
      * @return PersonModel[]
      */
-    public function fetchPeople(?FetchPeopleModel $fetchPeopleModel = null): array
+    public function fetchPeople(?FetchModel $fetchPeopleModel = null): array
     {
         $service = $this->di->get(FetchPeople::class);
 
         assert($service instanceof FetchPeople);
 
         return $service->fetch($fetchPeopleModel);
+    }
+
+    public function fetchPerson(
+        ?FetchModel $fetchPeopleModel = null
+    ): ?PersonModel {
+        $fetchPeopleModel ??= new FetchModel();
+
+        $fetchPeopleModel->limit = 1;
+
+        return $this->fetchPeople($fetchPeopleModel)[0] ?? null;
     }
 
     /**

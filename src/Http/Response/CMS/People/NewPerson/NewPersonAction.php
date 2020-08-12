@@ -23,7 +23,7 @@ class NewPersonAction
 
         $meta->title = 'Create New Person | CMS';
 
-        return $this->responder->__invoke(
+        return $this->responder->respond(
             $meta,
             'Create New Person',
         );
