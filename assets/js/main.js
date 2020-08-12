@@ -1,21 +1,19 @@
 /* eslint-disable no-new */
 
-// Setup
+// import Analytics from './SetUp/Analytics.js';
+import ConfirmSubmit from './Components/ConfirmSubmit.js';
 import Events from './Events.js';
-import SetGlobalData from './SetUp/SetGlobalData.js';
+import FileUploadField from './Components/FileUploadField.js';
 import LoadAxios from './SetUp/LoadAxios.js';
 import MarkdownTextArea from './Components/MarkdownTextArea.js';
-// import Analytics from './SetUp/Analytics.js';
-import SimpleTable from './Components/SimpleTable.js';
-
-// Components
-import FileUploadField from './Components/FileUploadField.js';
+import SetGlobalData from './SetUp/SetGlobalData.js';
 import Selects from './Components/Selects.js';
+import SimpleTable from './Components/SimpleTable.js';
 
 // Setup
 Events();
-SetGlobalData();
 LoadAxios();
+SetGlobalData();
 // Analytics();
 window.Methods.FileUploadField = FileUploadField;
 window.Methods.MarkdownTextArea = MarkdownTextArea;
@@ -28,3 +26,9 @@ const selectEls = document.querySelectorAll('[ref="select"]');
 if (selectEls.length > 0) {
     new Selects(selectEls);
 }
+
+// Confirm Submit
+const forms = document.querySelectorAll('[ref="ConfirmSubmit"]');
+forms.forEach((el) => {
+    new ConfirmSubmit(el);
+});
