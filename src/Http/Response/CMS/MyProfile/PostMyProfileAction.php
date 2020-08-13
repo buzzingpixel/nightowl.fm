@@ -14,7 +14,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Flash\Messages as FlashMessages;
 use Throwable;
 
+use function assert;
 use function count;
+use function is_array;
 
 class PostMyProfileAction
 {
@@ -40,6 +42,8 @@ class PostMyProfileAction
         $user = $this->loggedInUser->model();
 
         $postData = $request->getParsedBody();
+
+        assert(is_array($postData));
 
         $inputValues = [
             'timezone' => (string) ($postData['timezone'] ?? ''),

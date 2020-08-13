@@ -134,7 +134,7 @@ class TimeZoneList
     ];
 
     /**
-     * @return string[]
+     * @return array<array-key, array<string, string>>
      *
      * @noinspection PhpDocMissingThrowsInspection
      */

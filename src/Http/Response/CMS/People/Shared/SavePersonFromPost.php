@@ -25,8 +25,7 @@ class SavePersonFromPost
 
     public function __construct(
         ValidationFactory $validationFactory,
-        PeopleApi $peopleApi,
-        PostNewPersonResponder $responder
+        PeopleApi $peopleApi
     ) {
         $this->validationFactory = $validationFactory;
         $this->peopleApi         = $peopleApi;

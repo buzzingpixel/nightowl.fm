@@ -27,7 +27,7 @@ class TimeZoneList extends AbstractExtension
     }
 
     /**
-     * @return string[]
+     * @return array<array-key, array<string, string>>
      */
     public function getList(): array
     {

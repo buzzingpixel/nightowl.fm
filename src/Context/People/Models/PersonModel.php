@@ -33,6 +33,7 @@ class PersonModel
     {
         $pathInfo = pathinfo($this->photoFileLocation);
 
+        /** @phpstan-ignore-next-line */
         return (string) $pathInfo['basename'];
     }
 
