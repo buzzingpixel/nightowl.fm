@@ -7,6 +7,8 @@ use App\Http\Response\IForgot\IForGotAction;
 use App\Http\Response\IForgot\PostIForgotAction;
 use App\Http\Response\LogIn\PostLogInAction;
 use App\Http\Response\LogIn\PostLogOutAction;
+use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
+use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
 use Slim\App;
 
 return static function (App $app): void {
@@ -22,6 +24,8 @@ return static function (App $app): void {
     $app->post('/log-out', PostLogOutAction::class);
     $app->get('/iforgot', IForGotAction::class);
     $app->post('/iforgot', PostIForgotAction::class);
+    $app->get('/reset-pw-with-token/{token}', ResetPasswordWithTokenAction::class);
+    $app->post('/reset-pw-with-token/{token}', PostResetPasswordWithTokenAction::class);
 
     // CMS
     $cmsRoutes = require __DIR__ . '/CMS/index.php';

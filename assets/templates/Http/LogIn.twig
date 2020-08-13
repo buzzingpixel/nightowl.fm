@@ -5,7 +5,7 @@
     {% set message = message[0] %}
 {% endif %}
 
-{% set message %}
+{% set messageHtml %}
     {% if message['status'] is defined %}
         {% set title = 'There was a problem' %}
         {% set class = 'bg-red-300 border-red-500' %}
@@ -48,7 +48,7 @@
                     <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
                     <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
                     <input type="hidden" name="redirect_to" value="{{ redirectTo }}">
-                    {{ message|raw }}
+                    {{ messageHtml|raw }}
                     <div>
                         <label for="email_address" class="block text-sm font-medium leading-5 text-gray-700">
                             Email address
