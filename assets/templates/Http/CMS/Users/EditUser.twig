@@ -1,0 +1,59 @@
+{# @var \App\Context\Users\Models\UserModel|null userModel #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsPreContent %}
+    {% if deleteAction is defined %}
+        <form
+            method="post"
+            action="{{ deleteAction }}"
+            class="block mb-5"
+            ref="ConfirmSubmit"
+            data-submit-action-text="Delete {{ userModel.emailAddress }}"
+        >
+            <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+            <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+            <button
+                type="submit"
+                class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out"
+            >
+                Delete {{ userModel.emailAddress }}&hellip;
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block cmsContent %}
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: user is defined ? 'Save' : 'Create',
+        cancelAction: '/cms/users',
+        inputs: [
+            {
+                label: 'Email Address',
+                name: 'email_address',
+                type: 'email',
+                value: userModel.emailAddress ?? '',
+            },
+            {
+                label: 'Is Active?',
+                name: 'is_active',
+                type: 'lightswitch',
+                value: userModel.isActive ?? 'true',
+            },
+            {
+                label: 'Timezone',
+                name: 'timezone',
+                type: 'select',
+                value: userModel.timezone.name ?? 'US/Central',
+                options: timeZoneList(),
+            },
+            {
+                label: 'Send Password Reset Email?',
+                name: 'send_password_reset',
+                type: 'lightswitch',
+                value: userModel is defined ? 'false' : 'true',
+            },
+        ],
+    } only %}
+{% endblock %}
+

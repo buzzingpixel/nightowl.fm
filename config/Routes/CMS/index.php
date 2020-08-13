@@ -14,6 +14,8 @@ use App\Http\Response\CMS\People\NewPerson\PostNewPersonAction;
 use App\Http\Response\CMS\People\PeopleIndexAction;
 use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
 use App\Http\Response\CMS\Shows\ShowsIndexAction;
+use App\Http\Response\CMS\Users\NewUser\NewUserAction;
+use App\Http\Response\CMS\Users\NewUser\PostNewUserAction;
 use App\Http\Response\CMS\Users\UsersIndexAction;
 use App\Http\RouteMiddleware\RequireLogInAction;
 use Config\NoOp;
@@ -47,6 +49,8 @@ return static function (App $app): void {
         $r->post('/people/delete/{id}', PostDeletePersonAction::class);
 
         $r->get('/users', UsersIndexAction::class);
+        $r->get('/users/new', NewUserAction::class);
+        $r->post('/users/new', PostNewUserAction::class);
 
         // $r->group('', function (RouteCollectorProxy $ri): void {
         //     // $this so PHPCS will be happy and not convert to static function.

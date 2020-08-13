@@ -27,7 +27,7 @@ class PostNewPersonAction
         return $this->savePersonFromPost->save(
             $request,
             new PersonModel(),
-            $this->responder
+            $this->responder,
         );
     }
 }
