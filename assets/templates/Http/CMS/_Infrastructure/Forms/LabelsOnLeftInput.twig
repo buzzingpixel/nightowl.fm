@@ -229,7 +229,7 @@
                 {% if postBackValue is not null %}
                     {% set lightSwitchValue = postBackValue %}
                 {% else %}
-                    {% set lightSwitchValue = (value == true or value == 'true') ? 'true' : 'false' %}
+                    {% set lightSwitchValue = value %}
                 {% endif %}
                 <span
                     role="checkbox"
