@@ -196,6 +196,7 @@
                 <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
                     <select
                         id="{{ id }}"
+                        name="{{ name }}{% if multiple %}[]{% endif %}"
                         class="block form-select w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                         style="background-image: none"
                         ref="select"

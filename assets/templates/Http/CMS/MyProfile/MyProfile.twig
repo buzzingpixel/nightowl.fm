@@ -1,0 +1,36 @@
+{# @var string title #}
+{# @var \App\Context\Users\Models\UserModel user #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsPreContent %}
+    <form
+        method="post"
+        action="/log-out"
+        class="block mb-5"
+    >
+        <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+        <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+        <button
+            type="submit"
+            class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out"
+        >
+            Log Out
+        </button>
+    </form>
+{% endblock %}
+
+{% block cmsContent %}
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: 'Save',
+        inputs: [
+            {
+                label: 'Timezone',
+                name: 'timezone',
+                type: 'select',
+                value: user.timezone.name,
+                options: timeZoneList(),
+            },
+        ],
+    } only %}
+{% endblock %}

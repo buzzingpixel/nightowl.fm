@@ -10,6 +10,7 @@ use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
 use App\Templating\TwigExtensions\PhpFunctions;
 use App\Templating\TwigExtensions\ReadJson;
 use App\Templating\TwigExtensions\TemplateExists;
+use App\Templating\TwigExtensions\TimeZoneList;
 use App\Templating\TwigExtensions\TwigSlimFlashMessages;
 use BuzzingPixel\TwigDumper\TwigDumper;
 use buzzingpixel\twigsmartypants\SmartypantsTwigExtension;
@@ -89,6 +90,8 @@ class TwigEnvironmentFactory
         $twig->addExtension(
             $di->get(GetPersonProfilePhotoUrl::class)
         );
+
+        $twig->addExtension($di->get(TimeZoneList::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
 

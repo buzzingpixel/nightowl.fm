@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\IndexAction;
+use App\Http\Response\CMS\MyProfile\MyProfileAction;
+use App\Http\Response\CMS\MyProfile\PostMyProfileAction;
 use App\Http\Response\CMS\People\DeletePerson\PostDeletePersonAction;
 use App\Http\Response\CMS\People\EditPerson\EditPersonAction;
 use App\Http\Response\CMS\People\EditPerson\PostEditPersonAction;
@@ -29,6 +31,9 @@ return static function (App $app): void {
             '/ajax/file-upload',
             PostFileUploadAction::class
         );
+
+        $r->get('/my-profile', MyProfileAction::class);
+        $r->post('/my-profile', PostMyProfileAction::class);
 
         $r->get('/shows', ShowsIndexAction::class);
         $r->get('/shows/new', NewShowAction::class);
