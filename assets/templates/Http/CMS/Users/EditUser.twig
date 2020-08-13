@@ -23,6 +23,12 @@
     {% endif %}
 {% endblock %}
 
+{% set isActive = 'true' %}
+
+{% if userModel is defined %}
+    {% set isActive = userModel.isActive ? 'true' : 'false' %}
+{% endif %}
+
 {% block cmsContent %}
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
         submitContent: user is defined ? 'Save' : 'Create',
@@ -38,7 +44,7 @@
                 label: 'Is Active?',
                 name: 'is_active',
                 type: 'lightswitch',
-                value: userModel.isActive ?? 'true',
+                value: isActive,
             },
             {
                 label: 'Timezone',

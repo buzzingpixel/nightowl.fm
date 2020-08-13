@@ -6,6 +6,7 @@ namespace App\Http\Response\CMS\Users\Shared;
 
 use App\Context\Users\Models\UserModel;
 use App\Context\Users\UserApi;
+use App\Http\Response\CMS\Users\EditUser\PostEditUserResponder;
 use App\Http\Response\CMS\Users\NewUser\PostNewUserResponder;
 use App\Payload\Payload;
 use App\Utilities\SimpleValidator;
@@ -33,12 +34,14 @@ class SaveUserFromPost
     }
 
     /**
+     * @param PostNewUserResponder|PostEditUserResponder $responder
+     *
      * @throws Throwable
      */
     public function save(
         ServerRequestInterface $request,
         UserModel $user,
-        PostNewUserResponder $responder
+        $responder
     ): ResponseInterface {
         $post = $request->getParsedBody();
 
@@ -79,6 +82,7 @@ class SaveUserFromPost
                         'inputValues' => $data,
                     ],
                 ),
+                $user,
             );
         }
 
@@ -90,21 +94,28 @@ class SaveUserFromPost
 
         $user->timezone = $userTimezone;
 
+        $isNew = $user->id === '';
+
         $payload = $this->userApi->saveUser($user);
 
-        if ($payload->getStatus() !== Payload::STATUS_CREATED) {
+        if ($isNew && $payload->getStatus() !== Payload::STATUS_CREATED) {
             return $responder->respond(
                 new Payload(
                     Payload::STATUS_NOT_CREATED,
                     ['message' => 'An unknown error occurred'],
                 ),
+                $user,
             );
+        }
+
+        if (! $isNew && $payload->getStatus() !== Payload::STATUS_UPDATED) {
+            return $responder->respond($payload, $user);
         }
 
         if ($data['send_password_reset'] === 'true') {
             $this->userApi->requestPasswordResetEmail($user);
         }
 
-        return $responder->respond($payload);
+        return $responder->respond($payload, $user);
     }
 }

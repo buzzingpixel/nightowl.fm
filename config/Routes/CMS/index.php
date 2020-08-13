@@ -16,6 +16,7 @@ use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
 use App\Http\Response\CMS\Shows\ShowsIndexAction;
 use App\Http\Response\CMS\Users\DeletePerson\PostDeleteUserAction;
 use App\Http\Response\CMS\Users\EditUser\EditUserAction;
+use App\Http\Response\CMS\Users\EditUser\PostEditUserAction;
 use App\Http\Response\CMS\Users\NewUser\NewUserAction;
 use App\Http\Response\CMS\Users\NewUser\PostNewUserAction;
 use App\Http\Response\CMS\Users\UsersIndexAction;
@@ -54,6 +55,7 @@ return static function (App $app): void {
         $r->get('/users/new', NewUserAction::class);
         $r->post('/users/new', PostNewUserAction::class);
         $r->get('/users/edit/{id}', EditUserAction::class);
+        $r->post('/users/edit/{id}', PostEditUserAction::class);
         $r->post('/users/delete/{id}', PostDeleteUserAction::class);
 
         // $r->group('', function (RouteCollectorProxy $ri): void {
