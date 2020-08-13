@@ -38,7 +38,7 @@ class RequireLogInAction implements MiddlewareInterface
 
         $meta->title = 'Log In';
 
-        if ($user === null) {
+        if ($user === null || ! $user->isActive) {
             return $this->responder->respond(
                 $meta,
                 $request->getUri()->getPath()

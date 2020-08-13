@@ -34,8 +34,6 @@ class FetchUsersByLimitOffset
         $records = ($this->recordQueryFactory)(
             new UserRecord()
         )
-            ->withOrder('last_name', 'asc')
-            ->withOrder('first_name', 'asc')
             ->withOrder('email_address', 'asc')
             ->withLimit($limit)
             ->withOffset($offset)
