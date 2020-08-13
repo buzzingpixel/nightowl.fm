@@ -120,7 +120,7 @@ class RequestPasswordResetEmailTest extends TestCase
                     [
                         'emailAddress' => $user->emailAddress,
                         'link' => 'testSiteUrl' .
-                            '/account/reset-pw-with-token/' .
+                            '/reset-pw-with-token/' .
                             'testId',
                     ]
                 )

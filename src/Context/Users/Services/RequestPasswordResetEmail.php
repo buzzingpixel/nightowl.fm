@@ -54,7 +54,7 @@ class RequestPasswordResetEmail
             [
                 'emailAddress' => $user->emailAddress,
                 'link' => $this->config->siteUrl() .
-                    '/account/reset-pw-with-token/' .
+                    '/reset-pw-with-token/' .
                     $result['id'],
             ]
         );

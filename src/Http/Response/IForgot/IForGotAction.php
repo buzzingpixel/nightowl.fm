@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\RouteMiddleware;
+namespace App\Http\Response\IForgot;
 
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Throwable;
 use Twig\Environment as TwigEnvironment;
 
-class RequireLogInResponder
+class IForGotAction
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twigEnvironment;
@@ -23,21 +22,17 @@ class RequireLogInResponder
         $this->twigEnvironment = $twigEnvironment;
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function respond(
-        Meta $meta,
-        string $redirectTo
-    ): ResponseInterface {
+    public function __invoke(): ResponseInterface
+    {
+        $meta = new Meta();
+
+        $meta->title = 'Request Password Reset';
+
         $response = $this->responseFactory->createResponse();
 
         $response->getBody()->write($this->twigEnvironment->render(
-            'Http/LogIn.twig',
-            [
-                'meta' => $meta,
-                'redirectTo' => $redirectTo,
-            ]
+            'Http/IForgot.twig',
+            ['meta' => $meta]
         ));
 
         return $response;

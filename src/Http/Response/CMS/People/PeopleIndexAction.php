@@ -25,7 +25,7 @@ class PeopleIndexAction
     {
         $meta = new Meta();
 
-        $meta->title = 'Shows | CMS';
+        $meta->title = 'People | CMS';
 
         return $this->responder->respond(
             $meta,
