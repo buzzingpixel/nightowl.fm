@@ -46,8 +46,6 @@ class PostIForgotAction
             $emailAddress
         );
 
-        return $this->respond();
-
         if ($user === null) {
             return $this->respond();
         }
