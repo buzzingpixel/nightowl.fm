@@ -1,3 +1,5 @@
+{# @var mixed[] peopleOptions #}
+
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
 {% block cmsContent %}
@@ -83,20 +85,7 @@
                 name: 'hosts',
                 type: 'select',
                 multiple: true,
-                options: [
-                    {
-                        label: 'TODO 1',
-                        value: 'todo-1',
-                    },
-                    {
-                        label: 'TODO 2',
-                        value: 'todo-2',
-                    },
-                    {
-                        label: 'TODO 3',
-                        value: 'todo-3',
-                    },
-                ],
+                options: peopleOptions,
             },
         ],
     } only %}

@@ -193,7 +193,7 @@
                 </div>
             {% case 'select' %}
                 {% set multiple = multiple ?? false %}
-                <div class="max-w-lg rounded-md shadow-sm sm:max-w-xs">
+                <div class="rounded-md shadow-sm{% if multiple %} max-w-xl{% else %}max-w-lg sm:max-w-xs {% endif %}">
                     <select
                         id="{{ id }}"
                         name="{{ name }}{% if multiple %}[]{% endif %}"
@@ -216,7 +216,7 @@
                                     {% if value == option.value %}
                                         selected
                                     {% endif %}
-                                {% elseif loop.first %}
+                                {% elseif loop.first and not multiple %}
                                     selected
                                 {% endif %}
                             >

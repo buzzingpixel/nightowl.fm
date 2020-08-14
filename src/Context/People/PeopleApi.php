@@ -10,6 +10,7 @@ use App\Context\People\Services\DeletePerson;
 use App\Context\People\Services\FetchPeople;
 use App\Context\People\Services\GetPersonProfilePhotoUrl;
 use App\Context\People\Services\SavePerson;
+use App\Context\People\Transformers\PersonModelsToSelectArray;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
 
@@ -43,6 +44,20 @@ class PeopleApi
         assert($service instanceof FetchPeople);
 
         return $service->fetch($fetchPeopleModel);
+    }
+
+    /**
+     * @param PersonModel[] $models
+     *
+     * @return mixed[]
+     */
+    public function transformPersonModelsToSelectArray(array $models): array
+    {
+        $service = $this->di->get(PersonModelsToSelectArray::class);
+
+        assert($service instanceof PersonModelsToSelectArray);
+
+        return $service->transform($models);
     }
 
     public function fetchPerson(
