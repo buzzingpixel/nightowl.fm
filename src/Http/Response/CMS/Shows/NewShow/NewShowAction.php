@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Response\CMS\Shows\NewShow;
 
 use App\Context\People\PeopleApi;
+use App\Context\Shows\ShowConstants;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -35,7 +36,7 @@ class NewShowAction
         $response = $this->responseFactory->createResponse();
 
         $response->getBody()->write($this->twig->render(
-            'Http/CMS/Shows/NewShow.twig',
+            'Http/CMS/Shows/EditShow.twig',
             [
                 'meta' => $meta,
                 'title' => 'Create New Show',
@@ -46,6 +47,7 @@ class NewShowAction
                         'content' => 'Shows',
                     ],
                 ],
+                'statusOptions' => ShowConstants::STATUSES_SELECT_ARRAY,
                 'peopleOptions' => $this->peopleApi->transformPersonModelsToSelectArray(
                     $this->peopleApi->fetchPeople()
                 ),

@@ -1,3 +1,4 @@
+{# @var mixed[] statusOptions #}
 {# @var mixed[] peopleOptions #}
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
@@ -34,24 +35,7 @@
                 label: 'Show Status',
                 name: 'status',
                 type: 'radio',
-                options: [
-                    {
-                        label: 'Live',
-                        value: 'live',
-                    },
-                    {
-                        label: 'Coming Soon',
-                        value: 'coming_soon',
-                    },
-                    {
-                        label: 'Hidden',
-                        value: 'hidden',
-                    },
-                    {
-                        label: 'Retired',
-                        value: 'retired',
-                    },
-                ],
+                options: statusOptions,
             },
             {
                 label: 'Explicit?',

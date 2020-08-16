@@ -2,39 +2,35 @@
 
 declare(strict_types=1);
 
-namespace App\Context\People\Services;
+namespace App\Context\Shows\Services;
 
-use App\Context\People\Models\PersonModel;
-use Cocur\Slugify\Slugify;
+use App\Context\Shows\Models\ShowModel;
 use Config\General;
 use League\Flysystem\Filesystem;
 use LogicException;
 
 use function pathinfo;
 
-class SaveNewProfilePhoto
+class SaveNewArtwork
 {
     private General $generalConfig;
     private Filesystem $filesystem;
-    private Slugify $slugify;
 
     public function __construct(
         General $generalConfig,
-        Filesystem $filesystem,
-        Slugify $slugify
+        Filesystem $filesystem
     ) {
         $this->generalConfig = $generalConfig;
         $this->filesystem    = $filesystem;
-        $this->slugify       = $slugify;
     }
 
-    public function save(PersonModel $person): void
+    public function save(ShowModel $show): void
     {
         $tempDir = $this->generalConfig->pathToStorageDirectory() . '/temp';
 
-        $newFileLocation = $tempDir . '/' . $person->newPhotoFileLocation;
+        $newFileLocation = $tempDir . '/' . $show->newArtworkFileLocation;
 
-        $newFilePathInfo = pathinfo($person->newPhotoFileLocation);
+        $newFilePathInfo = pathinfo($show->newArtworkFileLocation);
 
         $ext = $newFilePathInfo['extension'] ?? 'jpg';
 
@@ -46,13 +42,11 @@ class SaveNewProfilePhoto
 
         $publicDir = $this->generalConfig->publicPath();
 
-        $targetPath = $publicDir . '/files/profile-photos/' . $person->id;
+        $targetPath = $publicDir . '/files/show-art/' . $show->id;
 
         $this->filesystem->createDir($targetPath);
 
-        $targetFileName = $this->slugify->slugify(
-            $person->getFullName()
-        ) . '.' . $ext;
+        $targetFileName = $show->slug . '.' . $ext;
 
         $targetFullPath = $targetPath . '/' . $targetFileName;
 
@@ -61,6 +55,6 @@ class SaveNewProfilePhoto
             $targetFullPath,
         );
 
-        $person->photoFileLocation = $person->id . '/' . $targetFileName;
+        $show->artworkFileLocation = $show->id . '/' . $targetFileName;
     }
 }

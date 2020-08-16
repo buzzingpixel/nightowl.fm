@@ -209,7 +209,7 @@
                             <option
                                 value="{{ option.value }}"
                                 {% if postBackValue %}
-                                    {% if postBackValue == option.value %}
+                                    {% if option.value in postBackValue %}
                                         selected
                                     {% endif %}
                                 {% elseif value %}
@@ -229,7 +229,7 @@
                 {% if postBackValue is not null %}
                     {% set lightSwitchValue = postBackValue %}
                 {% else %}
-                    {% set lightSwitchValue = value %}
+                    {% set lightSwitchValue = value ?: 'false' %}
                 {% endif %}
                 <span
                     role="checkbox"
