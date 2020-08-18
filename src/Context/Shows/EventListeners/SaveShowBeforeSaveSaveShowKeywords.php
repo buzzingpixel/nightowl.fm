@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Shows\EventListeners;
 
 use App\Context\Shows\Events\SaveShowBeforeSave;
-use App\Context\Shows\Services\SaveShowKeywords;
+use App\Context\Shows\Services\Internal\SaveShowKeywords;
 
 class SaveShowBeforeSaveSaveShowKeywords
 {

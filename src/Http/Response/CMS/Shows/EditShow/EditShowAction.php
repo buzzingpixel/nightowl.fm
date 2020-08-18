@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\People\EditPerson;
+namespace App\Http\Response\CMS\Shows\EditShow;
 
-use App\Context\People\Models\FetchModel;
 use App\Context\People\PeopleApi;
+use App\Context\Shows\Models\FetchModel;
+use App\Context\Shows\ShowApi;
+use App\Context\Shows\ShowConstants;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,17 +18,20 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class EditPersonAction
+class EditShowAction
 {
+    private ShowApi $showApi;
     private PeopleApi $peopleApi;
     private ResponseFactoryInterface $responseFactory;
     private Environment $twig;
 
     public function __construct(
+        ShowApi $showApi,
         PeopleApi $peopleApi,
         ResponseFactoryInterface $responseFactory,
         Environment $twig
     ) {
+        $this->showApi         = $showApi;
         $this->peopleApi       = $peopleApi;
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
@@ -44,32 +49,36 @@ class EditPersonAction
 
         $fetchModel->ids = [(string) $request->getAttribute('id')];
 
-        $person = $this->peopleApi->fetchPerson($fetchModel);
+        $show = $this->showApi->fetchShow($fetchModel);
 
-        if ($person === null) {
+        if ($show === null) {
             throw new HttpNotFoundException($request);
         }
 
         $meta = new Meta();
 
-        $meta->title = 'Edit ' . $person->getFullName() . ' | CMS';
+        $meta->title = 'Edit ' . $show->title . ' | CMS';
 
         $response = $this->responseFactory->createResponse();
 
         $response->getBody()->write($this->twig->render(
-            'Http/CMS/People/EditPerson.twig',
+            'Http/CMS/Shows/EditShow.twig',
             [
                 'meta' => $meta,
-                'title' => 'Edit ' . $person->getFullName(),
-                'activeNavHref' => '/cms/people',
-                'person' => $person,
-                'deleteAction' => '/cms/people/delete/' . $person->id,
+                'title' => 'Edit ' . $show->title,
+                'activeNavHref' => '/cms/shows',
+                'show' => $show,
+                'deleteAction' => '/cms/shows/delete/' . $show->id,
                 'breadcrumbs' => [
                     [
-                        'href' => '/cms/people',
-                        'content' => 'People',
+                        'href' => '/cms/shows',
+                        'content' => 'Shows',
                     ],
                 ],
+                'statusOptions' => ShowConstants::STATUSES_SELECT_ARRAY,
+                'peopleOptions' => $this->peopleApi->transformPersonModelsToSelectArray(
+                    $this->peopleApi->fetchPeople()
+                ),
             ]
         ));
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Config;
 
 use App\Context\Keywords\EventListeners\SaveShowBeforeSaveSaveKeywords;
+use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveHosts;
 use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveNewArtwork;
 use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveShowKeywords;
 use Crell\Tukio\OrderedListenerProvider;
@@ -44,6 +45,11 @@ class RegisterEventListeners
         $this->provider->addSubscriber(
             SaveShowBeforeSaveSaveShowKeywords::class,
             SaveShowBeforeSaveSaveShowKeywords::class,
+        );
+
+        $this->provider->addSubscriber(
+            SaveShowBeforeSaveSaveHosts::class,
+            SaveShowBeforeSaveSaveHosts::class,
         );
     }
 }

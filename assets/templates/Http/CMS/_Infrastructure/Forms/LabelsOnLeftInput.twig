@@ -209,12 +209,24 @@
                             <option
                                 value="{{ option.value }}"
                                 {% if postBackValue %}
-                                    {% if option.value in postBackValue %}
-                                        selected
+                                    {% if postBackValue is iterable %}
+                                        {% if option.value in postBackValue %}
+                                            selected
+                                        {% endif %}
+                                    {% else %}
+                                        {% if option.value == postBackValue %}
+                                            selected
+                                        {% endif %}
                                     {% endif %}
                                 {% elseif value %}
-                                    {% if value == option.value %}
-                                        selected
+                                    {% if value is iterable %}
+                                        {% if option.value in value %}
+                                            selected
+                                        {% endif %}
+                                    {% else %}
+                                        {% if option.value == value %}
+                                            selected
+                                        {% endif %}
                                     {% endif %}
                                 {% elseif loop.first and not multiple %}
                                     selected

@@ -1,22 +1,73 @@
+{# @var \App\Context\Shows\Models\ShowModel|null show #}
 {# @var mixed[] statusOptions #}
 {# @var mixed[] peopleOptions #}
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
+{% block cmsPreContent %}
+    {% if deleteAction is defined %}
+        <form
+            method="post"
+            action="{{ deleteAction }}"
+            class="block mb-5"
+            ref="ConfirmSubmit"
+            data-submit-action-text="Delete {{ show.title }}"
+        >
+            <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+            <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+            <button
+                type="submit"
+                class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out"
+            >
+                Delete {{ show.title }}&hellip;
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% set explicit = 'false' %}
+
+{% if show is defined %}
+    {% set explicit = show.explicit ? 'true' : 'false' %}
+{% endif %}
+
+{% set keywords = '' %}
+
+{% if show is defined %}
+    {% set isFirst = true %}
+    {% for keywordModel in show.keywords %}
+        {% if not isFirst %}
+            {% set keywords = keywords ~ ', ' %}
+        {% endif %}
+        {% set keywords = keywords ~ keywordModel.keyword %}
+        {% set isFirst = false %}
+    {% endfor %}
+{% endif %}
+
+{% set hosts = [] %}
+
+{% if show is defined %}
+    {% for host in show.hosts %}
+        {% set hosts = hosts|merge([host.id]) %}
+    {% endfor %}
+{% endif %}
+
 {% block cmsContent %}
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
-        submitContent: 'Create',
+        submitContent: show is defined ? 'Save' : 'Create',
         cancelAction: '/cms/shows',
         inputs: [
             {
                 label: 'Title',
                 subLabel: "The show's name. Obviously should be unique",
                 name: 'title',
+                value: show.title ?? '',
             },
             {
                 label: 'Slug',
                 subLabel: 'Must be unique to the show',
                 name: 'slug',
+                value: show.slug ?? '',
             },
             {
                 label: 'Show Art',
@@ -24,45 +75,54 @@
                 name: 'artwork',
                 type: 'file_upload',
                 description: 'Should be an optimized JPG, 1400px square',
+                value: show.artworkFileName ?? '',
             },
             {
                 label: 'Description',
                 subLabel: 'A short description of the show',
                 name: 'description',
                 type: 'textarea',
+                value: show.description ?? '',
             },
             {
                 label: 'Show Status',
                 name: 'status',
                 type: 'radio',
                 options: statusOptions,
+                value: show.status ?? '',
             },
             {
                 label: 'Explicit?',
                 name: 'explicit',
                 type: 'lightswitch',
+                value: explicit,
             },
             {
                 label: 'iTunes Link',
                 name: 'itunes_link',
+                value: show.itunesLink ?? '',
             },
             {
                 label: 'Google Play Link',
                 name: 'google_play_link',
+                value: show.googlePlayLink ?? '',
             },
             {
                 label: 'Stitcher Link',
                 name: 'stitcher_link',
+                value: show.stitcherLink ?? '',
             },
             {
                 label: 'Spotify Link',
                 name: 'spotify_link',
+                value: show.spotifyLink ?? '',
             },
             {
                 label: 'Keywords',
                 subLabel: 'A short description of the show',
                 name: 'keywords',
                 type: 'textarea',
+                value: keywords ?? '',
             },
             {
                 label: 'Hosts',
@@ -70,6 +130,7 @@
                 type: 'select',
                 multiple: true,
                 options: peopleOptions,
+                value: hosts,
             },
         ],
     } only %}
