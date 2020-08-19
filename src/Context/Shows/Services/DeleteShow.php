@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Context\People\Services;
+namespace App\Context\Shows\Services;
 
-use App\Context\People\Events\DeletePersonAfterDelete;
-use App\Context\People\Events\DeletePersonBeforeDelete;
-use App\Context\People\Models\PersonModel;
+use App\Context\Shows\Events\DeleteShowAfterDelete;
+use App\Context\Shows\Events\DeleteShowBeforeDelete;
+use App\Context\Shows\Models\ShowModel;
 use App\Payload\Payload;
 use App\Persistence\DatabaseTransactionManager;
-use App\Persistence\People\PersonRecord;
+use App\Persistence\Shows\ShowRecord;
 use Exception;
 use PDO;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
-class DeletePerson
+class DeleteShow
 {
     private EventDispatcherInterface $eventDispatcher;
     private DatabaseTransactionManager $transactionManager;
@@ -31,17 +31,17 @@ class DeletePerson
         $this->pdo                = $pdo;
     }
 
-    public function delete(PersonModel $person): Payload
+    public function delete(ShowModel $show): Payload
     {
         try {
-            return $this->innerRun($person);
+            return $this->innerRun($show);
         } catch (Throwable $e) {
             $this->transactionManager->rollBack();
 
             return new Payload(
                 Payload::STATUS_ERROR,
                 [
-                    'message' => 'Unable to delete ' . $person->getFullName(),
+                    'message' => 'Unable to delete ' . $show->title,
                 ]
             );
         }
@@ -50,13 +50,13 @@ class DeletePerson
     /**
      * @throws Exception
      */
-    private function innerRun(PersonModel $person): Payload
+    private function innerRun(ShowModel $show): Payload
     {
         $this->transactionManager->beginTransaction();
 
-        $beforeEvent = new DeletePersonBeforeDelete($person);
+        $beforeEvent = new DeleteShowBeforeDelete($show);
 
-        $this->eventDispatcher->dispatch($person);
+        $this->eventDispatcher->dispatch($beforeEvent);
 
         if (! $beforeEvent->isValid) {
             throw new Exception();
@@ -64,15 +64,15 @@ class DeletePerson
 
         $statement = $this->pdo->prepare(
             'DELETE FROM ' .
-            PersonRecord::tableName() .
+            ShowRecord::tableName() .
             ' WHERE id=:id'
         );
 
-        if (! $statement->execute([':id' => $person->id])) {
+        if (! $statement->execute([':id' => $show->id])) {
             throw new Exception();
         }
 
-        $afterEvent = new DeletePersonAfterDelete($person);
+        $afterEvent = new DeleteShowAfterDelete($show);
 
         $this->eventDispatcher->dispatch($afterEvent);
 

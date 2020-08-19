@@ -6,6 +6,7 @@ namespace App\Context\Shows;
 
 use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
+use App\Context\Shows\Services\DeleteShow;
 use App\Context\Shows\Services\FetchShows;
 use App\Context\Shows\Services\SaveShow;
 use App\Context\Shows\Services\ValidateUniqueShowSlug;
@@ -65,5 +66,14 @@ class ShowApi
             $proposedSlug,
             $existingId,
         );
+    }
+
+    public function deleteShow(ShowModel $show): Payload
+    {
+        $service = $this->di->get(DeleteShow::class);
+
+        assert($service instanceof DeleteShow);
+
+        return $service->delete($show);
     }
 }

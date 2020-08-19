@@ -51,8 +51,6 @@ class FetchShows
         try {
             return $this->innerRun($fetchModel);
         } catch (Throwable $e) {
-            throw $e;
-
             return [];
         }
     }
@@ -123,10 +121,14 @@ class FetchShows
         );
 
         /** @var ShowKeywordsRecord[] $keyWordAssociations */
-        $keyWordAssociations = $this->recordQueryFactory
-            ->make(new ShowKeywordsRecord())
-            ->withWhere('show_id', $recordIds, 'IN')
-            ->all();
+        $keyWordAssociations = [];
+
+        if (count($recordIds) > 0) {
+            $keyWordAssociations = $this->recordQueryFactory
+                ->make(new ShowKeywordsRecord())
+                ->withWhere('show_id', $recordIds, 'IN')
+                ->all();
+        }
 
         $keywordIds = array_map(
             static fn (ShowKeywordsRecord $r) => $r->keyword_id,
@@ -172,10 +174,14 @@ class FetchShows
         }
 
         /** @var ShowHostsRecord[] $hostAssociations */
-        $hostAssociations = $this->recordQueryFactory
-            ->make(new ShowHostsRecord())
-            ->withWhere('show_id', $recordIds, 'IN')
-            ->all();
+        $hostAssociations = [];
+
+        if (count($recordIds) > 0) {
+            $hostAssociations = $this->recordQueryFactory
+                ->make(new ShowHostsRecord())
+                ->withWhere('show_id', $recordIds, 'IN')
+                ->all();
+        }
 
         $fetchPeopleModel = new FetchPeopleModel();
 

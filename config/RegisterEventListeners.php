@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Config;
 
-use App\Context\Keywords\EventListeners\SaveShowBeforeSaveSaveKeywords;
-use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveHosts;
-use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveNewArtwork;
-use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveShowKeywords;
+use App\Context\People\PeopleRegisterEventListeners;
+use App\Context\Shows\ShowsRegisterEventListeners;
 use Crell\Tukio\OrderedListenerProvider;
 
 class RegisterEventListeners
@@ -19,9 +17,6 @@ class RegisterEventListeners
         $this->provider = $provider;
     }
 
-    /**
-     * TODO: Add subscribers here
-     */
     public function __invoke(): void
     {
         // Method names in subscriber classes must start with `on`. The event
@@ -32,24 +27,8 @@ class RegisterEventListeners
         //     dd($beforeValidate);
         // }
 
-        $this->provider->addSubscriber(
-            SaveShowBeforeSaveSaveKeywords::class,
-            SaveShowBeforeSaveSaveKeywords::class,
-        );
+        (new PeopleRegisterEventListeners())->register($this->provider);
 
-        $this->provider->addSubscriber(
-            SaveShowBeforeSaveSaveNewArtwork::class,
-            SaveShowBeforeSaveSaveNewArtwork::class,
-        );
-
-        $this->provider->addSubscriber(
-            SaveShowBeforeSaveSaveShowKeywords::class,
-            SaveShowBeforeSaveSaveShowKeywords::class,
-        );
-
-        $this->provider->addSubscriber(
-            SaveShowBeforeSaveSaveHosts::class,
-            SaveShowBeforeSaveSaveHosts::class,
-        );
+        (new ShowsRegisterEventListeners())->register($this->provider);
     }
 }

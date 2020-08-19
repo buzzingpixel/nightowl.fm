@@ -12,6 +12,7 @@ use App\Http\Response\CMS\People\EditPerson\PostEditPersonAction;
 use App\Http\Response\CMS\People\NewPerson\NewPersonAction;
 use App\Http\Response\CMS\People\NewPerson\PostNewPersonAction;
 use App\Http\Response\CMS\People\PeopleIndexAction;
+use App\Http\Response\CMS\Shows\DeleteShow\PostDeleteShowAction;
 use App\Http\Response\CMS\Shows\EditShow\EditShowAction;
 use App\Http\Response\CMS\Shows\EditShow\PostEditShowAction;
 use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
@@ -49,6 +50,7 @@ return static function (App $app): void {
         $r->post('/shows/new', PostNewShowAction::class);
         $r->get('/shows/edit/{id}', EditShowAction::class);
         $r->post('/shows/edit/{id}', PostEditShowAction::class);
+        $r->post('/shows/delete/{id}', PostDeleteShowAction::class);
 
         $r->get('/people', PeopleIndexAction::class);
         $r->get('/people/new', NewPersonAction::class);
