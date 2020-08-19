@@ -10,6 +10,7 @@ use App\Context\People\Services\Internal\SavePersonNew;
 use App\Payload\Payload;
 use App\Persistence\DatabaseTransactionManager;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
+use Exception;
 use Throwable;
 
 class SavePerson
@@ -20,6 +21,7 @@ class SavePerson
     private SaveNewProfilePhoto $saveNewProfilePhoto;
     private DeleteUserProfilePhoto $deleteUserProfilePhoto;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
+    private ValidateUniquePersonSlug $validateUniquePersonSlug;
 
     public function __construct(
         DatabaseTransactionManager $transactionManager,
@@ -27,19 +29,30 @@ class SavePerson
         SavePersonExisting $saveExisting,
         SaveNewProfilePhoto $saveNewProfilePhoto,
         DeleteUserProfilePhoto $deleteUserProfilePhoto,
-        UuidFactoryWithOrderedTimeCodec $uuidFactory
+        UuidFactoryWithOrderedTimeCodec $uuidFactory,
+        ValidateUniquePersonSlug $validateUniquePersonSlug
     ) {
-        $this->transactionManager     = $transactionManager;
-        $this->saveNew                = $saveNew;
-        $this->saveExisting           = $saveExisting;
-        $this->saveNewProfilePhoto    = $saveNewProfilePhoto;
-        $this->deleteUserProfilePhoto = $deleteUserProfilePhoto;
-        $this->uuidFactory            = $uuidFactory;
+        $this->transactionManager       = $transactionManager;
+        $this->saveNew                  = $saveNew;
+        $this->saveExisting             = $saveExisting;
+        $this->saveNewProfilePhoto      = $saveNewProfilePhoto;
+        $this->deleteUserProfilePhoto   = $deleteUserProfilePhoto;
+        $this->uuidFactory              = $uuidFactory;
+        $this->validateUniquePersonSlug = $validateUniquePersonSlug;
     }
 
     public function save(PersonModel $person): Payload
     {
         try {
+            if (
+                ! $this->validateUniquePersonSlug->validate(
+                    $person->slug,
+                    $person->id,
+                )
+            ) {
+                throw new Exception();
+            }
+
             $this->transactionManager->beginTransaction();
 
             $isNew = false;

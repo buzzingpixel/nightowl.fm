@@ -10,6 +10,7 @@ use App\Context\People\Services\DeletePerson;
 use App\Context\People\Services\FetchPeople;
 use App\Context\People\Services\GetPersonProfilePhotoUrl;
 use App\Context\People\Services\SavePerson;
+use App\Context\People\Services\ValidateUniquePersonSlug;
 use App\Context\People\Transformers\PersonModelsToSelectArray;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
@@ -91,5 +92,19 @@ class PeopleApi
         assert($service instanceof DeletePerson);
 
         return $service->delete($person);
+    }
+
+    public function validateUnqiePersonSlug(
+        string $proposedSlug,
+        ?string $existingId = null
+    ): bool {
+        $service = $this->di->get(ValidateUniquePersonSlug::class);
+
+        assert($service instanceof ValidateUniquePersonSlug);
+
+        return $service->validate(
+            $proposedSlug,
+            $existingId,
+        );
     }
 }

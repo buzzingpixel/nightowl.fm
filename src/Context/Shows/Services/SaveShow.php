@@ -68,7 +68,7 @@ class SaveShow
         if (
             ! $this->validateUniqueShowSlug->validate(
                 $show->slug,
-                $show->id
+                $show->id,
             )
         ) {
             throw new Exception();

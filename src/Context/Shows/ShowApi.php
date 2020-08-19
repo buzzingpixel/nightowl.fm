@@ -63,7 +63,7 @@ class ShowApi
 
         return $service->validate(
             $proposedSlug,
-            $existingId
+            $existingId,
         );
     }
 }

@@ -74,6 +74,14 @@ class SavePersonFromPost
                 'slug' => V::allOf(
                     V::notEmpty(),
                     V::slug(),
+                    V::callback(
+                        function ($input) use ($person): bool {
+                            return $this->peopleApi->validateUnqiePersonSlug(
+                                $input,
+                                $person->id,
+                            );
+                        }
+                    )->setTemplate('Person slug must be unique'),
                 ),
                 'email' => V::allOf(
                     V::notEmpty(),
