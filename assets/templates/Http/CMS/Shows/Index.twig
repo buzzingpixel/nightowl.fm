@@ -1,4 +1,4 @@
-{# @var \App\Context\Shows\Models\ShowModel shows #}
+{# @var \App\Context\Shows\Models\ShowModel[] shows #}
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
@@ -26,6 +26,7 @@
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 status
                             </th>
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -59,6 +60,9 @@
                                     <div class="text-sm leading-5 text-gray-900">
                                         {{ show.humanReadableStatus }}
                                     </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                    <a href="/cms/shows/series/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Series</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                                     <a href="/cms/shows/episodes/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Episodes</a>

@@ -17,6 +17,7 @@ use App\Http\Response\CMS\Shows\EditShow\EditShowAction;
 use App\Http\Response\CMS\Shows\EditShow\PostEditShowAction;
 use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
 use App\Http\Response\CMS\Shows\NewShow\PostNewShowAction;
+use App\Http\Response\CMS\Shows\Series\SeriesIndexAction;
 use App\Http\Response\CMS\Shows\ShowsIndexAction;
 use App\Http\Response\CMS\Users\DeletePerson\PostDeleteUserAction;
 use App\Http\Response\CMS\Users\EditUser\EditUserAction;
@@ -42,9 +43,15 @@ return static function (App $app): void {
             PostFileUploadAction::class
         );
 
+        /**
+         * My Profile
+         */
         $r->get('/my-profile', MyProfileAction::class);
         $r->post('/my-profile', PostMyProfileAction::class);
 
+        /**
+         * Shows
+         */
         $r->get('/shows', ShowsIndexAction::class);
         $r->get('/shows/new', NewShowAction::class);
         $r->post('/shows/new', PostNewShowAction::class);
@@ -52,6 +59,14 @@ return static function (App $app): void {
         $r->post('/shows/edit/{id}', PostEditShowAction::class);
         $r->post('/shows/delete/{id}', PostDeleteShowAction::class);
 
+        /**
+         * Show Series
+         */
+        $r->get('/shows/series/{showId}', SeriesIndexAction::class);
+
+        /**
+         * People
+         */
         $r->get('/people', PeopleIndexAction::class);
         $r->get('/people/new', NewPersonAction::class);
         $r->post('/people/new', PostNewPersonAction::class);
@@ -59,6 +74,9 @@ return static function (App $app): void {
         $r->post('/people/edit/{id}', PostEditPersonAction::class);
         $r->post('/people/delete/{id}', PostDeletePersonAction::class);
 
+        /**
+         * Users
+         */
         $r->get('/users', UsersIndexAction::class);
         $r->get('/users/new', NewUserAction::class);
         $r->post('/users/new', PostNewUserAction::class);
