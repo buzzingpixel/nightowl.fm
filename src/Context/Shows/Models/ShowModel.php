@@ -6,12 +6,15 @@ namespace App\Context\Shows\Models;
 
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\Shows\ShowConstants;
 use LogicException;
 
 use function array_walk;
+use function constant;
 use function explode;
 use function in_array;
 use function mb_strtolower;
+use function mb_strtoupper;
 use function pathinfo;
 use function trim;
 use function ucfirst;
@@ -48,6 +51,17 @@ class ShowModel
     public string $description = '';
 
     public string $status = '';
+
+    public function getHumanReadableStatus(): string
+    {
+        return constant(
+            ShowConstants::class .
+            '::' .
+            'SHOW_STATUS_' .
+            mb_strtoupper($this->status) .
+            '_LABEL',
+        );
+    }
 
     public bool $explicit = false;
 

@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\Shows;
 
+use App\Context\Shows\ShowApi;
 use App\Http\Models\Meta;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Twig\Environment as TwigEnvironment;
 
 class ShowsIndexAction
 {
-    private ShowsIndexResponder $responder;
+    private ResponseFactoryInterface $responseFactory;
+    private TwigEnvironment $twig;
+    private ShowApi $showApi;
 
-    public function __construct(ShowsIndexResponder $responder)
-    {
-        $this->responder = $responder;
+    public function __construct(
+        ShowApi $showApi,
+        ResponseFactoryInterface $responseFactory,
+        TwigEnvironment $twig
+    ) {
+        $this->responseFactory = $responseFactory;
+        $this->twig            = $twig;
+        $this->showApi         = $showApi;
     }
 
     public function __invoke(): ResponseInterface
@@ -22,9 +32,20 @@ class ShowsIndexAction
 
         $meta->title = 'Shows | CMS';
 
-        return $this->responder->__invoke(
-            $meta,
-            'Shows',
+        $response = $this->responseFactory->createResponse();
+
+        $response->getBody()->write(
+            $this->twig->render(
+                'Http/CMS/Shows/Index.twig',
+                [
+                    'meta' => $meta,
+                    'title' => 'Shows',
+                    'activeNavHref' => '/cms/shows',
+                    'shows' => $this->showApi->fetchShows(),
+                ],
+            ),
         );
+
+        return $response;
     }
 }

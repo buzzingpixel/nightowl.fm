@@ -6,19 +6,24 @@ namespace App\Http\Response\CMS\People;
 
 use App\Context\People\PeopleApi;
 use App\Http\Models\Meta;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Twig\Environment as TwigEnvironment;
 
 class PeopleIndexAction
 {
-    private PeopleIndexResponder $responder;
     private PeopleApi $peopleApi;
+    private ResponseFactoryInterface $responseFactory;
+    private TwigEnvironment $twig;
 
     public function __construct(
-        PeopleIndexResponder $responder,
-        PeopleApi $peopleApi
+        PeopleApi $peopleApi,
+        ResponseFactoryInterface $responseFactory,
+        TwigEnvironment $twig
     ) {
-        $this->responder = $responder;
-        $this->peopleApi = $peopleApi;
+        $this->peopleApi       = $peopleApi;
+        $this->responseFactory = $responseFactory;
+        $this->twig            = $twig;
     }
 
     public function __invoke(): ResponseInterface
@@ -27,10 +32,20 @@ class PeopleIndexAction
 
         $meta->title = 'People | CMS';
 
-        return $this->responder->respond(
-            $meta,
-            'People',
-            $this->peopleApi->fetchPeople(),
+        $response = $this->responseFactory->createResponse();
+
+        $response->getBody()->write(
+            $this->twig->render(
+                'Http/CMS/People/Index.twig',
+                [
+                    'meta' => $meta,
+                    'title' => 'People',
+                    'activeNavHref' => '/cms/people',
+                    'people' => $this->peopleApi->fetchPeople(),
+                ],
+            ),
         );
+
+        return $response;
     }
 }

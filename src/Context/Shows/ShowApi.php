@@ -8,6 +8,7 @@ use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\Services\DeleteShow;
 use App\Context\Shows\Services\FetchShows;
+use App\Context\Shows\Services\GetShowArtworkUrl;
 use App\Context\Shows\Services\SaveShow;
 use App\Context\Shows\Services\ValidateUniqueShowSlug;
 use App\Payload\Payload;
@@ -75,5 +76,14 @@ class ShowApi
         assert($service instanceof DeleteShow);
 
         return $service->delete($show);
+    }
+
+    public function getShowArtworkUrl(ShowModel $show, array $opt = []): string
+    {
+        $service = $this->di->get(GetShowArtworkUrl::class);
+
+        assert($service instanceof GetShowArtworkUrl);
+
+        return $service->get($show, $opt);
     }
 }
