@@ -17,6 +17,7 @@ use App\Http\Response\CMS\Shows\EditShow\EditShowAction;
 use App\Http\Response\CMS\Shows\EditShow\PostEditShowAction;
 use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
 use App\Http\Response\CMS\Shows\NewShow\PostNewShowAction;
+use App\Http\Response\CMS\Shows\Series\NewSeries\NewSeriesAction;
 use App\Http\Response\CMS\Shows\Series\SeriesIndexAction;
 use App\Http\Response\CMS\Shows\ShowsIndexAction;
 use App\Http\Response\CMS\Users\DeletePerson\PostDeleteUserAction;
@@ -63,6 +64,7 @@ return static function (App $app): void {
          * Show Series
          */
         $r->get('/shows/series/{showId}', SeriesIndexAction::class);
+        $r->get('/shows/series/{showId}/new', NewSeriesAction::class);
 
         /**
          * People

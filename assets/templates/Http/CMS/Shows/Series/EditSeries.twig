@@ -1,0 +1,52 @@
+{# @var \App\Context\Shows\Models\ShowModel show #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsPreContent %}
+    {% if deleteAction is defined %}
+        <form
+            method="post"
+            action="{{ deleteAction }}"
+            class="block mb-5"
+            ref="ConfirmSubmit"
+            data-submit-action-text="Delete {{ series.title }}"
+        >
+            <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+            <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+            <button
+                type="submit"
+                class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out"
+            >
+                Delete {{ series.title }}&hellip;
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block cmsContent %}
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: series is defined ? 'Save' : 'Create',
+        cancelAction: '/cms/shows/series/' ~ show.id,
+        inputs: [
+            {
+                label: 'Title',
+                subLabel: "The series name. Obviously should be unique",
+                name: 'title',
+                value: series.title ?? '',
+            },
+            {
+                label: 'Slug',
+                subLabel: 'Must be unique to the series',
+                name: 'slug',
+                value: series.slug ?? '',
+            },
+            {
+                label: 'Description',
+                subLabel: 'A short description of the series',
+                name: 'description',
+                type: 'textarea',
+                value: series.description ?? '',
+            },
+        ],
+    } only %}
+{% endblock %}
