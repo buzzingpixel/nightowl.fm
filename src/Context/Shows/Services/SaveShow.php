@@ -63,7 +63,7 @@ class SaveShow
     /**
      * @throws Exception
      */
-    public function innerRun(ShowModel $show): Payload
+    private function innerRun(ShowModel $show): Payload
     {
         if (
             ! $this->validateUniqueShowSlug->validate(

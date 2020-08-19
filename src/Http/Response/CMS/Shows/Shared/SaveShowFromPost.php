@@ -174,10 +174,7 @@ class SaveShowFromPost
                 $payload->getStatus(),
                 array_merge(
                     $payload->getResult(),
-                    [
-                        'message' => 'There was a problem saving the show',
-                        'inputValues' => $post,
-                    ],
+                    ['inputValues' => $post],
                 ),
             ),
             $model,

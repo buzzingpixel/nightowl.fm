@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Shows\Services\Internal;
+namespace App\Context\Series\Services\Internal;
 
-use App\Context\Shows\Models\ShowModel;
-use App\Context\Shows\Transformers\ModelToRecord;
+use App\Context\Series\Models\SeriesModel;
+use App\Context\Series\Transformers\ModelToRecord;
 use App\Payload\Payload;
 use App\Persistence\SaveNewRecord;
 use Exception;
 
-class SaveShowNew
+class SaveNewSeries
 {
     private SaveNewRecord $saveRecord;
     private ModelToRecord $modelToRecord;
@@ -26,16 +26,16 @@ class SaveShowNew
     /**
      * @throws Exception
      */
-    public function save(ShowModel $show): Payload
+    public function save(SeriesModel $series): Payload
     {
         $payload = $this->saveRecord->save(
-            $this->modelToRecord->transform($show)
+            $this->modelToRecord->transform($series)
         );
 
         if ($payload->getStatus() === Payload::STATUS_CREATED) {
             return $payload;
         }
 
-        throw new Exception('Unknown error saving show');
+        throw new Exception('Unknown error saving series');
     }
 }
