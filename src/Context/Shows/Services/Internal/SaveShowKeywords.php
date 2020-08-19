@@ -10,11 +10,13 @@ use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
 use App\Persistence\Shows\ShowKeywordsRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
+use PDO;
 
+use function array_fill;
 use function array_map;
 use function array_walk;
 use function count;
-use function dd;
+use function implode;
 use function in_array;
 
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
@@ -24,15 +26,18 @@ class SaveShowKeywords
     private RecordQueryFactory $recordQueryFactory;
     private SaveNewRecord $saveNewRecord;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
+    private PDO $pdo;
 
     public function __construct(
         RecordQueryFactory $recordQueryFactory,
         SaveNewRecord $saveNewRecord,
-        UuidFactoryWithOrderedTimeCodec $uuidFactory
+        UuidFactoryWithOrderedTimeCodec $uuidFactory,
+        PDO $pdo
     ) {
         $this->recordQueryFactory = $recordQueryFactory;
         $this->saveNewRecord      = $saveNewRecord;
         $this->uuidFactory        = $uuidFactory;
+        $this->pdo                = $pdo;
     }
 
     public function save(ShowModel $show): void
@@ -65,8 +70,41 @@ class SaveShowKeywords
             return;
         }
 
-        // TODO: Implement deleteNonExisting method
-        dd('TODO');
+        $currentKeywords = $show->keywords;
+
+        $allCurrentIds = array_map(
+            static fn (KeywordModel $m) => $m->id,
+            $currentKeywords
+        );
+
+        $toDelete = [];
+
+        foreach ($allPreviousKeywords as $keyword) {
+            if (in_array($keyword->keyword_id, $allCurrentIds)) {
+                continue;
+            }
+
+            $toDelete[] = $keyword->keyword_id;
+        }
+
+        if (count($toDelete) < 1) {
+            return;
+        }
+
+        $in = implode(
+            ',',
+            array_fill(0, count($toDelete), '?')
+        );
+
+        $statement = $this->pdo->prepare(
+            'DELETE FROM ' . ShowKeywordsRecord::tableName() .
+            ' WHERE keyword_id IN (' . $in . ') ' .
+            ' AND show_id = ?'
+        );
+
+        $toDelete[] = $show->id;
+
+        $statement->execute($toDelete);
     }
 
     /**
@@ -83,7 +121,7 @@ class SaveShowKeywords
         }
 
         $existingIds = array_map(
-            static fn (ShowKeywordsRecord $r) => $r->id,
+            static fn (ShowKeywordsRecord $r) => $r->keyword_id,
             $allPreviousKeywords,
         );
 

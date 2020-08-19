@@ -10,11 +10,13 @@ use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
 use App\Persistence\Shows\ShowHostsRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
+use PDO;
 
+use function array_fill;
 use function array_map;
 use function array_walk;
 use function count;
-use function dd;
+use function implode;
 use function in_array;
 
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
@@ -24,15 +26,18 @@ class SaveShowHosts
     private RecordQueryFactory $recordQueryFactory;
     private SaveNewRecord $saveNewRecord;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
+    private PDO $pdo;
 
     public function __construct(
         RecordQueryFactory $recordQueryFactory,
         SaveNewRecord $saveNewRecord,
-        UuidFactoryWithOrderedTimeCodec $uuidFactory
+        UuidFactoryWithOrderedTimeCodec $uuidFactory,
+        PDO $pdo
     ) {
         $this->recordQueryFactory = $recordQueryFactory;
         $this->saveNewRecord      = $saveNewRecord;
         $this->uuidFactory        = $uuidFactory;
+        $this->pdo                = $pdo;
     }
 
     public function save(ShowModel $show): void
@@ -65,8 +70,41 @@ class SaveShowHosts
             return;
         }
 
-        // TODO: Implement deleteNonExisting method
-        dd('TODO: Implement deleteNonExisting method');
+        $currentHosts = $show->hosts;
+
+        $allCurrentIds = array_map(
+            static fn (PersonModel $m) => $m->id,
+            $currentHosts
+        );
+
+        $toDelete = [];
+
+        foreach ($allPreviousHosts as $host) {
+            if (in_array($host->person_id, $allCurrentIds)) {
+                continue;
+            }
+
+            $toDelete[] = $host->person_id;
+        }
+
+        if (count($toDelete) < 1) {
+            return;
+        }
+
+        $in = implode(
+            ',',
+            array_fill(0, count($toDelete), '?')
+        );
+
+        $statement = $this->pdo->prepare(
+            'DELETE FROM ' . ShowHostsRecord::tableName() .
+            ' WHERE person_id IN (' . $in . ') ' .
+            ' AND show_id = ?'
+        );
+
+        $toDelete[] = $show->id;
+
+        $statement->execute($toDelete);
     }
 
     /**
@@ -83,7 +121,7 @@ class SaveShowHosts
         }
 
         $existingIds = array_map(
-            static fn (ShowHostsRecord $r) => $r->id,
+            static fn (ShowHostsRecord $r) => $r->person_id,
             $allPreviousHosts,
         );
 

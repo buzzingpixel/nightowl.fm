@@ -64,6 +64,14 @@ class ShowModel
 
     public function addKeyword(KeywordModel $keywordModel): void
     {
+        foreach ($this->keywords as $keyword) {
+            if ($keyword->keyword !== $keywordModel->keyword) {
+                continue;
+            }
+
+            return;
+        }
+
         $this->keywords[] = $keywordModel;
     }
 
@@ -88,6 +96,8 @@ class ShowModel
 
     public function setKeywordsFromCommaString(string $keywords): void
     {
+        $this->keywords = [];
+
         $keywordsArray = explode(',', $keywords);
 
         array_walk(
