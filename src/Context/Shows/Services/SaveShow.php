@@ -24,19 +24,22 @@ class SaveShow
     private SaveShowExisting $saveExisting;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
     private EventDispatcherInterface $eventDispatcher;
+    private ValidateUniqueShowSlug $validateUniqueShowSlug;
 
     public function __construct(
         DatabaseTransactionManager $transactionManager,
         SaveShowNew $saveNew,
         SaveShowExisting $saveExisting,
         UuidFactoryWithOrderedTimeCodec $uuidFactory,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        ValidateUniqueShowSlug $validateUniqueShowSlug
     ) {
-        $this->transactionManager = $transactionManager;
-        $this->saveNew            = $saveNew;
-        $this->saveExisting       = $saveExisting;
-        $this->uuidFactory        = $uuidFactory;
-        $this->eventDispatcher    = $eventDispatcher;
+        $this->transactionManager     = $transactionManager;
+        $this->saveNew                = $saveNew;
+        $this->saveExisting           = $saveExisting;
+        $this->uuidFactory            = $uuidFactory;
+        $this->eventDispatcher        = $eventDispatcher;
+        $this->validateUniqueShowSlug = $validateUniqueShowSlug;
     }
 
     public function save(ShowModel $show): Payload
@@ -62,6 +65,15 @@ class SaveShow
      */
     public function innerRun(ShowModel $show): Payload
     {
+        if (
+            ! $this->validateUniqueShowSlug->validate(
+                $show->slug,
+                $show->id
+            )
+        ) {
+            throw new Exception();
+        }
+
         $this->transactionManager->beginTransaction();
 
         $isNew = false;

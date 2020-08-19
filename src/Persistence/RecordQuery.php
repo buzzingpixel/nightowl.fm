@@ -172,12 +172,23 @@ class RecordQuery
         return $records;
     }
 
+    public function count(): int
+    {
+        $statement = $this->executeStatement(true);
+
+        return (int) $statement->fetchColumn(0);
+    }
+
     /**
      * @return array<string, mixed>
      */
-    public function getSqlAndBind(): array
+    public function getSqlAndBind(bool $count = false): array
     {
-        $sql = 'SELECT * FROM ' . $this->recordClass->getTableName();
+        $select = $count ? 'COUNT(*)' : '*';
+
+        $tableName = $this->recordClass->getTableName();
+
+        $sql = 'SELECT ' . $select . ' FROM ' . $tableName;
 
         $bind = [];
 
@@ -290,9 +301,9 @@ class RecordQuery
         ];
     }
 
-    private function executeStatement(): PDOStatement
+    private function executeStatement(bool $count = false): PDOStatement
     {
-        $sqlAndBind = $this->getSqlAndBind();
+        $sqlAndBind = $this->getSqlAndBind($count);
 
         /** @psalm-suppress MixedAssignment */
         $sql = $sqlAndBind['sql'];

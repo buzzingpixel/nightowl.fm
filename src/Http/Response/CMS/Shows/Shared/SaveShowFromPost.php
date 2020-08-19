@@ -91,6 +91,14 @@ class SaveShowFromPost
                 'slug' => V::allOf(
                     V::notEmpty(),
                     V::slug(),
+                    V::callback(
+                        function ($input) use ($model): bool {
+                            return $this->showApi->validateUniqueShowSlug(
+                                $input,
+                                $model->id,
+                            );
+                        }
+                    )->setTemplate('Show slug must be unique'),
                 ),
                 'artwork_file_path' => V::callback(
                     static function ($input) use ($model): bool {

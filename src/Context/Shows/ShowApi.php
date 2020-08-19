@@ -8,6 +8,7 @@ use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\Services\FetchShows;
 use App\Context\Shows\Services\SaveShow;
+use App\Context\Shows\Services\ValidateUniqueShowSlug;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
 
@@ -50,5 +51,19 @@ class ShowApi
         $fetchModel->limit = 1;
 
         return $this->fetchShows($fetchModel)[0] ?? null;
+    }
+
+    public function validateUniqueShowSlug(
+        string $proposedSlug,
+        ?string $existingId = null
+    ): bool {
+        $service = $this->di->get(ValidateUniqueShowSlug::class);
+
+        assert($service instanceof ValidateUniqueShowSlug);
+
+        return $service->validate(
+            $proposedSlug,
+            $existingId
+        );
     }
 }
