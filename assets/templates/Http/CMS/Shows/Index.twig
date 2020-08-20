@@ -33,48 +33,48 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        {% for show in shows %}
-                            <tr>
-                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <a href="/cms/shows/episodes/{{ show.id }}" class="block flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img
-                                                class="h-10 w-10"
-                                                src="{{ getShowArtworkUrl(show, {
-                                                    size: 80,
-                                                }) }}"
-                                                alt=""
-                                            >
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm leading-5 font-medium text-gray-900">
-                                                {{ show.title|smartypants|widont }}
+                            {% for show in shows %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <a href="/cms/shows/episodes/{{ show.id }}" class="block flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img
+                                                    class="h-10 w-10"
+                                                    src="{{ getShowArtworkUrl(show, {
+                                                        size: 80,
+                                                    }) }}"
+                                                    alt=""
+                                                >
                                             </div>
-                                            <div class="text-sm leading-5 text-gray-500">
-                                                {{ show.slug }}
+                                            <div class="ml-4">
+                                                <div class="text-sm leading-5 font-medium text-gray-900">
+                                                    {{ show.title|smartypants|widont }}
+                                                </div>
+                                                <div class="text-sm leading-5 text-gray-500">
+                                                    {{ show.slug }}
+                                                </div>
                                             </div>
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            {{ show.humanReadableStatus }}
                                         </div>
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">
-                                        {{ show.humanReadableStatus }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                    <a href="/cms/shows/series/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Series</a>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                    <a href="/cms/shows/episodes/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Episodes</a>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                    <a href="/{{ show.slug }}" class="text-indigo-600 hover:text-indigo-900">View Page</a>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                    <a href="/cms/shows/edit/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/series/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Series</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/episodes/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Episodes</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/{{ show.slug }}" class="text-indigo-600 hover:text-indigo-900">View Page</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/edit/{{ show.id }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

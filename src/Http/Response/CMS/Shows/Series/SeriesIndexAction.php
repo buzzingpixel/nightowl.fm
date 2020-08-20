@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\Shows\Series;
 
-use App\Context\Shows\Models\FetchModel;
+use App\Context\Series\Models\FetchModel as SeriesFetchModel;
+use App\Context\Series\SeriesApi;
+use App\Context\Shows\Models\FetchModel as ShowsFetchModel;
 use App\Context\Shows\ShowApi;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -21,15 +23,18 @@ class SeriesIndexAction
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
     private ShowApi $showApi;
+    private SeriesApi $seriesApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
-        ShowApi $showApi
+        ShowApi $showApi,
+        SeriesApi $seriesApi
     ) {
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
         $this->showApi         = $showApi;
+        $this->seriesApi       = $seriesApi;
     }
 
     /**
@@ -40,7 +45,7 @@ class SeriesIndexAction
      */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $fetchModel = new FetchModel();
+        $fetchModel = new ShowsFetchModel();
 
         $fetchModel->ids = [(string) $request->getAttribute('showId')];
 
@@ -49,6 +54,10 @@ class SeriesIndexAction
         if ($show === null) {
             throw new HttpNotFoundException($request);
         }
+
+        $seriesFetchModel = new SeriesFetchModel();
+
+        $seriesFetchModel->shows = [$show];
 
         $meta = new Meta();
 
@@ -70,6 +79,7 @@ class SeriesIndexAction
                         ],
                     ],
                     'show' => $show,
+                    'series' => $this->seriesApi->fetchSeries(),
                 ],
             ),
         );

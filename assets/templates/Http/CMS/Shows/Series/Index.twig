@@ -1,4 +1,5 @@
 {# @var \App\Context\Shows\Models\ShowModel show #}
+{# @var \App\Context\Series\Models\SeriesModel[] series #}
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
@@ -13,7 +14,48 @@
     <div class="mb-4 text-right">
         {{ actionButton }}
     </div>
-    <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+    <div>
+        <div class="flex flex-col">
+            <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                        <tr>
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                Title
+                            </th>
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                slug
+                            </th>
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for item in series %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <a href="/cms/shows/series/{{ show.id }}/edit/{{ item.id }}" class="block flex items-center">
+                                            <div class="text-sm leading-5 font-medium text-gray-900">
+                                                {{ item.title|smartypants|widont }}
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            {{ item.slug }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/series/{{ show.id }}/edit/{{ item.id }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="mt-4 text-right">
         {{ actionButton }}
     </div>
