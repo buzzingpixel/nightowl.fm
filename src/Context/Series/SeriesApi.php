@@ -8,6 +8,7 @@ use App\Context\Series\Models\FetchModel;
 use App\Context\Series\Models\SeriesModel;
 use App\Context\Series\Services\FetchSeries;
 use App\Context\Series\Services\SaveSeries;
+use App\Context\Series\Services\ValidateUniqueSeriesSlug;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
 
@@ -50,5 +51,21 @@ class SeriesApi
         $fetchModel->limit = 1;
 
         return $this->fetchSeries($fetchModel)[0] ?? null;
+    }
+
+    public function validateUniqueSeriesSlug(
+        string $proposedSlug,
+        string $showId,
+        ?string $existingId = null
+    ): bool {
+        $service = $this->di->get(ValidateUniqueSeriesSlug::class);
+
+        assert($service instanceof ValidateUniqueSeriesSlug);
+
+        return $service->validate(
+            $proposedSlug,
+            $showId,
+            $existingId
+        );
     }
 }

@@ -65,15 +65,15 @@ class SaveSeriesFromPost
                 'slug' => V::allOf(
                     V::notEmpty(),
                     V::slug(),
-                    // TODO: Validate unique slug for show series
-                    // V::callback(
-                    //     function ($input) use ($series): bool {
-                    //         return $this->showApi->validateUniqueShowSlug(
-                    //             $input,
-                    //             $series->id,
-                    //         );
-                    //     }
-                    // )->setTemplate('Show slug must be unique'),
+                    V::callback(
+                        function ($input) use ($show, $series): bool {
+                            return $this->seriesApi->validateUniqueSeriesSlug(
+                                $input,
+                                $show->id,
+                                $series->id,
+                            );
+                        }
+                    )->setTemplate('Show slug must be unique'),
                 ),
                 'description' => V::notEmpty(),
             ]
