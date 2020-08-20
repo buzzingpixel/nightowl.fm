@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Series;
 
+use App\Context\Series\Models\FetchModel;
 use App\Context\Series\Models\SeriesModel;
+use App\Context\Series\Services\FetchSeries;
 use App\Context\Series\Services\SaveSeries;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
@@ -27,5 +29,26 @@ class SeriesApi
         assert($service instanceof SaveSeries);
 
         return $service->save($series);
+    }
+
+    /**
+     * @return SeriesModel[]
+     */
+    public function fetchSeries(?FetchModel $fetchModel = null): array
+    {
+        $service = $this->di->get(FetchSeries::class);
+
+        assert($service instanceof FetchSeries);
+
+        return $service->fetch($fetchModel);
+    }
+
+    public function fetchOneSeries(?FetchModel $fetchModel = null): ?SeriesModel
+    {
+        $fetchModel ??= new FetchModel();
+
+        $fetchModel->limit = 1;
+
+        return $this->fetchSeries($fetchModel)[0] ?? null;
     }
 }

@@ -52,8 +52,9 @@ class PostNewSeriesResponder
             ->withHeader(
                 'Location',
                 '/cms/shows/series/' .
-                    $showId . '/edit/' .
-                ((string) $payload->getResult()['id']),
+                    $showId .
+                    '/edit/' .
+                    ((string) $payload->getResult()['id']),
             );
     }
 }

@@ -87,9 +87,10 @@ class SaveSeriesFromPost
                         'message' => 'The data provided was invalid',
                         'inputMessages' => $validator->getErrors(),
                         'inputValues' => $post,
-                    ]
+                    ],
                 ),
                 $show->id,
+                $series,
             );
         }
 
@@ -109,6 +110,7 @@ class SaveSeriesFromPost
                 ),
             ),
             $show->id,
+            $series,
         );
     }
 }

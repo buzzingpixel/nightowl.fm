@@ -58,7 +58,7 @@ class FetchShows
     /**
      * @return ShowModel[]
      */
-    private function innerRun(?FetchModel $fetchModel): array
+    private function innerRun(?FetchModel $fetchModel = null): array
     {
         $fetchModel ??= new FetchModel();
 
