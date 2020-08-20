@@ -22,7 +22,7 @@ final class CreateEpisodesTable extends AbstractMigration
             ->addColumn('status', 'string')
             ->addColumn('description', 'text')
             ->addColumn('file_location', 'string')
-            ->addColumn('not_an_episode', 'boolean')
+            ->addColumn('episode_type', 'string')
             ->addColumn('explicit', 'boolean')
             ->addColumn('show_notes', 'text')
             ->addColumn(

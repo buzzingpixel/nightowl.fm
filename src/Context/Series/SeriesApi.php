@@ -9,6 +9,7 @@ use App\Context\Series\Models\SeriesModel;
 use App\Context\Series\Services\FetchSeries;
 use App\Context\Series\Services\SaveSeries;
 use App\Context\Series\Services\ValidateUniqueSeriesSlug;
+use App\Context\Series\Transformers\SeriesModelsToSelectArray;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
 
@@ -67,5 +68,19 @@ class SeriesApi
             $showId,
             $existingId
         );
+    }
+
+    /**
+     * @param SeriesModel[] $models
+     *
+     * @return mixed[]
+     */
+    public function transformSeriesModelsToSelectArray(array $models): array
+    {
+        $service = $this->di->get(SeriesModelsToSelectArray::class);
+
+        assert($service instanceof SeriesModelsToSelectArray);
+
+        return $service->transform($models);
     }
 }

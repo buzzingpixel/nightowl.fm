@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Context\People\Transformers;
+namespace App\Context\Series\Transformers;
 
-use App\Context\People\Models\PersonModel;
+use App\Context\Series\Models\SeriesModel;
 
 use function array_map;
 
-class PersonModelsToSelectArray
+class SeriesModelsToSelectArray
 {
     /**
-     * @param PersonModel[] $models
+     * @param SeriesModel[] $models
      *
      * @return mixed[]
      */
     public function transform(array $models): array
     {
         return array_map(
-            static fn (PersonModel $model) => [
+            static fn (SeriesModel $model) => [
                 'value' => $model->id,
-                'label' => $model->getFullName(),
+                'label' => $model->title,
             ],
             $models
         );
