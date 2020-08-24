@@ -10,6 +10,7 @@ use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveHosts;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveKeywords;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveNewFile;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveSeries;
+use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSetEpisodePublishedState;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSetOrderAndNumber;
 use Crell\Tukio\OrderedListenerProvider;
 
@@ -50,6 +51,11 @@ class EpisodesRegisterEventListeners
         $provider->addSubscriber(
             SaveEpisodeBeforeSaveSaveSeries::class,
             SaveEpisodeBeforeSaveSaveSeries::class,
+        );
+
+        $provider->addSubscriber(
+            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
+            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
         );
     }
 }
