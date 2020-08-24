@@ -44,8 +44,6 @@ class SaveEpisode
         try {
             return $this->innerRun($episode);
         } catch (Throwable $e) {
-            throw $e;
-
             $this->transactionManager->rollBack();
 
             try {

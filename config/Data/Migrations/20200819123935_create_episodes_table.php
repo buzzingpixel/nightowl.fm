@@ -32,7 +32,10 @@ final class CreateEpisodesTable extends AbstractMigration
             ->addColumn(
                 'publish_at',
                 'datetime',
-                ['timezone' => true]
+                [
+                    'null' => true,
+                    'timezone' => true,
+                ]
             )
             ->addColumn('is_published', 'boolean')
             ->addColumn(
