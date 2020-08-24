@@ -22,6 +22,10 @@ final class CreateEpisodesTable extends AbstractMigration
             ->addColumn('status', 'string')
             ->addColumn('description', 'text')
             ->addColumn('file_location', 'string')
+            ->addColumn('file_runtime_seconds', 'float')
+            ->addColumn('file_size_bytes', 'string')
+            ->addColumn('file_mime_type', 'string')
+            ->addColumn('file_format', 'string')
             ->addColumn('episode_type', 'string')
             ->addColumn('explicit', 'boolean')
             ->addColumn('show_notes', 'text')
@@ -40,7 +44,7 @@ final class CreateEpisodesTable extends AbstractMigration
                 ]
             )
             ->addColumn(
-                'order',
+                'display_order',
                 'integer',
                 ['signed' => false]
             )

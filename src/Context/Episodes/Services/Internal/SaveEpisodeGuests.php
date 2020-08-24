@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Shows\Services\Internal;
+namespace App\Context\Episodes\Services\Internal;
 
-use App\Context\Keywords\Models\KeywordModel;
-use App\Context\Shows\Models\ShowModel;
+use App\Context\Episodes\Models\EpisodeModel;
+use App\Context\People\Models\PersonModel;
+use App\Persistence\Episodes\EpisodeGuestsRecord;
 use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
-use App\Persistence\Shows\ShowKeywordsRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
 use PDO;
 
@@ -21,7 +21,7 @@ use function in_array;
 
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
 
-class SaveShowKeywords
+class SaveEpisodeGuests
 {
     private RecordQueryFactory $recordQueryFactory;
     private SaveNewRecord $saveNewRecord;
@@ -40,56 +40,51 @@ class SaveShowKeywords
         $this->pdo                = $pdo;
     }
 
-    public function save(ShowModel $show): void
+    public function save(EpisodeModel $episode): void
     {
-        /** @var ShowKeywordsRecord[] $allPreviousKeywords */
-        $allPreviousKeywords = $this->recordQueryFactory
-            ->make(new ShowKeywordsRecord())
-            ->withWhere('show_id', $show->id)
+        /** @var EpisodeGuestsRecord[] $allPreviousGuests */
+        $allPreviousGuests = $this->recordQueryFactory
+            ->make(new EpisodeGuestsRecord())
+            ->withWhere('episode_id', $episode->id)
             ->all();
 
         $this->deleteNonExisting(
-            $allPreviousKeywords,
-            $show
+            $allPreviousGuests,
+            $episode
         );
 
         $this->insertNew(
-            $allPreviousKeywords,
-            $show
+            $allPreviousGuests,
+            $episode
         );
     }
 
     /**
-     * @param ShowKeywordsRecord[] $allPreviousKeywords
+     * @param EpisodeGuestsRecord[] $allPreviousGuests
      */
     private function deleteNonExisting(
-        array $allPreviousKeywords,
-        ShowModel $show
+        array $allPreviousGuests,
+        EpisodeModel $episode
     ): void {
-        if (count($allPreviousKeywords) < 1) {
+        if (count($allPreviousGuests) < 1) {
             return;
         }
 
-        $currentKeywords = $show->keywords;
+        $currentGuests = $episode->guests;
 
         $allCurrentIds = array_map(
-            static fn (KeywordModel $m) => $m->id,
-            $currentKeywords
+            static fn (PersonModel $m) => $m->id,
+            $currentGuests
         );
 
         $toDelete = [];
 
-        foreach ($allPreviousKeywords as $keyword) {
-            if (
-                in_array(
-                    $keyword->keyword_id,
-                    $allCurrentIds
-                )
-            ) {
+        foreach ($allPreviousGuests as $guest) {
+            if (in_array($guest->person_id, $allCurrentIds)) {
                 continue;
             }
 
-            $toDelete[] = $keyword->keyword_id;
+            $toDelete[] = $guest->person_id;
         }
 
         if (count($toDelete) < 1) {
@@ -102,53 +97,53 @@ class SaveShowKeywords
         );
 
         $statement = $this->pdo->prepare(
-            'DELETE FROM ' . ShowKeywordsRecord::tableName() .
-            ' WHERE keyword_id IN (' . $in . ') ' .
-            ' AND show_id = ?'
+            'DELETE FROM ' . EpisodeGuestsRecord::tableName() .
+            ' WHERE person_id IN (' . $in . ') ' .
+            ' AND episode_id = ?'
         );
 
-        $toDelete[] = $show->id;
+        $toDelete[] = $episode->id;
 
         $statement->execute($toDelete);
     }
 
     /**
-     * @param ShowKeywordsRecord[] $allPreviousKeywords
+     * @param EpisodeGuestsRecord[] $allPreviousGuests
      */
     private function insertNew(
-        array $allPreviousKeywords,
-        ShowModel $show
+        array $allPreviousGuests,
+        EpisodeModel $episode
     ): void {
-        $newShowKeywords = $show->keywords;
+        $newEpisodeGuests = $episode->guests;
 
-        if (count($newShowKeywords) < 1) {
+        if (count($newEpisodeGuests) < 1) {
             return;
         }
 
         $existingIds = array_map(
-            static fn (ShowKeywordsRecord $r) => $r->keyword_id,
-            $allPreviousKeywords,
+            static fn (EpisodeGuestsRecord $r) => $r->person_id,
+            $allPreviousGuests,
         );
 
         array_walk(
-            $newShowKeywords,
+            $newEpisodeGuests,
             function (
-                KeywordModel $keyword
+                PersonModel $guest
             ) use (
                 $existingIds,
-                $show
+                $episode
             ): void {
-                if (in_array($keyword->id, $existingIds)) {
+                if (in_array($guest->id, $existingIds)) {
                     return;
                 }
 
-                $record = new ShowKeywordsRecord();
+                $record = new EpisodeGuestsRecord();
 
                 $record->id = $this->uuidFactory->uuid1()->toString();
 
-                $record->show_id = $show->id;
+                $record->episode_id = $episode->id;
 
-                $record->keyword_id = $keyword->id;
+                $record->person_id = $guest->id;
 
                 $this->saveNewRecord->save($record);
             }

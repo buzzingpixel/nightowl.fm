@@ -17,6 +17,7 @@ use App\Http\Response\CMS\Shows\EditShow\EditShowAction;
 use App\Http\Response\CMS\Shows\EditShow\PostEditShowAction;
 use App\Http\Response\CMS\Shows\Episodes\EpisodesIndexAction;
 use App\Http\Response\CMS\Shows\Episodes\NewEpisode\NewEpisodeAction;
+use App\Http\Response\CMS\Shows\Episodes\NewEpisode\PostNewEpisodeAction;
 use App\Http\Response\CMS\Shows\NewShow\NewShowAction;
 use App\Http\Response\CMS\Shows\NewShow\PostNewShowAction;
 use App\Http\Response\CMS\Shows\Series\EditSeries\EditSeriesAction;
@@ -79,6 +80,7 @@ return static function (App $app): void {
          */
         $r->get('/shows/episodes/{showId}', EpisodesIndexAction::class);
         $r->get('/shows/episodes/{showId}/new', NewEpisodeAction::class);
+        $r->post('/shows/episodes/{showId}/new', PostNewEpisodeAction::class);
 
         /**
          * People

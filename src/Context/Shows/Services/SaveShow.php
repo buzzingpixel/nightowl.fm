@@ -50,9 +50,9 @@ class SaveShow
             $this->transactionManager->rollBack();
 
             try {
-                $failedEvent = new SaveShowSaveFailed($show);
-
-                $this->eventDispatcher->dispatch($failedEvent);
+                $this->eventDispatcher->dispatch(
+                    new SaveShowSaveFailed($show)
+                );
             } catch (Throwable $e) {
             }
 

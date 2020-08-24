@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Shows\Services\Internal;
+namespace App\Context\Episodes\Services\Internal;
 
+use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Keywords\Models\KeywordModel;
-use App\Context\Shows\Models\ShowModel;
+use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
-use App\Persistence\Shows\ShowKeywordsRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
 use PDO;
 
@@ -21,7 +21,7 @@ use function in_array;
 
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
 
-class SaveShowKeywords
+class SaveEpisodeKeywords
 {
     private RecordQueryFactory $recordQueryFactory;
     private SaveNewRecord $saveNewRecord;
@@ -40,37 +40,37 @@ class SaveShowKeywords
         $this->pdo                = $pdo;
     }
 
-    public function save(ShowModel $show): void
+    public function save(EpisodeModel $episode): void
     {
-        /** @var ShowKeywordsRecord[] $allPreviousKeywords */
+        /** @var EpisodeKeywordsRecord[] $allPreviousKeywords */
         $allPreviousKeywords = $this->recordQueryFactory
-            ->make(new ShowKeywordsRecord())
-            ->withWhere('show_id', $show->id)
+            ->make(new EpisodeKeywordsRecord())
+            ->withWhere('episode_id', $episode->id)
             ->all();
 
         $this->deleteNonExisting(
             $allPreviousKeywords,
-            $show
+            $episode
         );
 
         $this->insertNew(
             $allPreviousKeywords,
-            $show
+            $episode
         );
     }
 
     /**
-     * @param ShowKeywordsRecord[] $allPreviousKeywords
+     * @param EpisodeKeywordsRecord[] $allPreviousKeywords
      */
     private function deleteNonExisting(
         array $allPreviousKeywords,
-        ShowModel $show
+        EpisodeModel $episode
     ): void {
         if (count($allPreviousKeywords) < 1) {
             return;
         }
 
-        $currentKeywords = $show->keywords;
+        $currentKeywords = $episode->keywords;
 
         $allCurrentIds = array_map(
             static fn (KeywordModel $m) => $m->id,
@@ -102,51 +102,51 @@ class SaveShowKeywords
         );
 
         $statement = $this->pdo->prepare(
-            'DELETE FROM ' . ShowKeywordsRecord::tableName() .
+            'DELETE FROM ' . EpisodeKeywordsRecord::tableName() .
             ' WHERE keyword_id IN (' . $in . ') ' .
-            ' AND show_id = ?'
+            ' AND episode_id = ?'
         );
 
-        $toDelete[] = $show->id;
+        $toDelete[] = $episode->id;
 
         $statement->execute($toDelete);
     }
 
     /**
-     * @param ShowKeywordsRecord[] $allPreviousKeywords
+     * @param EpisodeKeywordsRecord[] $allPreviousKeywords
      */
     private function insertNew(
         array $allPreviousKeywords,
-        ShowModel $show
+        EpisodeModel $episode
     ): void {
-        $newShowKeywords = $show->keywords;
+        $newEpisodeKeywords = $episode->keywords;
 
-        if (count($newShowKeywords) < 1) {
+        if (count($newEpisodeKeywords) < 1) {
             return;
         }
 
         $existingIds = array_map(
-            static fn (ShowKeywordsRecord $r) => $r->keyword_id,
+            static fn (EpisodeKeywordsRecord $r) => $r->keyword_id,
             $allPreviousKeywords,
         );
 
         array_walk(
-            $newShowKeywords,
+            $newEpisodeKeywords,
             function (
                 KeywordModel $keyword
             ) use (
                 $existingIds,
-                $show
+                $episode
             ): void {
                 if (in_array($keyword->id, $existingIds)) {
                     return;
                 }
 
-                $record = new ShowKeywordsRecord();
+                $record = new EpisodeKeywordsRecord();
 
                 $record->id = $this->uuidFactory->uuid1()->toString();
 
-                $record->show_id = $show->id;
+                $record->episode_id = $episode->id;
 
                 $record->keyword_id = $keyword->id;
 

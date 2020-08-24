@@ -13,8 +13,8 @@ use function getenv;
  * @method bool devMode()
  * @method string rootPath()
  * @method string publicPath()
- * @method string pathToContentDirectory()
  * @method string pathToStorageDirectory()
+ * @method string pathToEpisodesDirectory()
  * @method string siteUrl()
  * @method string siteName()
  * @method string twitterHandle()
@@ -33,9 +33,9 @@ class General extends SimpleModel
 
         static::$publicPath = $rootPath . '/public';
 
-        static::$pathToContentDirectory = $rootPath . '/content';
-
         static::$pathToStorageDirectory = $rootPath . '/storage';
+
+        static::$pathToEpisodesDirectory = $rootPath . '/episodes';
 
         if (getenv('SITE_URL') !== false) {
             static::$siteUrl = getenv('SITE_URL');
@@ -58,9 +58,9 @@ class General extends SimpleModel
 
     public static string $publicPath = '';
 
-    public static string $pathToContentDirectory = '';
-
     public static string $pathToStorageDirectory = '';
+
+    public static string $pathToEpisodesDirectory = '';
 
     public static string $siteUrl = 'https://www.nightowl.fm';
 

@@ -17,7 +17,7 @@ final class CreateEpisodeSeriesTable extends AbstractMigration
             'primary_key' => ['id'],
         ])
             ->addColumn('id', 'uuid')
-            ->addColumn('show_id', 'uuid')
+            ->addColumn('episode_id', 'uuid')
             ->addColumn('series_id', 'uuid')
             ->create();
     }

@@ -73,6 +73,7 @@
             },
             {
                 label: 'Status',
+                subLabel: 'If episode is set to Draft, required fields do not need to be filled in yet.',
                 name: 'status',
                 type: 'radio',
                 options: statusOptions,
@@ -86,6 +87,7 @@
             },
             {
                 label: 'Playable Episode File',
+                subLabel: 'Must be an MP3',
                 name: 'file',
                 type: 'file_upload',
                 value: episode.fileName ?? '',

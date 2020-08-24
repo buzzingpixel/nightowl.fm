@@ -17,7 +17,7 @@ final class CreateEpisodeGuestsTable extends AbstractMigration
             'primary_key' => ['id'],
         ])
             ->addColumn('id', 'uuid')
-            ->addColumn('show_id', 'uuid')
+            ->addColumn('episode_id', 'uuid')
             ->addColumn('person_id', 'uuid')
             ->create();
     }

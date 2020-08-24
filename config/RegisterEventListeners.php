@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Config;
 
+use App\Context\Episodes\EpisodesRegisterEventListeners;
 use App\Context\People\PeopleRegisterEventListeners;
 use App\Context\Series\SeriesRegisterEventListeners;
 use App\Context\Shows\ShowsRegisterEventListeners;
@@ -31,5 +32,6 @@ class RegisterEventListeners
         (new PeopleRegisterEventListeners())->register($this->provider);
         (new ShowsRegisterEventListeners())->register($this->provider);
         (new SeriesRegisterEventListeners())->register($this->provider);
+        (new EpisodesRegisterEventListeners())->register($this->provider);
     }
 }
