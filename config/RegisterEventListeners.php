@@ -8,6 +8,7 @@ use App\Context\Episodes\EpisodesRegisterEventListeners;
 use App\Context\People\PeopleRegisterEventListeners;
 use App\Context\Series\SeriesRegisterEventListeners;
 use App\Context\Shows\ShowsRegisterEventListeners;
+use App\Http\ServiceSuites\StaticCache\StaticCacheRegisterEventListeners;
 use Crell\Tukio\OrderedListenerProvider;
 
 class RegisterEventListeners
@@ -29,9 +30,12 @@ class RegisterEventListeners
         //     dd($beforeValidate);
         // }
 
-        (new PeopleRegisterEventListeners())->register($this->provider);
-        (new ShowsRegisterEventListeners())->register($this->provider);
-        (new SeriesRegisterEventListeners())->register($this->provider);
-        (new EpisodesRegisterEventListeners())->register($this->provider);
+        $provider = $this->provider;
+
+        (new PeopleRegisterEventListeners())->register($provider);
+        (new ShowsRegisterEventListeners())->register($provider);
+        (new SeriesRegisterEventListeners())->register($provider);
+        (new EpisodesRegisterEventListeners())->register($provider);
+        (new StaticCacheRegisterEventListeners())->register($provider);
     }
 }

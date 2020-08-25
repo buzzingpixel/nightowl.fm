@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Context\People\Services;
 
+use App\Context\People\Events\SavePersonAfterSave;
+use App\Context\People\Events\SavePersonBeforeSave;
 use App\Context\People\Models\PersonModel;
 use App\Context\People\Services\Internal\SavePersonExisting;
 use App\Context\People\Services\Internal\SavePersonNew;
@@ -11,6 +13,7 @@ use App\Payload\Payload;
 use App\Persistence\DatabaseTransactionManager;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
 use Exception;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 class SavePerson
@@ -22,6 +25,7 @@ class SavePerson
     private DeleteUserProfilePhoto $deleteUserProfilePhoto;
     private UuidFactoryWithOrderedTimeCodec $uuidFactory;
     private ValidateUniquePersonSlug $validateUniquePersonSlug;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
         DatabaseTransactionManager $transactionManager,
@@ -30,7 +34,8 @@ class SavePerson
         SaveNewProfilePhoto $saveNewProfilePhoto,
         DeleteUserProfilePhoto $deleteUserProfilePhoto,
         UuidFactoryWithOrderedTimeCodec $uuidFactory,
-        ValidateUniquePersonSlug $validateUniquePersonSlug
+        ValidateUniquePersonSlug $validateUniquePersonSlug,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->transactionManager       = $transactionManager;
         $this->saveNew                  = $saveNew;
@@ -39,6 +44,7 @@ class SavePerson
         $this->deleteUserProfilePhoto   = $deleteUserProfilePhoto;
         $this->uuidFactory              = $uuidFactory;
         $this->validateUniquePersonSlug = $validateUniquePersonSlug;
+        $this->eventDispatcher          = $eventDispatcher;
     }
 
     public function save(PersonModel $person): Payload
@@ -50,6 +56,14 @@ class SavePerson
                     $person->id,
                 )
             ) {
+                throw new Exception();
+            }
+
+            $beforeEvent = new SavePersonBeforeSave($person);
+
+            $this->eventDispatcher->dispatch($beforeEvent);
+
+            if (! $beforeEvent->isValid) {
                 throw new Exception();
             }
 
@@ -71,6 +85,14 @@ class SavePerson
                 $payload = $this->saveNew->save($person);
             } else {
                 $payload = $this->saveExisting->save($person);
+            }
+
+            $afterEvent = new SavePersonAfterSave($person);
+
+            $this->eventDispatcher->dispatch($afterEvent);
+
+            if (! $afterEvent->isValid) {
+                throw new Exception();
             }
 
             $this->transactionManager->commit();

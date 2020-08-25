@@ -7,7 +7,7 @@ namespace App\Context\People\Events;
 use App\Context\Events\StoppableEvent;
 use App\Context\People\Models\PersonModel;
 
-class DeletePersonAfterDelete extends StoppableEvent
+class SavePersonBeforeSave extends StoppableEvent
 {
     public PersonModel $person;
     public bool $isValid = true;
