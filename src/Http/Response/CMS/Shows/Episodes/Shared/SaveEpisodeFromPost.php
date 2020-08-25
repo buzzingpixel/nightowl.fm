@@ -227,6 +227,10 @@ class SaveEpisodeFromPost
                     )->setTemplate('File must be provided'),
                     V::callback(
                         function ($input): bool {
+                            if ($input === '') {
+                                return true;
+                            }
+
                             return $this->validatePlayableMimeType->fromTempPath(
                                 $input
                             );

@@ -59,6 +59,10 @@
                     >{{ postBackValue ?: value }}</textarea>
                 </div>
             {% case 'file_upload' %}
+                {% set dataMessage = value %}
+                {% if postBackValue['file_name'] is defined and postBackValue['file_name'] and postBackValue['file_name'] != '' %}
+                    {% set dataMessage = postBackValue['file_name'] %}
+                {% endif %}
                 <div
                     x-init="RunWhenReady('FileUploadField', {
                         data: data,
@@ -67,7 +71,7 @@
                     x-data="{
                         data: {
                             mode: 'incompatible',
-                            message: '{{ postBackValue['file_name'] ?? value }}',
+                            message: '{{ dataMessage }}',
                             messageType: 'success',
                             uploadInProgress: false,
                             filePath: '{{ postBackValue['file_path'] ?? '' }}',

@@ -142,7 +142,7 @@ class FetchSeries
                     $r,
                     $showsById[$r->show_id],
                 ),
-            $records
+            $records,
         );
     }
 }

@@ -7,7 +7,7 @@
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
 {% block cmsPreContent %}
-    {% if deleteAction is defined %}
+    {% if deleteAction is defined and deleteAction %}
         <form
             method="post"
             action="{{ deleteAction }}"
@@ -61,95 +61,112 @@
     {% endfor %}
 {% endif %}
 
+{% set inputs = [{
+    label: 'Title',
+    name: 'title',
+    value: episode.title ?? '',
+}] %}
+
+{% if episode is not defined or not episode.isPublished %}
+    {% set inputs = inputs|merge([{
+        label: 'Status',
+        subLabel: 'If episode is set to Draft, required fields do not need to be filled in yet.',
+        name: 'status',
+        type: 'radio',
+        options: statusOptions,
+        value: episode.status ?? '',
+    }]) %}
+{% endif %}
+
+{% set inputs = inputs|merge([{
+    label: 'Description',
+    name: 'description',
+    type: 'textarea',
+    value: episode.description ?? '',
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Playable Episode File',
+    subLabel: 'Must be an MP3',
+    name: 'file',
+    type: 'file_upload',
+    value: episode.fileName ?? '',
+},]) %}
+
+{% if episode is not defined or not episode.isPublished %}
+    {% set inputs = inputs|merge([{
+        label: 'Episode Type',
+        name: 'type',
+        type: 'radio',
+        options: typeOptions,
+        value: episode.episodeType ?? '',
+    },]) %}
+{% endif %}
+
+{% set inputs = inputs|merge([{
+    label: 'Explicit?',
+    name: 'explicit',
+    type: 'lightswitch',
+    value: explicit,
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Show Notes',
+    name: 'show_notes',
+    type: 'markdown',
+    value: episode.showNotes ?? '',
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Hosts',
+    name: 'hosts',
+    type: 'select',
+    multiple: true,
+    options: peopleOptions,
+    value: hosts,
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Guests',
+    name: 'guests',
+    type: 'select',
+    multiple: true,
+    options: peopleOptions,
+    value: guests,
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Keywords',
+    subLabel: "Comma seperated list. Keywords will be normalized without capitalization.",
+    name: 'keywords',
+    type: 'textarea',
+    value: keywords ?? '',
+},]) %}
+
+{% set inputs = inputs|merge([{
+    label: 'Series',
+    name: 'series',
+    type: 'select',
+    multiple: true,
+    options: seriesOptions,
+    value: series,
+},]) %}
+
+{% if episode is not defined or not episode.isPublished %}
+    {% set inputs = inputs|merge([{
+        label: 'Publish At',
+        subLabel: "Leave blank to publish right away. Timezone is your user account preferences timezone.",
+        name: 'publish_at',
+        type: 'datetime-local',
+        value: episode.publishAt.format('Y-m-d g:i A') ?? '',
+    },]) %}
+{% endif %}
+
 {% block cmsContent %}
     {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
         submitContent: episode is defined ? 'Save' : 'Create',
         cancelAction: '/cms/shows/episodes/' ~ show.id,
-        inputs: [
-            {
-                label: 'Title',
-                name: 'title',
-                value: episode.title ?? '',
-            },
-            {
-                label: 'Status',
-                subLabel: 'If episode is set to Draft, required fields do not need to be filled in yet.',
-                name: 'status',
-                type: 'radio',
-                options: statusOptions,
-                value: episode.status ?? '',
-            },
-            {
-                label: 'Description',
-                name: 'description',
-                type: 'textarea',
-                value: episode.description ?? '',
-            },
-            {
-                label: 'Playable Episode File',
-                subLabel: 'Must be an MP3',
-                name: 'file',
-                type: 'file_upload',
-                value: episode.fileName ?? '',
-            },
-            {
-                label: 'Episode Type',
-                name: 'type',
-                type: 'radio',
-                options: typeOptions,
-                value: episode.type ?? '',
-            },
-            {
-                label: 'Explicit?',
-                name: 'explicit',
-                type: 'lightswitch',
-                value: explicit,
-            },
-            {
-                label: 'Show Notes',
-                name: 'show_notes',
-                type: 'markdown',
-                value: episode.showNotes ?? '',
-            },
-            {
-                label: 'Hosts',
-                name: 'hosts',
-                type: 'select',
-                multiple: true,
-                options: peopleOptions,
-                value: hosts,
-            },
-            {
-                label: 'Guests',
-                name: 'guests',
-                type: 'select',
-                multiple: true,
-                options: peopleOptions,
-                value: guests,
-            },
-            {
-                label: 'Keywords',
-                subLabel: "Comma seperated list. Keywords will be normalized without capitalization.",
-                name: 'keywords',
-                type: 'textarea',
-                value: keywords ?? '',
-            },
-            {
-                label: 'Series',
-                name: 'series',
-                type: 'select',
-                multiple: true,
-                options: seriesOptions,
-                value: series,
-            },
-            {
-                label: 'Publish At',
-                subLabel: "Leave blank to publish right away. Timezone is your user account preferences timezone.",
-                name: 'publish_at',
-                type: 'datetime-local',
-                value: episode.publishAt.format('Y-m-d g:i A') ?? '',
-            },
-        ],
+        inputs: inputs,
     } only %}
 {% endblock %}
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Episodes\Services\Internal;
 
+use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;
 
 use function time;
@@ -13,6 +14,10 @@ class SetEpisodePublishedState
     public function set(EpisodeModel $episode): void
     {
         if ($episode->isPublished) {
+            return;
+        }
+
+        if ($episode->status !== EpisodeConstants::EPISODE_STATUS_LIVE) {
             return;
         }
 

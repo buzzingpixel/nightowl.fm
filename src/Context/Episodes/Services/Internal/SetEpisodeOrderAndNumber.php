@@ -51,6 +51,8 @@ class SetEpisodeOrderAndNumber
                 EpisodeConstants::EPISODE_STATUS_LIVE
             )
             ->withWhere('show_id', $episode->show->id)
+            ->withWhere('id', $episode->id, '!=')
+            ->withOrder('display_order', 'desc')
             ->one();
 
         assert($record instanceof EpisodeRecord || $record === null);
@@ -75,6 +77,8 @@ class SetEpisodeOrderAndNumber
                 EpisodeConstants::EPISODE_STATUS_LIVE
             )
             ->withWhere('show_id', $episode->show->id)
+            ->withWhere('id', $episode->id, '!=')
+            ->withOrder('display_order', 'desc')
             ->one();
 
         assert($record instanceof EpisodeRecord || $record === null);
