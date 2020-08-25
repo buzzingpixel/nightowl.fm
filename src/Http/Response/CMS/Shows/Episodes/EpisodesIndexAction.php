@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\Shows\Episodes;
 
+use App\Context\Episodes\EpisodeApi;
+use App\Context\Episodes\EpisodeConstants;
+use App\Context\Episodes\Models\FetchModel as EpisodeFetchModel;
 use App\Context\Shows\Models\FetchModel as ShowsFetchModel;
 use App\Context\Shows\ShowApi;
 use App\Http\Models\Meta;
@@ -21,15 +24,18 @@ class EpisodesIndexAction
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
     private ShowApi $showApi;
+    private EpisodeApi $episodeApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
-        ShowApi $showApi
+        ShowApi $showApi,
+        EpisodeApi $episodeApi
     ) {
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
         $this->showApi         = $showApi;
+        $this->episodeApi      = $episodeApi;
     }
 
     /**
@@ -51,6 +57,28 @@ class EpisodesIndexAction
         if ($show === null) {
             throw new HttpNotFoundException($request);
         }
+
+        $draftFetchModel           = new EpisodeFetchModel();
+        $draftFetchModel->shows    = [$show];
+        $draftFetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_DRAFT];
+        $drafts                    = $this->episodeApi->fetchEpisodes(
+            $draftFetchModel
+        );
+
+        $scheduledFetchModel              = new EpisodeFetchModel();
+        $scheduledFetchModel->shows       = [$show];
+        $scheduledFetchModel->statuses    = [EpisodeConstants::EPISODE_STATUS_LIVE];
+        $scheduledFetchModel->isPublished = false;
+        $scheduled                        = $this->episodeApi->fetchEpisodes(
+            $scheduledFetchModel
+        );
+
+        $publishedFetchModel              = new EpisodeFetchModel();
+        $publishedFetchModel->shows       = [$show];
+        $publishedFetchModel->isPublished = true;
+        $published                        = $this->episodeApi->fetchEpisodes(
+            $publishedFetchModel
+        );
 
         $title = $show->title . ' Episodes';
 
@@ -74,6 +102,9 @@ class EpisodesIndexAction
                         ],
                     ],
                     'show' => $show,
+                    'drafts' => $drafts,
+                    'scheduled' => $scheduled,
+                    'published' => $published,
                 ],
             ),
         );
