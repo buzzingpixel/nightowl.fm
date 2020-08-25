@@ -36,4 +36,6 @@ class FetchModel
 
     /** @var int[] */
     public array $episodeNumbers = [];
+
+    public bool $pastPublishedAt = false;
 }

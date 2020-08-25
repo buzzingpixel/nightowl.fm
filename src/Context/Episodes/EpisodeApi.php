@@ -7,6 +7,7 @@ namespace App\Context\Episodes;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\Episodes\Services\FetchEpisodes;
+use App\Context\Episodes\Services\PublishPendingEpisodes;
 use App\Context\Episodes\Services\SaveEpisode;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
@@ -50,5 +51,14 @@ class EpisodeApi
         $fetchModel->limit = 1;
 
         return $this->fetchEpisodes($fetchModel)[0] ?? null;
+    }
+
+    public function publishPendingEpisodes(): void
+    {
+        $service = $this->di->get(PublishPendingEpisodes::class);
+
+        assert($service instanceof PublishPendingEpisodes);
+
+        $service->run();
     }
 }

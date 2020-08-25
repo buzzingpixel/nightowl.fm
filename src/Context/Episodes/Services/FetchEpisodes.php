@@ -14,6 +14,7 @@ use App\Context\Series\Models\FetchModel as SeriesFetchModel;
 use App\Context\Series\SeriesApi;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\ShowApi;
+use App\Persistence\Constants;
 use App\Persistence\Episodes\EpisodeGuestsRecord;
 use App\Persistence\Episodes\EpisodeHostsRecord;
 use App\Persistence\Episodes\EpisodeKeywordsRecord;
@@ -21,6 +22,8 @@ use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\Episodes\EpisodeSeriesRecord;
 use App\Persistence\Keywords\KeywordRecord;
 use App\Persistence\RecordQueryFactory;
+use App\Utilities\SystemClock;
+use DateTimeZone;
 use Throwable;
 
 use function array_map;
@@ -40,19 +43,22 @@ class FetchEpisodes
     private ShowApi $showApi;
     private PeopleApi $peopleApi;
     private SeriesApi $seriesApi;
+    private SystemClock $systemClock;
 
     public function __construct(
         RecordQueryFactory $recordQueryFactory,
         RecordToModel $recordToModel,
         ShowApi $showApi,
         PeopleApi $peopleApi,
-        SeriesApi $seriesApi
+        SeriesApi $seriesApi,
+        SystemClock $systemClock
     ) {
         $this->recordQueryFactory = $recordQueryFactory;
         $this->recordToModel      = $recordToModel;
         $this->showApi            = $showApi;
         $this->peopleApi          = $peopleApi;
         $this->seriesApi          = $seriesApi;
+        $this->systemClock        = $systemClock;
     }
 
     /**
@@ -158,6 +164,27 @@ class FetchEpisodes
                 'number',
                 $fetchModel->episodeNumbers,
                 'IN'
+            );
+        }
+
+        if ($fetchModel->pastPublishedAt) {
+            $query = $query->withWhere(
+                'publish_at',
+                'NULL',
+                '!='
+            );
+
+            $datetime = $this->systemClock->getCurrentTime()
+                ->setTimezone(new DateTimeZone('UTC'));
+
+            $format = $datetime->format(
+                Constants::POSTGRES_OUTPUT_FORMAT
+            );
+
+            $query = $query->withWhere(
+                'publish_at',
+                $format,
+                '<'
             );
         }
 
