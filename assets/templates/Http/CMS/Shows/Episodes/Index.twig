@@ -14,6 +14,10 @@
 
 {% macro table(episodes, sectionTitle) %}
     {# @var \App\Context\Episodes\Models\EpisodeModel[] episodes #}
+
+    {# @var \App\Context\Users\Models\LoggedInUser user #}
+    {% set user = fetchLoggedInUser() %}
+
     <div>
         <div class="flex flex-col">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -30,6 +34,11 @@
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                     Episode Number
                                 </th>
+                                {% if sectionTitle == 'Scheduled' %}
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Publish At
+                                    </th>
+                                {% endif %}
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
@@ -56,6 +65,13 @@
                                         {% endif %}
                                     </div>
                                 </td>
+                                {% if sectionTitle == 'Scheduled' %}
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            {{ episode.publishAt.setTimezone(user.model.timezone).format('Y-m-d h:i A') }}
+                                        </div>
+                                    </td>
+                                {% endif %}
                                 <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                                     <a href="/cms/shows/episodes/{{ episode.show.id }}/edit/{{ episode.id }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 </td>

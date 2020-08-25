@@ -19,6 +19,11 @@ class EpisodesRegisterEventListeners
     public function register(OrderedListenerProvider $provider): void
     {
         $provider->addSubscriber(
+            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
+            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
+        );
+
+        $provider->addSubscriber(
             SaveEpisodeBeforeSaveSetOrderAndNumber::class,
             SaveEpisodeBeforeSaveSetOrderAndNumber::class,
         );
@@ -51,11 +56,6 @@ class EpisodesRegisterEventListeners
         $provider->addSubscriber(
             SaveEpisodeBeforeSaveSaveSeries::class,
             SaveEpisodeBeforeSaveSaveSeries::class,
-        );
-
-        $provider->addSubscriber(
-            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
-            SaveEpisodeBeforeSaveSetEpisodePublishedState::class,
         );
     }
 }

@@ -69,20 +69,28 @@ class SaveEpisodeFromPost
         assert(is_array($post));
 
         $data = [
-            'title' => (string) ($post['title'] ?? ''),
-            'status' => (string) ($post['status'] ?? ''),
-            'description' => (string) ($post['description'] ?? ''),
+            'title' => (string) ($post['title'] ?? $episode->title),
+            'status' => (string) ($post['status'] ?? $episode->status),
+            'description' => (string) ($post['description'] ?? $episode->description),
             'file_path' => (string) ($post['file']['file_path'] ?? ''),
             'file_name' => (string) ($post['file']['file_name'] ?? ''),
-            'type' => (string) ($post['type'] ?? ''),
-            'explicit' => (string) ($post['explicit'] ?? 'false'),
-            'show_notes' => (string) ($post['show_notes'] ?? ''),
+            'type' => (string) ($post['type'] ?? $episode->episodeType),
+            'explicit' => (string) ($post['explicit'] ?? ($episode->explicit ? 'true' : 'false')),
+            'show_notes' => (string) ($post['show_notes'] ?? $episode->showNotes),
             'hosts' => (array) ($post['hosts'] ?? []),
             'guests' => (array) ($post['guests'] ?? []),
             'keywords' => (string) ($post['keywords'] ?? ''),
             'series' => (array) ($post['series'] ?? []),
-            'publish_at' => (string) ($post['publish_at'] ?? []),
+            'publish_at' => (string) ($post['publish_at'] ?? 'false'),
         ];
+
+        if ($data['publish_at'] === 'false' && $episode->publishAt) {
+            $data['publish_at'] = $episode->publishAt
+                ->setTimezone($this->user->model()->timezone)
+                ->format('Y-m-d g:i A');
+        } elseif ($data['publish_at'] === 'false') {
+            $data['publish_at'] = '';
+        }
 
         $hosts = [];
 

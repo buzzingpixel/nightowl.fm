@@ -25,7 +25,7 @@ class SetEpisodeOrderAndNumber
 
     public function set(EpisodeModel $episode): void
     {
-        if ($episode->status !== EpisodeConstants::EPISODE_STATUS_LIVE) {
+        if (! $episode->isPublished) {
             return;
         }
 
@@ -37,6 +37,10 @@ class SetEpisodeOrderAndNumber
     private function setEpisodeNumber(EpisodeModel $episode): void
     {
         if ($episode->episodeType !== EpisodeConstants::EPISODE_TYPE_NUMBERED) {
+            return;
+        }
+
+        if ($episode->number > 0) {
             return;
         }
 
@@ -70,6 +74,10 @@ class SetEpisodeOrderAndNumber
 
     private function setOrder(EpisodeModel $episode): void
     {
+        if ($episode->displayOrder > 0) {
+            return;
+        }
+
         $record = $this->recordQueryFactory
             ->make(new EpisodeRecord())
             ->withWhere(
