@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Episodes\EventListeners;
 
 use App\Context\Episodes\Events\SaveEpisodeBeforeSave;
-use App\Context\Episodes\Services\SaveNewFile;
+use App\Context\Episodes\Services\Internal\SaveNewFile;
 
 class SaveEpisodeBeforeSaveSaveNewFile
 {

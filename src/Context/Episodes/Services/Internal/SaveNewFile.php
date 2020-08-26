@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Episodes\Services;
+namespace App\Context\Episodes\Services\Internal;
 
 use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;

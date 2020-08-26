@@ -99,7 +99,7 @@ class SaveEpisodeGuests
         $statement = $this->pdo->prepare(
             'DELETE FROM ' . EpisodeGuestsRecord::tableName() .
             ' WHERE person_id IN (' . $in . ') ' .
-            ' AND episode_id = ?'
+            ' AND episode_id = ?',
         );
 
         $toDelete[] = $episode->id;

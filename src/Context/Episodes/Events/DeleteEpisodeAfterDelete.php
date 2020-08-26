@@ -7,7 +7,7 @@ namespace App\Context\Episodes\Events;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Events\StoppableEvent;
 
-class SaveEpisodeAfterSave extends StoppableEvent
+class DeleteEpisodeAfterDelete extends StoppableEvent
 {
     public EpisodeModel $episode;
     public bool $isValid = true;

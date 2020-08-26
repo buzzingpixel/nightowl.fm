@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Context\Episodes\Events;
 
 use App\Context\Episodes\Models\EpisodeModel;
+use App\Context\Events\StoppableEvent;
 
-class SaveEpisodeBeforeSave
+class SaveEpisodeBeforeSave extends StoppableEvent
 {
     public EpisodeModel $episode;
     public bool $isValid = true;

@@ -6,6 +6,7 @@ namespace App\Context\Episodes;
 
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
+use App\Context\Episodes\Services\DeleteEpisode;
 use App\Context\Episodes\Services\FetchEpisodes;
 use App\Context\Episodes\Services\PublishPendingEpisodes;
 use App\Context\Episodes\Services\SaveEpisode;
@@ -60,5 +61,14 @@ class EpisodeApi
         assert($service instanceof PublishPendingEpisodes);
 
         $service->run();
+    }
+
+    public function deleteEpisode(EpisodeModel $episode): Payload
+    {
+        $service = $this->di->get(DeleteEpisode::class);
+
+        assert($service instanceof DeleteEpisode);
+
+        return $service->delete($episode);
     }
 }

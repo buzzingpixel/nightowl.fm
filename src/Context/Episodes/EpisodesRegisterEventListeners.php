@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App\Context\Episodes;
 
+use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteFile;
+use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteGuests;
+use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteHosts;
+use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteKeywords;
+use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteSeries;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveEpisodeKeywords;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveGuests;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveHosts;
@@ -56,6 +61,31 @@ class EpisodesRegisterEventListeners
         $provider->addSubscriber(
             SaveEpisodeBeforeSaveSaveSeries::class,
             SaveEpisodeBeforeSaveSaveSeries::class,
+        );
+
+        $provider->addSubscriber(
+            DeleteEpisodeBeforeDeleteDeleteGuests::class,
+            DeleteEpisodeBeforeDeleteDeleteGuests::class,
+        );
+
+        $provider->addSubscriber(
+            DeleteEpisodeBeforeDeleteDeleteHosts::class,
+            DeleteEpisodeBeforeDeleteDeleteHosts::class,
+        );
+
+        $provider->addSubscriber(
+            DeleteEpisodeBeforeDeleteDeleteKeywords::class,
+            DeleteEpisodeBeforeDeleteDeleteKeywords::class,
+        );
+
+        $provider->addSubscriber(
+            DeleteEpisodeBeforeDeleteDeleteSeries::class,
+            DeleteEpisodeBeforeDeleteDeleteSeries::class,
+        );
+
+        $provider->addSubscriber(
+            DeleteEpisodeBeforeDeleteDeleteFile::class,
+            DeleteEpisodeBeforeDeleteDeleteFile::class,
         );
     }
 }
