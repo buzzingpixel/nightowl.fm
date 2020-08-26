@@ -13,6 +13,7 @@ use App\Context\People\PeopleApi;
 use App\Context\Series\Models\FetchModel as SeriesFetchModel;
 use App\Context\Series\SeriesApi;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
+use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
 use App\Persistence\Constants;
 use App\Persistence\Episodes\EpisodeGuestsRecord;
@@ -234,9 +235,15 @@ class FetchEpisodes
                 $keywords,
                 $series
             ): EpisodeModel {
+                $show = $showsById[$record->show_id] ?? new ShowModel();
+
+                if ($show->id === '') {
+                    $show->id = $record->show_id;
+                }
+
                 return $this->recordToModel->transform(
                     $record,
-                    $showsById[$record->show_id],
+                    $show,
                     $people['hosts'][$record->id] ?? [],
                     $people['guests'][$record->id] ?? [],
                     $keywords[$record->id] ?? [],
