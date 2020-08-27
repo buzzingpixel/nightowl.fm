@@ -10,6 +10,7 @@ use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteHosts;
 use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteKeywords;
 use App\Context\Episodes\EventListeners\DeleteEpisodeBeforeDeleteDeleteSeries;
 use App\Context\Episodes\EventListeners\DeleteShowAfterDeleteQueueEpisodesDelete;
+use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveRenamePublishedEpisodeFile;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveEpisodeKeywords;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveGuests;
 use App\Context\Episodes\EventListeners\SaveEpisodeBeforeSaveSaveHosts;
@@ -57,6 +58,11 @@ class EpisodesRegisterEventListeners
         $provider->addSubscriber(
             SaveEpisodeBeforeSaveSaveGuests::class,
             SaveEpisodeBeforeSaveSaveGuests::class,
+        );
+
+        $provider->addSubscriber(
+            SaveEpisodeBeforeSaveRenamePublishedEpisodeFile::class,
+            SaveEpisodeBeforeSaveRenamePublishedEpisodeFile::class,
         );
 
         $provider->addSubscriber(

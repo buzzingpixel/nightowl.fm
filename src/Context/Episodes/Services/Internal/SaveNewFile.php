@@ -55,7 +55,9 @@ class SaveNewFile
 
         $this->filesystem->createDir($targetPath);
 
-        if ($episode->episodeType === EpisodeConstants::EPISODE_TYPE_NUMBERED) {
+        if (! $episode->isPublished) {
+            $targetFileName = 'episodeId-' . $episode->id;
+        } elseif ($episode->episodeType === EpisodeConstants::EPISODE_TYPE_NUMBERED) {
             $targetFileName = $episode->show->slug . '-' . str_pad(
                 (string) $episode->number,
                 5,
