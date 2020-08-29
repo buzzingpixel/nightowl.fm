@@ -158,6 +158,14 @@ class SyncWithCsv
         $chainPath = $podcastModel->getParentChainWithSelfAsPath();
 
         if (isset($this->allRecordsByPathKey[$chainPath])) {
+            $podcastModel->id = $this->allRecordsByPathKey[$chainPath]->id;
+
+            /** @psalm-suppress MixedAssignment */
+            foreach ($item['children'] as $child) {
+                /** @var mixed[] $child */
+                $this->processItem($child, $podcastModel);
+            }
+
             return;
         }
 
