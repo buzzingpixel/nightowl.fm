@@ -159,6 +159,8 @@
       <path value="$PROJECT_DIR$/vendor/gumlet/php-image-resize" />
       <path value="$PROJECT_DIR$/vendor/league/mime-type-detection" />
       <path value="$PROJECT_DIR$/vendor/james-heinrich/getid3" />
+      <path value="$PROJECT_DIR$/vendor/league/csv" />
+      <path value="$PROJECT_DIR$/vendor/adbario/php-dot-notation" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

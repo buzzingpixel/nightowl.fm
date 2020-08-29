@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Globals;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Whoops\Handler\PlainTextHandler;
@@ -46,5 +47,9 @@ return static function (): ContainerInterface {
         $containerBuilder->writeProxiesToFile(true, dirname(__DIR__) . '/storage/di-cache');
     }
 
-    return $containerBuilder->build();
+    $container = $containerBuilder->build();
+
+    Globals::init($container);
+
+    return $container;
 };
