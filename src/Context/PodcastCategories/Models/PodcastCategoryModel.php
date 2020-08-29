@@ -8,7 +8,6 @@ use LogicException;
 
 use function array_map;
 use function array_merge;
-use function array_walk;
 use function end;
 use function implode;
 
@@ -23,10 +22,9 @@ class PodcastCategoryModel
      */
     public function __construct(array $parentChain = [])
     {
-        array_walk(
-            $parentChain,
-            [$this, 'addParentChainItem'],
-        );
+        foreach ($parentChain as $parent) {
+            $this->addParentChainItem($parent);
+        }
 
         $parent = end($parentChain);
 
@@ -108,6 +106,7 @@ class PodcastCategoryModel
             );
         }
 
+        /** @phpstan-ignore-next-line */
         return $this->{$name};
     }
 }

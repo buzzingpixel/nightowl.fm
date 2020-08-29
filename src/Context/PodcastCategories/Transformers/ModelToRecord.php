@@ -20,7 +20,9 @@ class ModelToRecord
 
         $record->id = $model->id;
 
-        $record->parent_id = $model->parent->id;
+        if ($model->parent !== null) {
+            $record->parent_id = $model->parent->id;
+        }
 
         $parentChain = array_map(
             static fn (PodcastCategoryModel $m) => $m->id,

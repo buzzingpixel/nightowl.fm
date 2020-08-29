@@ -17,6 +17,7 @@ use Respect\Validation\Validator as V;
 
 use function assert;
 use function is_array;
+use function is_string;
 
 class SavePersonFromPost
 {
@@ -66,6 +67,7 @@ class SavePersonFromPost
             ],
         );
 
+        /** @psalm-suppress MixedArgument */
         $validator->validate(
             $data,
             [
@@ -75,7 +77,14 @@ class SavePersonFromPost
                     V::notEmpty(),
                     V::slug(),
                     V::callback(
+                        /**
+                         * @param mixed $input
+                         */
                         function ($input) use ($person): bool {
+                            if (! is_string($input)) {
+                                return false;
+                            }
+
                             return $this->peopleApi->validateUnqiePersonSlug(
                                 $input,
                                 $person->id,

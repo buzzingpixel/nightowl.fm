@@ -39,7 +39,7 @@ class GetShowArtworkUrl
      */
     public function __invoke(ShowModel $show, array $opt = []): string
     {
-        return $this->get($person, $opt);
+        return $this->get($show, $opt);
     }
 
     /**

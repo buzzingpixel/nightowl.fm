@@ -18,6 +18,7 @@ use Respect\Validation\Validator as V;
 use function array_merge;
 use function assert;
 use function is_array;
+use function is_string;
 
 class SaveSeriesFromPost
 {
@@ -58,6 +59,7 @@ class SaveSeriesFromPost
             ],
         );
 
+        /** @psalm-suppress MixedArgument */
         $validator->validate(
             $data,
             [
@@ -66,7 +68,14 @@ class SaveSeriesFromPost
                     V::notEmpty(),
                     V::slug(),
                     V::callback(
+                        /**
+                         * @param mixed $input
+                         */
                         function ($input) use ($show, $series): bool {
+                            if (! is_string($input)) {
+                                return false;
+                            }
+
                             return $this->seriesApi->validateUniqueSeriesSlug(
                                 $input,
                                 $show->id,

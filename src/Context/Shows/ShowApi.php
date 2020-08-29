@@ -78,6 +78,9 @@ class ShowApi
         return $service->delete($show);
     }
 
+    /**
+     * @param mixed[] $opt
+     */
     public function getShowArtworkUrl(ShowModel $show, array $opt = []): string
     {
         $service = $this->di->get(GetShowArtworkUrl::class);

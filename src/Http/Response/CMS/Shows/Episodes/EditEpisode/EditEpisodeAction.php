@@ -91,7 +91,7 @@ class EditEpisodeAction
             $show->title .
             ' Episode: ' .
             (
-                $episode->title ?: 'Draft'
+                $episode->title !== '' ? $episode->title : 'Draft'
             );
 
         $meta->title = $title . ' | CMS';

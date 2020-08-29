@@ -65,7 +65,8 @@ class RecordToModel
                 'true',
                 '1',
                 1,
-            ]
+            ],
+            true,
         );
 
         $model->showNotes = $record->show_notes;
@@ -86,7 +87,8 @@ class RecordToModel
                 'true',
                 '1',
                 1,
-            ]
+            ],
+            true,
         );
 
         $model->number = (int) $record->number;

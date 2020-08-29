@@ -18,17 +18,18 @@ use App\Http\Response\CMS\Shows\Episodes\EditEpisode\PostEditEpisodeResponder;
 use App\Http\Response\CMS\Shows\Episodes\NewEpisode\PostNewEpisodeResponder;
 use App\Payload\Payload;
 use App\Utilities\ValidatePlayableMimeType;
-use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as V;
+use Safe\DateTimeImmutable;
 
 use function array_merge;
 use function assert;
 use function count;
 use function in_array;
 use function is_array;
+use function is_string;
 
 class SaveEpisodeFromPost
 {
@@ -84,7 +85,7 @@ class SaveEpisodeFromPost
             'publish_at' => (string) ($post['publish_at'] ?? 'false'),
         ];
 
-        if ($data['publish_at'] === 'false' && $episode->publishAt) {
+        if ($data['publish_at'] === 'false' && $episode->publishAt !== null) {
             $data['publish_at'] = $episode->publishAt
                 ->setTimezone($this->user->model()->timezone)
                 ->format('Y-m-d g:i A');
@@ -94,9 +95,12 @@ class SaveEpisodeFromPost
 
         $hosts = [];
 
-        if (count($data['hosts']) > 0) {
+        /** @var string[] $hostIds */
+        $hostIds = $data['hosts'];
+
+        if (count($hostIds) > 0) {
             $peopleFetchModel      = new PeopleFetchModel();
-            $peopleFetchModel->ids = $data['hosts'];
+            $peopleFetchModel->ids = $hostIds;
             $hosts                 = $this->peopleApi->fetchPeople(
                 $peopleFetchModel
             );
@@ -110,6 +114,7 @@ class SaveEpisodeFromPost
 
         if (count($validationErrors) > 0) {
             if (isset($validationErrors['file_path'])) {
+                /** @psalm-suppress MixedAssignment */
                 $validationErrors['file'] = $validationErrors['file_path'];
             }
 
@@ -129,9 +134,12 @@ class SaveEpisodeFromPost
 
         $guests = [];
 
-        if (count($data['guests']) > 0) {
+        /** @var string[] $guestIds */
+        $guestIds = $data['guests'];
+
+        if (count($guestIds) > 0) {
             $peopleFetchModel      = new PeopleFetchModel();
-            $peopleFetchModel->ids = $data['guests'];
+            $peopleFetchModel->ids = $guestIds;
             $guests                = $this->peopleApi->fetchPeople(
                 $peopleFetchModel
             );
@@ -139,9 +147,12 @@ class SaveEpisodeFromPost
 
         $series = [];
 
-        if (count($data['series']) > 0) {
+        /** @var string[] $seriesIds */
+        $seriesIds = $data['series'];
+
+        if (count($seriesIds) > 0) {
             $seriesFetchModel      = new SeriesFetchModel();
-            $seriesFetchModel->ids = $data['series'];
+            $seriesFetchModel->ids = $seriesIds;
             $series                = $this->seriesApi->fetchSeries(
                 $seriesFetchModel
             );
@@ -161,13 +172,11 @@ class SaveEpisodeFromPost
         $episode->setKeywordsFromCommaString($data['keywords']);
 
         if ($data['publish_at'] !== '') {
-            $publishAt = \Safe\DateTimeImmutable::createFromFormat(
+            $publishAt = DateTimeImmutable::createFromFormat(
                 'Y-m-d g:i A',
                 $data['publish_at'],
                 $this->user->model()->timezone
             )->setTimezone(new DateTimeZone('UTC'));
-
-            assert($publishAt instanceof DateTimeImmutable);
 
             $episode->publishAt = $publishAt;
         }
@@ -206,22 +215,34 @@ class SaveEpisodeFromPost
             ['notEmpty' => 'Value must not be empty'],
         );
 
+        /** @psalm-suppress MixedArgument */
         $validator->validate(
             $data,
             [
                 'title' => V::notEmpty(),
                 'status' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input): bool {
                         return in_array(
                             $input,
-                            EpisodeConstants::STATUSES
+                            EpisodeConstants::STATUSES,
+                            true
                         );
                     }
                 )->setTemplate('Must be predefined value'),
                 'description' => V::notEmpty(),
                 'file_path' => V::allOf(
                     V::callback(
+                        /**
+                         * @param mixed $input
+                         */
                         static function ($input) use ($episode): bool {
+                            if (! is_string($input)) {
+                                return false;
+                            }
+
                             if ($episode->id === '') {
                                 return $input !== '';
                             }
@@ -234,7 +255,14 @@ class SaveEpisodeFromPost
                         }
                     )->setTemplate('File must be provided'),
                     V::callback(
+                        /**
+                         * @param mixed $input
+                         */
                         function ($input): bool {
+                            if (! is_string($input)) {
+                                return false;
+                            }
+
                             if ($input === '') {
                                 return true;
                             }
@@ -246,16 +274,31 @@ class SaveEpisodeFromPost
                     )->setTemplate('File must be an MP3')
                 ),
                 'type' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input): bool {
+                        if (! is_string($input)) {
+                            return false;
+                        }
+
                         return in_array(
                             $input,
-                            EpisodeConstants::TYPES
+                            EpisodeConstants::TYPES,
+                            true
                         );
                     }
                 )->setTemplate('Must be predefined value'),
                 'hosts' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input) use ($hosts): bool {
                         if (count($hosts) < 1) {
+                            return false;
+                        }
+
+                        if (! is_array($input)) {
                             return false;
                         }
 

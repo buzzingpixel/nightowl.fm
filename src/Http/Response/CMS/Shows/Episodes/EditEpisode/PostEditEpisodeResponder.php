@@ -48,7 +48,7 @@ class PostEditEpisodeResponder
                 );
         }
 
-        $title = $episode->title ?: 'Draft';
+        $title = $episode->title !== '' ? $episode->title : 'Draft';
 
         $this->flashMessages->addMessage(
             'PostMessage',

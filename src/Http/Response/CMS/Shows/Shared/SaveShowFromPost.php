@@ -22,6 +22,7 @@ use function assert;
 use function count;
 use function in_array;
 use function is_array;
+use function is_string;
 
 class SaveShowFromPost
 {
@@ -69,9 +70,12 @@ class SaveShowFromPost
 
         $hosts = [];
 
-        if (count($data['hosts']) > 0) {
+        /** @var string[] $hostIds */
+        $hostIds = $data['hosts'];
+
+        if (count($hostIds) > 0) {
             $fetchModel      = new FetchModel();
-            $fetchModel->ids = $data['hosts'];
+            $fetchModel->ids = $hostIds;
             $hosts           = $this->peopleApi->fetchPeople(
                 $fetchModel
             );
@@ -84,6 +88,7 @@ class SaveShowFromPost
             ],
         );
 
+        /** @psalm-suppress MixedArgument */
         $validator->validate(
             $data,
             [
@@ -92,7 +97,14 @@ class SaveShowFromPost
                     V::notEmpty(),
                     V::slug(),
                     V::callback(
+                        /**
+                         * @param mixed $input
+                         */
                         function ($input) use ($model): bool {
+                            if (! is_string($input)) {
+                                return false;
+                            }
+
                             return $this->showApi->validateUniqueShowSlug(
                                 $input,
                                 $model->id,
@@ -101,7 +113,14 @@ class SaveShowFromPost
                     )->setTemplate('Show slug must be unique'),
                 ),
                 'artwork_file_path' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input) use ($model): bool {
+                        if (! is_string($input)) {
+                            return false;
+                        }
+
                         if ($model->id === '') {
                             return $input !== '';
                         }
@@ -115,16 +134,31 @@ class SaveShowFromPost
                 )->setTemplate('Artwork must be provided'),
                 'description' => V::notEmpty(),
                 'status' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input): bool {
+                        if (! is_string($input)) {
+                            return false;
+                        }
+
                         return in_array(
                             $input,
-                            ShowConstants::STATUSES
+                            ShowConstants::STATUSES,
+                            true
                         );
                     }
                 )->setTemplate('Must be predefined value'),
                 'hosts' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input) use ($hosts): bool {
                         if (count($hosts) < 1) {
+                            return false;
+                        }
+
+                        if (! is_array($input)) {
                             return false;
                         }
 

@@ -62,7 +62,7 @@ class SyncWithCsv
     {
         $this->populateRecordsByKeyPath();
 
-        $csvStr = $this->filesystem->read(
+        $csvStr = (string) $this->filesystem->read(
             PodcastCategoryConstants::CSV_FILE_PATH
         );
 
@@ -72,12 +72,15 @@ class SyncWithCsv
 
         $items = new Dot();
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($csv as $item) {
-            $key = $item['Parent Chain'] ?: '';
+            /** @var mixed[] $item */
 
-            $key = $key ? $key . '/' : '';
+            $key = (string) $item['Parent Chain'];
 
-            $key .= $item['Category'];
+            $key = $key !== '' ? $key . '/' : '';
+
+            $key .= (string) $item['Category'];
 
             $this->allCsvItemKeys[] = $key;
 
@@ -90,19 +93,25 @@ class SyncWithCsv
             );
 
             $items->add($keyDots, [
-                'name' => $item['Category'],
+                'name' => (string) $item['Category'],
                 'children' => [],
             ]);
-
-            $keyedItems[$key] = $item['Category'];
         }
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($items->all() as $item) {
+            /** @var mixed[] $item */
             $this->processItem($item);
         }
 
         foreach ($this->allRecordsByPathKey as $key => $record) {
-            if (in_array($key, $this->allCsvItemKeys)) {
+            if (
+                in_array(
+                    $key,
+                    $this->allCsvItemKeys,
+                    true,
+                )
+            ) {
                 continue;
             }
 
@@ -133,7 +142,7 @@ class SyncWithCsv
             );
         }
 
-        $podcastModel->name = $item['name'];
+        $podcastModel->name = (string) $item['name'];
 
         $chainPath = $podcastModel->getParentChainWithSelfAsPath();
 
@@ -160,7 +169,9 @@ class SyncWithCsv
 
         $this->saveNewRecord->save($record);
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($item['children'] as $child) {
+            /** @var mixed[] $child */
             $this->processItem($child, $podcastModel);
         }
     }
@@ -184,6 +195,7 @@ class SyncWithCsv
         foreach ($allRecordsById as $id => $record) {
             $key = '';
 
+            /** @var string[] $chainIds */
             $chainIds = json_decode(
                 $record->parent_chain,
                 true

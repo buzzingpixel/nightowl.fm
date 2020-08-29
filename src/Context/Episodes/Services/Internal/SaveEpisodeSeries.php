@@ -80,7 +80,13 @@ class SaveEpisodeSeries
         $toDelete = [];
 
         foreach ($allPreviousSeries as $series) {
-            if (in_array($series->series_id, $allCurrentIds)) {
+            if (
+                in_array(
+                    $series->series_id,
+                    $allCurrentIds,
+                    true,
+                )
+            ) {
                 continue;
             }
 
@@ -133,7 +139,13 @@ class SaveEpisodeSeries
                 $existingIds,
                 $episode
             ): void {
-                if (in_array($series->id, $existingIds)) {
+                if (
+                    in_array(
+                        $series->id,
+                        $existingIds,
+                        true,
+                    )
+                ) {
                     return;
                 }
 

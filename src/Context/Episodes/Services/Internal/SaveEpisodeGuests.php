@@ -80,7 +80,13 @@ class SaveEpisodeGuests
         $toDelete = [];
 
         foreach ($allPreviousGuests as $guest) {
-            if (in_array($guest->person_id, $allCurrentIds)) {
+            if (
+                in_array(
+                    $guest->person_id,
+                    $allCurrentIds,
+                    true,
+                )
+            ) {
                 continue;
             }
 
@@ -133,7 +139,13 @@ class SaveEpisodeGuests
                 $existingIds,
                 $episode
             ): void {
-                if (in_array($guest->id, $existingIds)) {
+                if (
+                    in_array(
+                        $guest->id,
+                        $existingIds,
+                        true,
+                    )
+                ) {
                     return;
                 }
 

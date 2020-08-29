@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Context\Shows\Services;
 
 use App\Context\People\Models\FetchModel as FetchPeopleModel;
-use App\Context\People\Models\PersonModel;
 use App\Context\People\PeopleApi;
 use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
@@ -18,10 +17,9 @@ use App\Persistence\Shows\ShowRecord;
 use Throwable;
 
 use function array_map;
-use function assert;
 use function count;
 use function dd;
-use function ksort;
+use function Safe\ksort;
 
 use const SORT_NATURAL;
 
@@ -124,6 +122,7 @@ class FetchShows
         $keyWordAssociations = [];
 
         if (count($recordIds) > 0) {
+            /** @var ShowKeywordsRecord[] $keyWordAssociations */
             $keyWordAssociations = $this->recordQueryFactory
                 ->make(new ShowKeywordsRecord())
                 ->withWhere('show_id', $recordIds, 'IN')
@@ -161,8 +160,6 @@ class FetchShows
                 continue;
             }
 
-            assert($keyword instanceof KeywordRecord);
-
             $showId = $keyWordAssociationRecord->show_id;
 
             $keyWordRecordsByShowId[$showId][$keyword->keyword] = $keyword;
@@ -177,6 +174,7 @@ class FetchShows
         $hostAssociations = [];
 
         if (count($recordIds) > 0) {
+            /** @var ShowHostsRecord[] $hostAssociations */
             $hostAssociations = $this->recordQueryFactory
                 ->make(new ShowHostsRecord())
                 ->withWhere('show_id', $recordIds, 'IN')
@@ -206,8 +204,6 @@ class FetchShows
             if ($host === null) {
                 continue;
             }
-
-            assert($host instanceof PersonModel);
 
             $key = $host->lastName . '-' . $host->firstName;
 

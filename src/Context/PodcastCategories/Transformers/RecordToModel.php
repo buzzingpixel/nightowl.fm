@@ -7,7 +7,7 @@ namespace App\Context\PodcastCategories\Transformers;
 use App\Context\PodcastCategories\Models\PodcastCategoryModel;
 use App\Persistence\PodcastCategories\PodcastCategoryRecord;
 
-use function array_walk;
+use function assert;
 
 class RecordToModel
 {
@@ -18,12 +18,10 @@ class RecordToModel
         PodcastCategoryRecord $record,
         array $parentChain
     ): PodcastCategoryModel {
-        // Validate all items in the array are the correct type because of the
-        // typecast in the function
-        array_walk(
-            $parentChain,
-            static fn (PodcastCategoryModel $m) => $m->id,
-        );
+        // Validate all items in the array are the correct type
+        foreach ($parentChain as $item) {
+            assert($item instanceof PodcastCategoryModel);
+        }
 
         $model = new PodcastCategoryModel($parentChain);
 

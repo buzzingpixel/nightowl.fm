@@ -80,7 +80,13 @@ class SaveEpisodeHosts
         $toDelete = [];
 
         foreach ($allPreviousHosts as $host) {
-            if (in_array($host->person_id, $allCurrentIds)) {
+            if (
+                in_array(
+                    $host->person_id,
+                    $allCurrentIds,
+                    true,
+                )
+            ) {
                 continue;
             }
 
@@ -133,7 +139,13 @@ class SaveEpisodeHosts
                 $existingIds,
                 $episode
             ): void {
-                if (in_array($host->id, $existingIds)) {
+                if (
+                    in_array(
+                        $host->id,
+                        $existingIds,
+                        true,
+                    )
+                ) {
                     return;
                 }
 

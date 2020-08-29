@@ -45,6 +45,7 @@ class EpisodeModel
 
     public string $id = '';
 
+    /** @psalm-suppress PropertyNotSetInConstructor */
     public ShowModel $show;
 
     public string $title = '';
@@ -235,12 +236,19 @@ class EpisodeModel
      */
     public function __set(string $name, $val): void
     {
-        if (! in_array($name, self::HAS_GET_SET)) {
+        if (
+            ! in_array(
+                $name,
+                self::HAS_GET_SET,
+                true,
+            )
+        ) {
             throw new LogicException('Invalid property ' . $name);
         }
 
         $method = 'set' . ucfirst($name);
 
+        /** @phpstan-ignore-next-line  */
         $this->{$method}($val);
     }
 
@@ -249,17 +257,28 @@ class EpisodeModel
      */
     public function __get(string $name)
     {
-        if (! in_array($name, self::HAS_GET_SET)) {
+        if (
+            ! in_array(
+                $name,
+                self::HAS_GET_SET,
+                true,
+            )
+        ) {
             throw new LogicException('Invalid property ' . $name);
         }
 
         $method = 'get' . ucfirst($name);
 
+        /** @phpstan-ignore-next-line  */
         return $this->{$method}();
     }
 
     public function __isset(string $name): bool
     {
-        return in_array($name, self::HAS_GET_SET);
+        return in_array(
+            $name,
+            self::HAS_GET_SET,
+            true,
+        );
     }
 }

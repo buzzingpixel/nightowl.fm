@@ -54,7 +54,7 @@ class ShowModel
 
     public function getHumanReadableStatus(): string
     {
-        return constant(
+        return (string) constant(
             ShowConstants::class .
             '::' .
             'SHOW_STATUS_' .
@@ -167,12 +167,19 @@ class ShowModel
      */
     public function __set(string $name, $val): void
     {
-        if (! in_array($name, self::HAS_GET_SET)) {
+        if (
+            ! in_array(
+                $name,
+                self::HAS_GET_SET,
+                true,
+            )
+        ) {
             throw new LogicException('Invalid property ' . $name);
         }
 
         $method = 'set' . ucfirst($name);
 
+        /** @phpstan-ignore-next-line  */
         $this->{$method}($val);
     }
 
@@ -181,17 +188,24 @@ class ShowModel
      */
     public function __get(string $name)
     {
-        if (! in_array($name, self::HAS_GET_SET)) {
+        if (
+            ! in_array(
+                $name,
+                self::HAS_GET_SET,
+                true
+            )
+        ) {
             throw new LogicException('Invalid property ' . $name);
         }
 
         $method = 'get' . ucfirst($name);
 
+        /** @phpstan-ignore-next-line */
         return $this->{$method}();
     }
 
     public function __isset(string $name): bool
     {
-        return in_array($name, self::HAS_GET_SET);
+        return in_array($name, self::HAS_GET_SET, true);
     }
 }

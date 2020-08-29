@@ -31,7 +31,7 @@ use function array_map;
 use function assert;
 use function count;
 use function in_array;
-use function ksort;
+use function Safe\ksort;
 
 use const SORT_NATURAL;
 
@@ -199,7 +199,13 @@ class FetchEpisodes
         $showIdsToFetch = [];
 
         foreach ($records as $record) {
-            if (in_array($record->show_id, $showIds)) {
+            if (
+                in_array(
+                    $record->show_id,
+                    $showIds,
+                    true,
+                )
+            ) {
                 continue;
             }
 
@@ -241,6 +247,7 @@ class FetchEpisodes
                     $show->id = $record->show_id;
                 }
 
+                /** @psalm-suppress MixedArgument */
                 return $this->recordToModel->transform(
                     $record,
                     $show,

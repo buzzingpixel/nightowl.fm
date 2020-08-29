@@ -47,7 +47,8 @@ class RecordToModel
                 'true',
                 '1',
                 1,
-            ]
+            ],
+            true,
         );
 
         $model->itunesLink = $record->itunes_link;
@@ -59,7 +60,9 @@ class RecordToModel
         $model->spotifyLink = $record->spotify_link;
 
         $model->keywords = array_map(
-            static function (KeywordRecord $keywordRecord) {
+            static function (
+                KeywordRecord $keywordRecord
+            ): KeywordModel {
                 $keywordModel          = new KeywordModel();
                 $keywordModel->id      = $keywordRecord->id;
                 $keywordModel->keyword = $keywordRecord->keyword;

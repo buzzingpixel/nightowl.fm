@@ -83,7 +83,8 @@ class SaveEpisodeKeywords
             if (
                 in_array(
                     $keyword->keyword_id,
-                    $allCurrentIds
+                    $allCurrentIds,
+                    true,
                 )
             ) {
                 continue;
@@ -138,7 +139,13 @@ class SaveEpisodeKeywords
                 $existingIds,
                 $episode
             ): void {
-                if (in_array($keyword->id, $existingIds)) {
+                if (
+                    in_array(
+                        $keyword->id,
+                        $existingIds,
+                        true,
+                    )
+                ) {
                     return;
                 }
 

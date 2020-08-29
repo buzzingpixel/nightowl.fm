@@ -118,7 +118,13 @@ class FetchSeries
         $showIdsToFetch = [];
 
         foreach ($records as $record) {
-            if (in_array($record->show_id, $showIds)) {
+            if (
+                in_array(
+                    $record->show_id,
+                    $showIds,
+                    true,
+                )
+            ) {
                 continue;
             }
 
