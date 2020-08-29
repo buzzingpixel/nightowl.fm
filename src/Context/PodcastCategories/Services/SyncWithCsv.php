@@ -10,6 +10,7 @@ use App\Context\PodcastCategories\PodcastCategoryConstants;
 use App\Persistence\PodcastCategories\PodcastCategoryRecord;
 use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
+use App\Persistence\Shows\ShowPodcastCategoriesRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
 use League\Csv\Reader;
 use League\Flysystem\FileNotFoundException;
@@ -122,6 +123,16 @@ class SyncWithCsv
             );
 
             $statement->execute([':id' => $record->id]);
+
+            $statement = $this->pdo->prepare(
+                'DELETE FROM ' .
+                ShowPodcastCategoriesRecord::tableName() .
+                ' WHERE podcast_category_id=:podcast_category_id'
+            );
+
+            $statement->execute(
+                [':podcast_category_id' => $record->id]
+            );
         }
     }
 
