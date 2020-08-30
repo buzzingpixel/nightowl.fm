@@ -217,7 +217,7 @@ class SyncWithCsv
             /** @var string[] $chainIds */
             $chainIds = json_decode(
                 $record->parent_chain,
-                true
+                true,
             );
 
             foreach ($chainIds as $chainId) {

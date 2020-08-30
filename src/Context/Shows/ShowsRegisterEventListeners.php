@@ -8,6 +8,7 @@ use App\Context\Keywords\EventListeners\SaveShowBeforeSaveSaveKeywords;
 use App\Context\Shows\EventListeners\DeleteShowAfterDeleteDeleteShowArtwork;
 use App\Context\Shows\EventListeners\DeleteShowBeforeDeleteDeleteHosts;
 use App\Context\Shows\EventListeners\DeleteShowBeforeDeleteDeleteKeywords;
+use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveCategories;
 use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveHosts;
 use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveNewArtwork;
 use App\Context\Shows\EventListeners\SaveShowBeforeSaveSaveShowKeywords;
@@ -35,6 +36,11 @@ class ShowsRegisterEventListeners
         $provider->addSubscriber(
             SaveShowBeforeSaveSaveHosts::class,
             SaveShowBeforeSaveSaveHosts::class,
+        );
+
+        $provider->addSubscriber(
+            SaveShowBeforeSaveSaveCategories::class,
+            SaveShowBeforeSaveSaveCategories::class,
         );
 
         $provider->addSubscriber(

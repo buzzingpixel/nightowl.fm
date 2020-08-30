@@ -8,15 +8,27 @@ use LogicException;
 
 use function array_map;
 use function array_merge;
+use function array_walk;
 use function end;
 use function implode;
+use function in_array;
+use function ucfirst;
 
 /**
  * @property-read PodcastCategoryModel|null $parent
  * @property-read PodcastCategoryModel[] $parentChain
+ * @property PodcastCategoryModel[] $children
  */
 class PodcastCategoryModel
 {
+    private const HAS_GET = [
+        'parent',
+        'parentChain',
+        'children',
+    ];
+
+    private const HAS_SET = ['children'];
+
     /**
      * @param PodcastCategoryModel[] $parentChain
      */
@@ -88,11 +100,44 @@ class PodcastCategoryModel
         return implode('/', $pathArray);
     }
 
+    /** @var PodcastCategoryModel[] */
+    private array $children = [];
+
+    protected function addChildItem(PodcastCategoryModel $item): void
+    {
+        $this->children[] = $item;
+    }
+
+    /**
+     * @param PodcastCategoryModel[] $children
+     */
+    public function setChildren(array $children): void
+    {
+        $this->children = [];
+
+        array_walk(
+            $children,
+            [$this, 'addChildItem'],
+        );
+    }
+
+    /**
+     * @return PodcastCategoryModel[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
     public string $name = '';
 
     public function __isset(string $name): bool
     {
-        return $name === 'parentChain' || $name === 'parent';
+        return in_array(
+            $name,
+            self::HAS_GET,
+            true,
+        );
     }
 
     /**
@@ -100,13 +145,40 @@ class PodcastCategoryModel
      */
     public function __get(string $name)
     {
-        if ($name !== 'parentChain' && $name !== 'parent') {
-            throw new LogicException(
-                'Invalid property'
-            );
+        if (
+            ! in_array(
+                $name,
+                self::HAS_GET,
+                true,
+            )
+        ) {
+            throw new LogicException('Invalid property ' . $name);
         }
 
-        /** @phpstan-ignore-next-line */
-        return $this->{$name};
+        $method = 'get' . ucfirst($name);
+
+        /** @phpstan-ignore-next-line  */
+        return $this->{$method}();
+    }
+
+    /**
+     * @param mixed $val
+     */
+    public function __set(string $name, $val): void
+    {
+        if (
+            ! in_array(
+                $name,
+                self::HAS_SET,
+                true,
+            )
+        ) {
+            throw new LogicException('Invalid property ' . $name);
+        }
+
+        $method = 'set' . ucfirst($name);
+
+        /** @phpstan-ignore-next-line  */
+        $this->{$method}($val);
     }
 }

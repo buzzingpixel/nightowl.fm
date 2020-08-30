@@ -1,6 +1,7 @@
 {# @var \App\Context\Shows\Models\ShowModel|null show #}
 {# @var mixed[] statusOptions #}
 {# @var mixed[] peopleOptions #}
+{# @var mixed[] podcastCategoryOptions #}
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
@@ -45,10 +46,15 @@
 {% endif %}
 
 {% set hosts = [] %}
+{% set categories = [] %}
 
 {% if show is defined %}
     {% for host in show.hosts %}
         {% set hosts = hosts|merge([host.id]) %}
+    {% endfor %}
+
+    {% for category in show.podcastCategories %}
+        {% set categories = categories|merge([category.id]) %}
     {% endfor %}
 {% endif %}
 
@@ -131,6 +137,14 @@
                 multiple: true,
                 options: peopleOptions,
                 value: hosts,
+            },
+            {
+                label: 'Podcast Categories',
+                name: 'podcast_categories',
+                type: 'select',
+                multiple: true,
+                options: podcastCategoryOptions,
+                value: categories,
             },
         ],
     } only %}

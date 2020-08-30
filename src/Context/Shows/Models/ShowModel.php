@@ -6,6 +6,7 @@ namespace App\Context\Shows\Models;
 
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\PodcastCategories\Models\PodcastCategoryModel;
 use App\Context\Shows\ShowConstants;
 use LogicException;
 
@@ -22,12 +23,14 @@ use function ucfirst;
 /**
  * @property KeywordModel[] $keywords
  * @property PersonModel[] $hosts
+ * @property PodcastCategoryModel[] $podcastCategories
  */
 class ShowModel
 {
     private const HAS_GET_SET = [
         'keywords',
         'hosts',
+        'podcastCategories',
     ];
 
     public string $id = '';
@@ -160,6 +163,35 @@ class ShowModel
     public function getHosts(): array
     {
         return $this->hosts;
+    }
+
+    /** @var PodcastCategoryModel[] */
+    private array $podcastCategories = [];
+
+    public function addPodcastCategory(PodcastCategoryModel $category): void
+    {
+        $this->podcastCategories[] = $category;
+    }
+
+    /**
+     * @param PodcastCategoryModel[] $categories
+     */
+    public function setPodcastCategories(array $categories): void
+    {
+        $this->podcastCategories = [];
+
+        array_walk(
+            $categories,
+            [$this, 'addPodcastCategory']
+        );
+    }
+
+    /**
+     * @return PodcastCategoryModel[]
+     */
+    public function getPodcastCategories(): array
+    {
+        return $this->podcastCategories;
     }
 
     /**

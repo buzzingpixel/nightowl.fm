@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Response\CMS\Shows\EditShow;
 
 use App\Context\People\PeopleApi;
+use App\Context\PodcastCategories\PodcastCategoriesApi;
 use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\ShowApi;
 use App\Context\Shows\ShowConstants;
@@ -24,17 +25,20 @@ class EditShowAction
     private PeopleApi $peopleApi;
     private ResponseFactoryInterface $responseFactory;
     private Environment $twig;
+    private PodcastCategoriesApi $podcastCategoriesApi;
 
     public function __construct(
         ShowApi $showApi,
         PeopleApi $peopleApi,
         ResponseFactoryInterface $responseFactory,
-        Environment $twig
+        Environment $twig,
+        PodcastCategoriesApi $podcastCategoriesApi
     ) {
-        $this->showApi         = $showApi;
-        $this->peopleApi       = $peopleApi;
-        $this->responseFactory = $responseFactory;
-        $this->twig            = $twig;
+        $this->showApi              = $showApi;
+        $this->peopleApi            = $peopleApi;
+        $this->responseFactory      = $responseFactory;
+        $this->twig                 = $twig;
+        $this->podcastCategoriesApi = $podcastCategoriesApi;
     }
 
     /**
@@ -79,6 +83,8 @@ class EditShowAction
                 'peopleOptions' => $this->peopleApi->transformPersonModelsToSelectArray(
                     $this->peopleApi->fetchPeople()
                 ),
+                'podcastCategoryOptions' => $this->podcastCategoriesApi
+                    ->fetchCategoriesAsSelectArray(),
             ]
         ));
 

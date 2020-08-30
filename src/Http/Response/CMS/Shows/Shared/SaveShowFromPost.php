@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\Shows\Shared;
 
-use App\Context\People\Models\FetchModel;
+use App\Context\People\Models\FetchModel as PeopleFetchModel;
 use App\Context\People\PeopleApi;
+use App\Context\PodcastCategories\Models\FetchModel as PodcastCategoriesFetchModel;
+use App\Context\PodcastCategories\PodcastCategoriesApi;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
 use App\Context\Shows\ShowConstants;
@@ -29,15 +31,18 @@ class SaveShowFromPost
     private ValidationFactory $validationFactory;
     private PeopleApi $peopleApi;
     private ShowApi $showApi;
+    private PodcastCategoriesApi $podcastCategoriesApi;
 
     public function __construct(
         ValidationFactory $validationFactory,
         PeopleApi $peopleApi,
-        ShowApi $showApi
+        ShowApi $showApi,
+        PodcastCategoriesApi $podcastCategoriesApi
     ) {
-        $this->validationFactory = $validationFactory;
-        $this->peopleApi         = $peopleApi;
-        $this->showApi           = $showApi;
+        $this->validationFactory    = $validationFactory;
+        $this->peopleApi            = $peopleApi;
+        $this->showApi              = $showApi;
+        $this->podcastCategoriesApi = $podcastCategoriesApi;
     }
 
     /**
@@ -66,6 +71,7 @@ class SaveShowFromPost
             'spotify_link' => (string) ($post['spotify_link'] ?? ''),
             'keywords' => (string) ($post['keywords'] ?? ''),
             'hosts' => (array) ($post['hosts'] ?? []),
+            'podcast_categories' => (array) ($post['podcast_categories'] ?? []),
         ];
 
         $hosts = [];
@@ -74,7 +80,7 @@ class SaveShowFromPost
         $hostIds = $data['hosts'];
 
         if (count($hostIds) > 0) {
-            $fetchModel      = new FetchModel();
+            $fetchModel      = new PeopleFetchModel();
             $fetchModel->ids = $hostIds;
             $hosts           = $this->peopleApi->fetchPeople(
                 $fetchModel
@@ -200,6 +206,21 @@ class SaveShowFromPost
         $model->spotifyLink            = $data['spotify_link'];
         $model->setKeywordsFromCommaString($data['keywords']);
         $model->hosts = $hosts;
+
+        $categories = [];
+
+        /** @var string[] $categoryIds */
+        $categoryIds = $data['podcast_categories'];
+
+        if (count($categoryIds) > 0) {
+            $fetchModel      = new PodcastCategoriesFetchModel();
+            $fetchModel->ids = $categoryIds;
+            $categories      = $this->podcastCategoriesApi->fetchCategories(
+                $fetchModel
+            );
+        }
+
+        $model->podcastCategories = $categories;
 
         $payload = $this->showApi->saveShow($model);
 

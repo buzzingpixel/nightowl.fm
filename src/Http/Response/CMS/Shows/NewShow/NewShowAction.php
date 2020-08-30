@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Response\CMS\Shows\NewShow;
 
 use App\Context\People\PeopleApi;
+use App\Context\PodcastCategories\PodcastCategoriesApi;
 use App\Context\Shows\ShowConstants;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -16,15 +17,18 @@ class NewShowAction
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
     private PeopleApi $peopleApi;
+    private PodcastCategoriesApi $podcastCategoriesApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
-        PeopleApi $peopleApi
+        PeopleApi $peopleApi,
+        PodcastCategoriesApi $podcastCategoriesApi
     ) {
-        $this->responseFactory = $responseFactory;
-        $this->twig            = $twig;
-        $this->peopleApi       = $peopleApi;
+        $this->responseFactory      = $responseFactory;
+        $this->twig                 = $twig;
+        $this->peopleApi            = $peopleApi;
+        $this->podcastCategoriesApi = $podcastCategoriesApi;
     }
 
     public function __invoke(): ResponseInterface
@@ -51,6 +55,8 @@ class NewShowAction
                 'peopleOptions' => $this->peopleApi->transformPersonModelsToSelectArray(
                     $this->peopleApi->fetchPeople()
                 ),
+                'podcastCategoryOptions' => $this->podcastCategoriesApi
+                    ->fetchCategoriesAsSelectArray(),
             ]
         ));
 

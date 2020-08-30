@@ -6,6 +6,8 @@ namespace App\Context\Shows\Services;
 
 use App\Context\People\Models\FetchModel as FetchPeopleModel;
 use App\Context\People\PeopleApi;
+use App\Context\PodcastCategories\Models\FetchModel as FetchPodcastCategoriesModel;
+use App\Context\PodcastCategories\PodcastCategoriesApi;
 use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\Transformers\RecordToModel;
@@ -13,6 +15,7 @@ use App\Persistence\Keywords\KeywordRecord;
 use App\Persistence\RecordQueryFactory;
 use App\Persistence\Shows\ShowHostsRecord;
 use App\Persistence\Shows\ShowKeywordsRecord;
+use App\Persistence\Shows\ShowPodcastCategoriesRecord;
 use App\Persistence\Shows\ShowRecord;
 use Throwable;
 
@@ -30,15 +33,18 @@ class FetchShows
     private RecordQueryFactory $recordQueryFactory;
     private RecordToModel $recordToModel;
     private PeopleApi $peopleApi;
+    private PodcastCategoriesApi $podcastCategoriesApi;
 
     public function __construct(
         RecordQueryFactory $recordQueryFactory,
         RecordToModel $recordToModel,
-        PeopleApi $peopleApi
+        PeopleApi $peopleApi,
+        PodcastCategoriesApi $podcastCategoriesApi
     ) {
-        $this->recordQueryFactory = $recordQueryFactory;
-        $this->recordToModel      = $recordToModel;
-        $this->peopleApi          = $peopleApi;
+        $this->recordQueryFactory   = $recordQueryFactory;
+        $this->recordToModel        = $recordToModel;
+        $this->peopleApi            = $peopleApi;
+        $this->podcastCategoriesApi = $podcastCategoriesApi;
     }
 
     /**
@@ -215,12 +221,56 @@ class FetchShows
             );
         }
 
+        /** @var ShowPodcastCategoriesRecord[] $categoryAssociations */
+        $categoryAssociations = [];
+
+        if (count($recordIds) > 0) {
+            /** @var ShowPodcastCategoriesRecord[] $categoryAssociations */
+            $categoryAssociations = $this->recordQueryFactory
+                ->make(new ShowPodcastCategoriesRecord())
+                ->withWhere('show_id', $recordIds, 'IN')
+                ->all();
+        }
+
+        $fetchCategoriesModel = new FetchPodcastCategoriesModel();
+
+        $fetchCategoriesModel->ids = array_map(
+            static fn (ShowPodcastCategoriesRecord $r) => $r->podcast_category_id,
+            $categoryAssociations,
+        );
+
+        $categories = $this->podcastCategoriesApi->fetchCategories(
+            $fetchCategoriesModel
+        );
+
+        $categoriesById = [];
+        foreach ($categories as $category) {
+            $categoriesById[$category->id] = $category;
+        }
+
+        $categoriesByShowId = [];
+        foreach ($categoryAssociations as $catRecord) {
+            $cat = $categoriesById[$catRecord->podcast_category_id] ?? null;
+
+            if ($cat === null) {
+                continue;
+            }
+
+            $categoriesByShowId[$catRecord->show_id][$cat->name] = $cat;
+
+            ksort(
+                $categoriesByShowId[$catRecord->show_id],
+                SORT_NATURAL,
+            );
+        }
+
         return array_map(
             fn (ShowRecord $r) => $this->recordToModel
                 ->transform(
                     $r,
                     $keyWordRecordsByShowId[$r->id] ?? [],
                     $hostsByShowId[$r->id] ?? [],
+                    $categoriesByShowId[$r->id] ?? [],
                 ),
             $records
         );

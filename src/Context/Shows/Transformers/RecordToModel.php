@@ -6,6 +6,7 @@ namespace App\Context\Shows\Transformers;
 
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\PodcastCategories\Models\PodcastCategoryModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Persistence\Keywords\KeywordRecord;
 use App\Persistence\Shows\ShowRecord;
@@ -18,13 +19,15 @@ use function in_array;
 class RecordToModel
 {
     /**
-     * @param KeywordRecord[] $keywords
-     * @param PersonModel[]   $hosts
+     * @param KeywordRecord[]        $keywords
+     * @param PersonModel[]          $hosts
+     * @param PodcastCategoryModel[] $categories
      */
     public function transform(
         ShowRecord $record,
         array $keywords = [],
-        array $hosts = []
+        array $hosts = [],
+        array $categories = []
     ): ShowModel {
         $model = new ShowModel();
 
@@ -73,6 +76,8 @@ class RecordToModel
         );
 
         $model->hosts = $hosts;
+
+        $model->podcastCategories = $categories;
 
         return $model;
     }
