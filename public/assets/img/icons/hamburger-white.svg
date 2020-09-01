@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="16px" viewBox="0 0 20 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39 (31667) - http://www.bohemiancoding.com/sketch -->
+    <title>hamburger</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Style" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Style-Guide" transform="translate(-529.000000, -3365.000000)" fill="#FFFFFF">
+            <g id="Mobile-Navigation" transform="translate(509.000000, 3247.000000)">
+                <g id="navigation-dropdown-open" transform="translate(0.000000, 105.000000)">
+                    <g id="red-menu-bar">
+                        <g id="hamburger" transform="translate(20.000000, 13.000000)">
+                            <polygon id="bottom-line" points="0 14 20 14 20 16 0 16"></polygon>
+                            <rect id="middle-line" x="0" y="7" width="20" height="2"></rect>
+                            <rect id="top-line" x="0" y="3.66373598e-15" width="20" height="2"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="19px" height="19px" viewBox="0 0 19 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39 (31667) - http://www.bohemiancoding.com/sketch -->
+    <title>Calendar Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0.633339541" y="0.544497283" width="17.9350181" height="19" rx="3"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="17.9350181" height="19" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tablet-Portrait" transform="translate(-135.000000, -472.000000)" stroke="#979797">
+            <g id="body" transform="translate(0.000000, 155.000000)">
+                <g id="post-1" transform="translate(32.000000, 30.000000)">
+                    <g id="thumbnails-+-details" transform="translate(0.000000, 1.000000)">
+                        <g id="meta-data-copy" transform="translate(6.000000, 285.000000)">
+                            <g id="Group" transform="translate(96.991209, 0.455503)">
+                                <use id="cal" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+                                <path d="M5.11709405,9.04449728 L6.11348395,9.04449728" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M8.10626373,9.04449728 L9.10265362,9.04449728" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M11.0954334,9.04449728 L11.0954334,9.04449728" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M13.0882132,9.04449728 L14.0846031,9.04449728" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M5.11709405,11.0444973 L6.11348395,11.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M8.10626373,11.0444973 L8.10626373,11.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M11.0954334,11.0444973 L11.0954334,11.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M13.0882132,11.0444973 L13.0882132,11.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M5.11709405,13.0444973 L5.11709405,13.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M8.10626373,13.0444973 L9.10265362,13.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M11.0954334,13.0444973 L11.0954334,13.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M14.0846031,13.0444973 L14.0846031,13.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M5.11709405,15.0444973 L6.11348395,15.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M8.10626373,15.0444973 L8.10626373,15.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M10.0990435,15.0444973 L11.0954334,15.0444973" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                                <path d="M1.13153449,6.04449728 L17.1048795,6.04449728" id="Line" stroke-width="1" stroke-linecap="square"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -19,6 +19,7 @@ use function getenv;
  * @method string siteName()
  * @method string siteEmailAddress()
  * @method string twitterHandle()
+ * @method array|string[][] mainNav()
  * @method array stylesheets()
  * @method array jsFiles()
  */
@@ -71,9 +72,33 @@ class General extends SimpleModel
 
     public static string $twitterHandle = 'nightowlfm';
 
-    /** @var string[] */
-    public static array $stylesheets = [];
+    /** @var array|string[][] */
+    public static array $mainNav = [
+        [
+            'href' => '/shows',
+            'content' => 'Shows',
+        ],
+        [
+            'href' => '/people',
+            'content' => 'People',
+        ],
+        [
+            'href' => '/about',
+            'content' => 'About',
+        ],
+        [
+            'href' => '/subscribe',
+            'content' => 'Subscribe',
+        ],
+    ];
 
     /** @var string[] */
-    public static array $jsFiles = ['https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js'];
+    public static array $stylesheets = ['https://fonts.googleapis.com/css?family=Ubuntu:400,400italic,500italic,500,300italic,300'];
+
+    /** @var string[] */
+    public static array $jsFiles = [
+        '/assets/legacy/lib/jQuery-2.2.0.min.js',
+        '/assets/legacy/script.min.js',
+        'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js',
+    ];
 }

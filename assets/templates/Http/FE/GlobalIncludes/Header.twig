@@ -1,0 +1,46 @@
+{# @var \Config\General GeneralConfig #}
+
+<div class="site-header">
+    <div
+        class="site-header__mobile-menu-activator-wrapper js-mobile-menu-activator"
+        data-active-class="site-header__mobile-menu-activator-wrapper--is-active"
+    >
+        <span class="site-header__mobile-menu-activator">Menu</span>
+    </div>
+    <a href="/" class="site-header__logo-wrapper"><h1 class="site-header__logo"><span class="site-header__logo-night">Night</span><span class="site-header__logo-owl">Owl</span></h1></a>
+    <nav class="site-nav">
+        <ul class="site-nav__list js-site-nav-list">
+            {% for item in GeneralConfig.mainNav %}
+                <li class="site-nav__item">
+                    <a
+                        href="{{ item.href }}"
+                        class="site-nav__link{# {% if craft.request.getFirstSegment() == item.menuLink %} site-nav__link--is-active{% endif %} #}"
+                    >
+                        {{ item.content|smartypants }}
+                    </a>
+                </li>
+            {% endfor %}
+            <li class="site-nav__item site-nav__item--search">
+                <form class="site-search" action="/search">
+                    <input
+                        type="search"
+                        name="q"
+                        title="search"
+                        placeholder="Search&hellip;"
+                        class="input site-search__input"
+                        {#{% if craft.request.segment(1) == 'search' and craft.request.getParam('q') %}
+                            value="{{ craft.request.getParam('q') }}"
+                        {% endif %}#}
+                    >
+                    <input
+                        type="submit"
+                        title="Submit"
+                        value="Submit"
+                        class="button site-search__submit"
+                    >
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <a href="/" class="site-header__mobile-logo"><span class="site-header__logo-night">Night</span><span class="site-header__logo-owl">Owl</span></a>
+</div>
