@@ -13,6 +13,8 @@ parameters:
         -
             message: '#Only booleans are allowed in a negated boolean, string given\.#'
             path: %currentWorkingDirectory%/src/Context/Schedule/Services/SaveSchedule.php
+        - '#Access to an undefined property Psr\\Cache\\CacheItemInterface::\$key\.#'
+        - '#Call to deprecated method at\(\) of class PHPUnit\\Framework\\TestCase:\nhttps://github.com/sebastianbergmann/phpunit/issues/4297#'
     excludes_analyse:
         - %currentWorkingDirectory%/config/dumper.php
         - %currentWorkingDirectory%/tests/TestConfig.php

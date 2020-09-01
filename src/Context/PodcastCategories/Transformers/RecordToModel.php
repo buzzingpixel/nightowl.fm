@@ -38,20 +38,18 @@ class RecordToModel
         if (count($parentChain) > 0) {
             $parent = end($parentChain);
 
-            if ($parent instanceof PodcastCategoryModel) {
-                $parentChildren = [];
+            $parentChildren = [];
 
-                foreach ($parent->children as $child) {
-                    $parentChildren[$child->name] = $child;
-                }
-
-                $parentChildren[$model->name] = $model;
-
-                ksort($parentChildren, SORT_NATURAL);
-
-                /** @psalm-suppress MixedPropertyTypeCoercion */
-                $parent->children = array_values($parentChildren);
+            foreach ($parent->children as $child) {
+                $parentChildren[$child->name] = $child;
             }
+
+            $parentChildren[$model->name] = $model;
+
+            ksort($parentChildren, SORT_NATURAL);
+
+            /** @psalm-suppress MixedPropertyTypeCoercion */
+            $parent->children = array_values($parentChildren);
         }
 
         return $model;

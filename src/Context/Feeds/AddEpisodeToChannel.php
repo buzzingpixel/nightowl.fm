@@ -11,9 +11,11 @@ use App\Context\Series\Models\SeriesModel;
 use App\Context\Shows\ShowApi;
 use cebe\markdown\GithubMarkdown;
 use DateTimeInterface;
+use Safe\DateTimeImmutable;
 use SimpleXMLElement;
 
 use function array_map;
+use function assert;
 use function count;
 use function gmdate;
 use function htmlspecialchars;
@@ -58,10 +60,14 @@ class AddEpisodeToChannel
 
         $guid->addAttribute('isPermalink', 'false');
 
+        $publishedAt = $episode->publishedAt;
+
+        assert($publishedAt instanceof DateTimeImmutable);
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $item->addChild(
             'pubDate',
-            $episode->publishedAt->format(
+            $publishedAt->format(
                 DateTimeInterface::RFC2822
             )
         );

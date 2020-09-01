@@ -27,13 +27,17 @@ class CleanUploadedFilesCommand extends Command
         $this->setDescription('Cleans expired uploaded temp files');
     }
 
-    protected function execute(InputInterface $in, OutputInterface $out): int
-    {
-        $out->writeln('<fg=yellow>Cleaning uploaded temp files...</>');
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output
+    ): int {
+        $output->writeln(
+            '<fg=yellow>Cleaning uploaded temp files...</>'
+        );
 
         $this->tempFileStorageApi->cleanUploadedFiles();
 
-        $out->writeln('<fg=green>Uploaded temp files clean</>');
+        $output->writeln('<fg=green>Uploaded temp files clean</>');
 
         return 0;
     }

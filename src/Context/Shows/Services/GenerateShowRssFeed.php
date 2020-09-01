@@ -28,6 +28,7 @@ use function assert;
 use function count;
 use function explode;
 use function implode;
+use function is_array;
 
 class GenerateShowRssFeed
 {
@@ -123,10 +124,12 @@ class GenerateShowRssFeed
                     new DateTimeZone('UTC')
                 );
 
+                /** @psalm-suppress NoInterfaceProperties */
                 $pubDateCacheItem->key = $cacheKey;
                 $pubDateCacheItem->set($pubDate);
             }
 
+            /** @psalm-suppress MixedAssignment */
             $pubDate = $pubDateCacheItem->get();
 
             assert($pubDate instanceof DateTimeImmutable);
@@ -150,7 +153,7 @@ class GenerateShowRssFeed
 
         $atomLink = $channel->addChild(
             'atom:link',
-            null,
+            '',
             'http://www.w3.org/2005/Atom/'
         );
         $atomLink->addAttribute('href', $show->getPublicFeedUrl());
@@ -197,7 +200,7 @@ class GenerateShowRssFeed
 
         $owner = $channel->addChild(
             'itunes:owner',
-            null,
+            '',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -254,15 +257,20 @@ class GenerateShowRssFeed
         array $categoriesSorted
     ): void {
         foreach ($categoriesSorted as $cat) {
+            assert(is_array($cat));
+
             $item = $xml->addChild(
                 'itunes:category',
-                null,
+                '',
                 'http://www.itunes.com/dtds/podcast-1.0.dtd',
             );
 
-            $item->addAttribute('text', $cat['name']);
+            $item->addAttribute('text', (string) $cat['name']);
 
-            $this->addCategories($item, $cat['children']);
+            $this->addCategories(
+                $item,
+                (array) $cat['children']
+            );
         }
     }
 
@@ -282,6 +290,9 @@ class GenerateShowRssFeed
         return $dot->all();
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     private function addSortCategory(Dot $dot, PodcastCategoryModel $cat): void
     {
         $key = implode(

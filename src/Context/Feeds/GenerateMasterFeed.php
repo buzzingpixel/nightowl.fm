@@ -114,10 +114,12 @@ class GenerateMasterFeed
                     new DateTimeZone('UTC')
                 );
 
+                /** @psalm-suppress NoInterfaceProperties */
                 $pubDateCacheItem->key = $cacheKey;
                 $pubDateCacheItem->set($pubDate);
             }
 
+            /** @psalm-suppress MixedAssignment */
             $pubDate = $pubDateCacheItem->get();
 
             assert($pubDate instanceof DateTimeImmutable);
@@ -142,7 +144,7 @@ class GenerateMasterFeed
 
         $atomLink = $channel->addChild(
             'atom:link',
-            null,
+            '',
             'http://www.w3.org/2005/Atom/'
         );
         $atomLink->addAttribute('href', $feedUrl);
@@ -189,7 +191,7 @@ class GenerateMasterFeed
 
         $owner = $channel->addChild(
             'itunes:owner',
-            null,
+            '',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 

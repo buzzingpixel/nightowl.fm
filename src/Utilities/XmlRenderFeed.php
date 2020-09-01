@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Utilities;
 
 use DOMDocument;
+use DOMElement;
 use SimpleXMLElement;
 
+use function assert;
 use function dom_import_simplexml;
 
 class XmlRenderFeed
@@ -15,15 +17,16 @@ class XmlRenderFeed
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
 
+        $domElement = dom_import_simplexml($xml);
+
+        assert($domElement instanceof DOMElement);
+
         $dom->appendChild(
-            $dom->importNode(
-                dom_import_simplexml($xml),
-                true
-            )
+            $dom->importNode($domElement, true)
         );
 
         $dom->formatOutput = true;
 
-        return $dom->saveXML();
+        return (string) $dom->saveXML();
     }
 }
