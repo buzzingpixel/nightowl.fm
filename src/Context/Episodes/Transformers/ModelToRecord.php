@@ -48,6 +48,12 @@ class ModelToRecord
             );
         }
 
+        if ($model->publishedAt !== null) {
+            $record->published_at = $model->publishedAt->format(
+                DateTimeInterface::ATOM
+            );
+        }
+
         $record->is_published = $model->isPublished ? '1' : '0';
 
         $record->number = $model->number;
@@ -57,6 +63,8 @@ class ModelToRecord
         $record->created_at = $model->createdAt->format(
             DateTimeInterface::ATOM
         );
+
+        $record->old_guid = $model->oldGuid;
 
         return $record;
     }

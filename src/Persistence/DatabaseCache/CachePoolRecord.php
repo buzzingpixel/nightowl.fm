@@ -16,5 +16,5 @@ class CachePoolRecord extends Record
 
     public string $value = '';
 
-    public ?string $expires_at;
+    public ?string $expires_at = null;
 }

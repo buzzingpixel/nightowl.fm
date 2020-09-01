@@ -6,6 +6,8 @@ namespace App\Context\Episodes\Services\Internal;
 
 use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;
+use DateTimeZone;
+use Safe\DateTimeImmutable;
 
 use function time;
 
@@ -24,12 +26,23 @@ class SetEpisodePublishedState
         if ($episode->publishAt === null) {
             $episode->isPublished = true;
 
+            $episode->publishedAt = new DateTimeImmutable(
+                'now',
+                new DateTimeZone('UTC'),
+            );
+
             return;
         }
 
         if (time() < $episode->publishAt->getTimestamp()) {
             return;
         }
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $episode->publishedAt = new DateTimeImmutable(
+            'now',
+            new DateTimeZone('UTC'),
+        );
 
         $episode->isPublished = true;
     }

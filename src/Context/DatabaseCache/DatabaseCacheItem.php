@@ -23,7 +23,7 @@ class DatabaseCacheItem implements CacheItemInterface
     /** @var mixed */
     public $value;
 
-    public ?DateTimeInterface $expiresAt;
+    public ?DateTimeInterface $expiresAt = null;
 
     public function getKey(): string
     {

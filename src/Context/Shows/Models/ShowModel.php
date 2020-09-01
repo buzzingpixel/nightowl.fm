@@ -8,11 +8,13 @@ use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
 use App\Context\PodcastCategories\Models\PodcastCategoryModel;
 use App\Context\Shows\ShowConstants;
+use Config\General;
 use LogicException;
 
 use function array_walk;
 use function constant;
 use function explode;
+use function implode;
 use function in_array;
 use function mb_strtolower;
 use function mb_strtoupper;
@@ -192,6 +194,22 @@ class ShowModel
     public function getPodcastCategories(): array
     {
         return $this->podcastCategories;
+    }
+
+    public function getPublicUrl(): string
+    {
+        return implode('/', [
+            General::$siteUrl,
+            $this->slug,
+        ]);
+    }
+
+    public function getPublicFeedUrl(): string
+    {
+        return implode('/', [
+            $this->getPublicUrl(),
+            'feed',
+        ]);
     }
 
     /**

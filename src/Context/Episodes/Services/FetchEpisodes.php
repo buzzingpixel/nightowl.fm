@@ -25,6 +25,7 @@ use App\Persistence\Keywords\KeywordRecord;
 use App\Persistence\RecordQueryFactory;
 use App\Utilities\SystemClock;
 use DateTimeZone;
+use Safe\Exceptions\DatetimeException;
 use Throwable;
 
 use function array_map;
@@ -76,6 +77,8 @@ class FetchEpisodes
 
     /**
      * @return EpisodeModel[]
+     *
+     * @throws DatetimeException
      */
     private function innerRun(?FetchModel $fetchModel = null): array
     {
@@ -83,11 +86,19 @@ class FetchEpisodes
 
         $query = $this->recordQueryFactory
             ->make(new EpisodeRecord())
-            ->withOrder('is_published', 'desc')
-            ->withOrder('display_order', 'desc')
-            ->withOrder('created_at', 'desc')
             ->withLimit($fetchModel->limit)
             ->withOffset($fetchModel->offset);
+
+        if ($fetchModel->orderByPublishedAt) {
+            $query = $query->withOrder(
+                'published_at',
+                'desc'
+            );
+        } else {
+            $query = $query->withOrder('is_published', 'desc')
+                ->withOrder('display_order', 'desc')
+                ->withOrder('created_at', 'desc');
+        }
 
         if (count($fetchModel->ids) > 0) {
             $query = $query->withWhere(
@@ -175,9 +186,11 @@ class FetchEpisodes
                 '!='
             );
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             $datetime = $this->systemClock->getCurrentTime()
                 ->setTimezone(new DateTimeZone('UTC'));
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             $format = $datetime->format(
                 Constants::POSTGRES_OUTPUT_FORMAT
             );

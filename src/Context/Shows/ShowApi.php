@@ -8,10 +8,12 @@ use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\Services\DeleteShow;
 use App\Context\Shows\Services\FetchShows;
+use App\Context\Shows\Services\GenerateShowRssFeed;
 use App\Context\Shows\Services\GetShowArtworkUrl;
 use App\Context\Shows\Services\SaveShow;
 use App\Context\Shows\Services\ValidateUniqueShowSlug;
 use App\Payload\Payload;
+use Config\General;
 use Psr\Container\ContainerInterface;
 
 use function assert;
@@ -88,5 +90,27 @@ class ShowApi
         assert($service instanceof GetShowArtworkUrl);
 
         return $service->get($show, $opt);
+    }
+
+    /**
+     * @param mixed[] $opt
+     */
+    public function getShowArtworkUrlPublic(
+        ShowModel $show,
+        array $opt = []
+    ): string {
+        return General::$siteUrl . $this->getShowArtworkUrl(
+            $show,
+            $opt
+        );
+    }
+
+    public function generateShowRssFeed(ShowModel $show): string
+    {
+        $service = $this->di->get(GenerateShowRssFeed::class);
+
+        assert($service instanceof GenerateShowRssFeed);
+
+        return $service->generate($show);
     }
 }

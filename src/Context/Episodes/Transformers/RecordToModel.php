@@ -74,10 +74,19 @@ class RecordToModel
         if ($record->publish_at !== null && $record->publish_at !== '') {
             $publishAt = DateTimeImmutable::createFromFormat(
                 Constants::POSTGRES_OUTPUT_FORMAT,
-                $record->publish_at
+                $record->publish_at,
             );
 
             $model->publishAt = $publishAt;
+        }
+
+        if ($record->published_at !== null && $record->published_at !== '') {
+            $publishedAt = DateTimeImmutable::createFromFormat(
+                Constants::POSTGRES_OUTPUT_FORMAT,
+                $record->published_at,
+            );
+
+            $model->publishedAt = $publishedAt;
         }
 
         $model->isPublished = in_array(
@@ -99,6 +108,8 @@ class RecordToModel
             Constants::POSTGRES_OUTPUT_FORMAT,
             $record->created_at
         );
+
+        $model->oldGuid = $record->old_guid;
 
         $model->createdAt = $createdAt;
 

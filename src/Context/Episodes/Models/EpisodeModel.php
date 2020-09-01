@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Context\Episodes\Models;
 
+use App\Context\Episodes\EpisodeConstants;
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
 use App\Context\Series\Models\SeriesModel;
 use App\Context\Shows\Models\ShowModel;
+use Config\General;
 use DateTimeZone;
 use LogicException;
 use Safe\DateTimeImmutable;
 
 use function array_walk;
 use function explode;
+use function implode;
 use function in_array;
 use function mb_strtolower;
 use function pathinfo;
@@ -82,6 +85,8 @@ class EpisodeModel
 
     public ?DateTimeImmutable $publishAt = null;
 
+    public ?DateTimeImmutable $publishedAt = null;
+
     public bool $isPublished = false;
 
     public int $number = 0;
@@ -89,6 +94,13 @@ class EpisodeModel
     public int $displayOrder = 0;
 
     public DateTimeImmutable $createdAt;
+
+    public string $oldGuid = '';
+
+    public function getGuid(): string
+    {
+        return $this->oldGuid !== '' ? $this->oldGuid : $this->id;
+    }
 
     /** @var PersonModel[] */
     private array $hosts = [];
@@ -229,6 +241,36 @@ class EpisodeModel
     public function getSeries(): array
     {
         return $this->series;
+    }
+
+    public function getPublicUrl(): string
+    {
+        if ($this->episodeType === EpisodeConstants::EPISODE_TYPE_NUMBERED) {
+            return implode('/', [
+                General::$siteUrl,
+                $this->show->slug,
+                $this->number,
+            ]);
+        }
+
+        return implode('/', [
+            General::$siteUrl,
+            $this->show->slug,
+            $this->id,
+        ]);
+    }
+
+    public function getShowNotesWithDescription(): string
+    {
+        return $this->description . "\n\n" . $this->showNotes;
+    }
+
+    public function getPublicFileUrl(): string
+    {
+        return implode('/', [
+            $this->getPublicUrl(),
+            $this->getFileName(),
+        ]);
     }
 
     /**

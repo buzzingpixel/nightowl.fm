@@ -38,4 +38,6 @@ class FetchModel
     public array $episodeNumbers = [];
 
     public bool $pastPublishedAt = false;
+
+    public bool $orderByPublishedAt = false;
 }

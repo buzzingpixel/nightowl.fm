@@ -40,6 +40,8 @@ class EpisodeRecord extends Record
 
     public ?string $publish_at = null;
 
+    public ?string $published_at = null;
+
     /** @var int|bool|string */
     public $is_published = '0';
 
@@ -50,4 +52,6 @@ class EpisodeRecord extends Record
     public $display_order = 0;
 
     public string $created_at;
+
+    public string $old_guid = '';
 }

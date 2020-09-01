@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Context\Series\Models;
 
 use App\Context\Shows\Models\ShowModel;
+use Config\General;
+
+use function implode;
 
 class SeriesModel
 {
@@ -17,4 +20,14 @@ class SeriesModel
     public string $description = '';
 
     public ShowModel $show;
+
+    public function getPublicUrl(): string
+    {
+        return implode('/', [
+            General::$siteUrl,
+            $this->show->slug,
+            'series',
+            $this->slug,
+        ]);
+    }
 }

@@ -17,6 +17,7 @@ use function getenv;
  * @method string pathToEpisodesDirectory()
  * @method string siteUrl()
  * @method string siteName()
+ * @method string siteEmailAddress()
  * @method string twitterHandle()
  * @method array stylesheets()
  * @method array jsFiles()
@@ -64,7 +65,9 @@ class General extends SimpleModel
 
     public static string $siteUrl = 'https://www.nightowl.fm';
 
-    public static string $siteName = 'NightOwl';
+    public static string $siteName = 'Night Owl';
+
+    public static string $siteEmailAddress = 'info@nightowl.fm';
 
     public static string $twitterHandle = 'nightowlfm';
 

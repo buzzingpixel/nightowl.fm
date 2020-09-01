@@ -9,6 +9,7 @@ use App\Http\Response\LogIn\PostLogInAction;
 use App\Http\Response\LogIn\PostLogOutAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
+use App\Http\Response\Show\FeedAction;
 use Slim\App;
 
 return static function (App $app): void {
@@ -30,4 +31,7 @@ return static function (App $app): void {
     // CMS
     $cmsRoutes = require __DIR__ . '/CMS/index.php';
     $cmsRoutes($app);
+
+    // Shows
+    $app->get('/{showSlug}/feed', FeedAction::class);
 };
