@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Config\Factories;
 
+use App\Globals;
+use App\Http\Utilities\Segments\ExtractUriSegments;
 use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\FormatSimpleTablePostBackValue;
 use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
@@ -101,6 +103,15 @@ class TwigEnvironmentFactory
         $twig->addGlobal('csrf', $di->get(Csrf::class));
 
         $twig->addGlobal('PostMessage', $postMessage[0] ?? []);
+
+        $twig->addGlobal('Request', Globals::request());
+
+        $twig->addGlobal(
+            'UriSegments',
+            $di->get(ExtractUriSegments::class)(
+                Globals::request()->getUri()
+            )
+        );
 
         return $twig;
     }

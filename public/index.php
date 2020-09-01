@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Globals;
 use App\Http\Response\Error\HttpErrorAction;
 use Config\RegisterEventListeners;
 use Psr\Container\ContainerInterface;
@@ -34,6 +35,8 @@ $routes($app);
 // Use factory to get the ServerRequest
 $request = ServerRequestCreatorFactory::create()
     ->createServerRequestFromGlobals();
+
+Globals::setRequest($request);
 
 // Register error handlers is Whoops does not exists
 if (! class_exists(WhoopsRun::class)) {

@@ -20,8 +20,6 @@ return static function (App $app): void {
     // Match anything except a forward slash
     // {slug:[^\/]+}
 
-    $app->get('/', HomeAction::class);
-
     $app->post('/log-in', PostLogInAction::class);
     $app->post('/log-out', PostLogOutAction::class);
     $app->get('/iforgot', IForGotAction::class);
@@ -34,6 +32,8 @@ return static function (App $app): void {
     $cmsRoutes($app);
 
     // Site FE
+
+    $app->get('/', HomeAction::class);
 
     $app->get('/masterfeed', GetMasterFeedAction::class);
 

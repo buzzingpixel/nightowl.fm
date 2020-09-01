@@ -1,4 +1,6 @@
 {# @var \Config\General GeneralConfig #}
+{# @var \App\Http\Utilities\Segments\UriSegments UriSegments #}
+{# @var \Psr\Http\Message\ServerRequestInterface Request #}
 
 <div class="site-header">
     <div
@@ -14,7 +16,7 @@
                 <li class="site-nav__item">
                     <a
                         href="{{ item.href }}"
-                        class="site-nav__link{# {% if craft.request.getFirstSegment() == item.menuLink %} site-nav__link--is-active{% endif %} #}"
+                        class="site-nav__link{% if '/' ~ UriSegments.segment(1) == item.href %} site-nav__link--is-active{% endif %}"
                     >
                         {{ item.content|smartypants }}
                     </a>
@@ -28,9 +30,9 @@
                         title="search"
                         placeholder="Search&hellip;"
                         class="input site-search__input"
-                        {#{% if craft.request.segment(1) == 'search' and craft.request.getParam('q') %}
-                            value="{{ craft.request.getParam('q') }}"
-                        {% endif %}#}
+                        {% if UriSegments.segment(1) == 'search' %}
+                        value="{{ Request.queryParams.q ?? '' }}"
+                        {% endif %}
                     >
                     <input
                         type="submit"
