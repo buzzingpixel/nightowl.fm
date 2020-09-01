@@ -10,22 +10,18 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
-use Twig\Environment;
 
 class FeedAction
 {
     private ShowApi $showApi;
     private ResponseFactoryInterface $responseFactory;
-    private Environment $twig;
 
     public function __construct(
         ShowApi $showApi,
-        ResponseFactoryInterface $responseFactory,
-        Environment $twig
+        ResponseFactoryInterface $responseFactory
     ) {
         $this->showApi         = $showApi;
         $this->responseFactory = $responseFactory;
-        $this->twig            = $twig;
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface

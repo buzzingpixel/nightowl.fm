@@ -2,18 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Context\Shows\Services;
+namespace App\Context\Feeds;
 
-use Adbar\Dot;
 use App\Context\Episodes\EpisodeApi;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
-use App\Context\Feeds\AddEpisodeToChannel;
-use App\Context\Feeds\GetAuthorString;
-use App\Context\Keywords\Models\KeywordModel;
-use App\Context\PodcastCategories\Models\PodcastCategoryModel;
-use App\Context\Shows\Models\ShowModel;
-use App\Context\Shows\ShowApi;
+use App\Context\Shows\ShowConstants;
 use App\Utilities\XmlCreateFeed;
 use App\Utilities\XmlRenderFeed;
 use Config\General;
@@ -23,54 +17,44 @@ use Psr\Cache\CacheItemPoolInterface;
 use Safe\DateTimeImmutable;
 use SimpleXMLElement;
 
-use function array_map;
 use function assert;
 use function count;
-use function explode;
-use function implode;
 
-class GenerateShowRssFeed
+class GenerateMasterFeed
 {
-    private General $generalConfig;
     private EpisodeApi $episodeApi;
     private CacheItemPoolInterface $cachePool;
-    private ShowApi $showApi;
     private XmlCreateFeed $xmlCreateFeed;
     private XmlRenderFeed $xmlRenderFeed;
+    private General $generalConfig;
     private AddEpisodeToChannel $addEpisodeToChannel;
-    private GetAuthorString $getAuthorString;
 
     public function __construct(
-        General $generalConfig,
         EpisodeApi $episodeApi,
         CacheItemPoolInterface $cachePool,
-        ShowApi $showApi,
         XmlCreateFeed $xmlCreateFeed,
         XmlRenderFeed $xmlRenderFeed,
-        AddEpisodeToChannel $addEpisodeToChannel,
-        GetAuthorString $getAuthorString
+        General $generalConfig,
+        AddEpisodeToChannel $addEpisodeToChannel
     ) {
-        $this->generalConfig       = $generalConfig;
         $this->episodeApi          = $episodeApi;
         $this->cachePool           = $cachePool;
-        $this->showApi             = $showApi;
         $this->xmlCreateFeed       = $xmlCreateFeed;
         $this->xmlRenderFeed       = $xmlRenderFeed;
+        $this->generalConfig       = $generalConfig;
         $this->addEpisodeToChannel = $addEpisodeToChannel;
-        $this->getAuthorString     = $getAuthorString;
     }
 
-    public function generate(ShowModel $show): string
+    public function generate(): string
     {
-        $episodes = $this->getEpisodes($show);
+        $episodes = $this->getEpisodes();
 
-        $lastPubDate = $this->getLastPubDate($episodes, $show);
+        $lastPubDate = $this->getLastPubDate($episodes);
 
         $feed = $this->xmlCreateFeed->create();
 
         $channel = $this->addChannel(
             $feed,
-            $show,
             $lastPubDate
         );
 
@@ -87,11 +71,9 @@ class GenerateShowRssFeed
     /**
      * @return EpisodeModel[]
      */
-    private function getEpisodes(ShowModel $show): array
+    private function getEpisodes(): array
     {
         $fetchModel = new FetchModel();
-
-        $fetchModel->shows = [$show];
 
         $fetchModel->orderByPublishedAt = true;
 
@@ -99,7 +81,17 @@ class GenerateShowRssFeed
 
         $fetchModel->limit = 100;
 
-        return $this->episodeApi->fetchEpisodes($fetchModel);
+        $episodes = $this->episodeApi->fetchEpisodes($fetchModel);
+
+        foreach ($episodes as $key => $episode) {
+            if ($episode->show->status !== ShowConstants::SHOW_STATUS_HIDDEN) {
+                continue;
+            }
+
+            unset($episodes[$key]);
+        }
+
+        return $episodes;
     }
 
     /**
@@ -109,11 +101,10 @@ class GenerateShowRssFeed
      * @noinspection PhpDocMissingThrowsInspection
      */
     private function getLastPubDate(
-        array $episodes,
-        ShowModel $show
+        array $episodes
     ): DateTimeImmutable {
         if (count($episodes) < 1) {
-            $cacheKey = 'feed_pub_date_' . $show->id;
+            $cacheKey = 'feed_pub_date_master_feed';
 
             $pubDateCacheItem = $this->cachePool->getItem($cacheKey);
 
@@ -143,9 +134,10 @@ class GenerateShowRssFeed
 
     private function addChannel(
         SimpleXMLElement $feed,
-        ShowModel $show,
         DateTimeImmutable $lastPubDate
     ): SimpleXMLElement {
+        $feedUrl = $this->generalConfig->siteUrl() . '/masterfeed';
+
         $channel = $feed->addChild('channel');
 
         $atomLink = $channel->addChild(
@@ -153,13 +145,16 @@ class GenerateShowRssFeed
             null,
             'http://www.w3.org/2005/Atom/'
         );
-        $atomLink->addAttribute('href', $show->getPublicFeedUrl());
+        $atomLink->addAttribute('href', $feedUrl);
         $atomLink->addAttribute('type', 'application/rss+xml');
         $atomLink->addAttribute('rel', 'self');
 
-        $channel->addChild('title', $show->title);
+        $channel->addChild(
+            'title',
+            'Night Owl Master Feed '
+        );
 
-        $channel->addChild('link', $show->getPublicFeedUrl());
+        $channel->addChild('link', $feedUrl);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $channel->addChild(
@@ -169,12 +164,12 @@ class GenerateShowRssFeed
 
         $channel->addChild(
             'description',
-            $show->description,
+            'The Night Owl master feed for all shows',
         );
 
         $channel->addChild(
             'itunes:summary',
-            $show->description,
+            'The Night Owl master feed for all shows',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -182,16 +177,13 @@ class GenerateShowRssFeed
 
         $channel->addChild(
             'itunes:author',
-            $this->getAuthorString->get($show->hosts),
+            'Night Owl',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
         $channel->addChild(
             'itunes:image',
-            $this->showApi->getShowArtworkUrlPublic(
-                $show,
-                ['size' => 1400]
-            ),
+            $this->generalConfig->siteUrl() . '/master-feed.jpg',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -213,92 +205,14 @@ class GenerateShowRssFeed
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
-        $channel->addChild(
-            'itunes:keywords',
-            implode(', ', array_map(
-                static fn (KeywordModel $k) => $k->keyword,
-                $show->keywords,
-            )),
-            'http://www.itunes.com/dtds/podcast-1.0.dtd',
-        );
-
-        $channel->addChild(
-            'itunes:explicit',
-            $show->explicit ? 'yes' : 'no',
-            'http://www.itunes.com/dtds/podcast-1.0.dtd',
-        );
-
-        $this->addCategories(
-            $channel,
-            $this->sortCategories(
-                $show->podcastCategories
-            ),
-        );
-
         /** @noinspection PhpUnhandledExceptionInspection */
         $channel->addChild(
             'copyright',
             'Copyright ' .
-                (new DateTimeImmutable())->format('Y') .
-                ' BuzzingPixel, LLC'
+            (new DateTimeImmutable())->format('Y') .
+            ' BuzzingPixel, LLC'
         );
 
         return $channel;
-    }
-
-    /**
-     * @param mixed[] $categoriesSorted
-     */
-    private function addCategories(
-        SimpleXMLElement $xml,
-        array $categoriesSorted
-    ): void {
-        foreach ($categoriesSorted as $cat) {
-            $item = $xml->addChild(
-                'itunes:category',
-                null,
-                'http://www.itunes.com/dtds/podcast-1.0.dtd',
-            );
-
-            $item->addAttribute('text', $cat['name']);
-
-            $this->addCategories($item, $cat['children']);
-        }
-    }
-
-    /**
-     * @param PodcastCategoryModel[] $podcastCategories
-     *
-     * @return mixed[]
-     */
-    private function sortCategories(array $podcastCategories): array
-    {
-        $dot = new Dot();
-
-        foreach ($podcastCategories as $cat) {
-            $this->addSortCategory($dot, $cat);
-        }
-
-        return $dot->all();
-    }
-
-    private function addSortCategory(Dot $dot, PodcastCategoryModel $cat): void
-    {
-        $key = implode(
-            '.children.',
-            explode(
-                '/',
-                $cat->getParentChainWithSelfAsPath()
-            )
-        );
-
-        $dot->set($key, [
-            'name' => $cat->name,
-            'children' => $dot->get($key)['children'] ?? [],
-        ]);
-
-        foreach ($cat->getParentChain() as $parentCat) {
-            $this->addSortCategory($dot, $parentCat);
-        }
     }
 }

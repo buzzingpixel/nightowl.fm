@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Response\GetMasterFeedAction;
 use App\Http\Response\Home\HomeAction;
 use App\Http\Response\IForgot\IForGotAction;
 use App\Http\Response\IForgot\PostIForgotAction;
@@ -31,6 +32,10 @@ return static function (App $app): void {
     // CMS
     $cmsRoutes = require __DIR__ . '/CMS/index.php';
     $cmsRoutes($app);
+
+    // Site FE
+
+    $app->get('/masterfeed', GetMasterFeedAction::class);
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);
