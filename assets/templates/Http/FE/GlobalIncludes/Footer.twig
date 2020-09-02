@@ -1,0 +1,107 @@
+{# @var \Config\General GeneralConfig #}
+
+{# @var \App\Context\Shows\Models\ShowModel[] shows #}
+{% set shows = getShows() %}
+
+<footer class="site-footer" role="contentinfo">
+    <div class="site-footer__upper">
+        <div class="site-footer__inner-wrapper">
+            <div class="site-footer__upper-row">
+                <div class="site-footer__upper-left">
+                    <div class="site-footer__logo-text">
+                        <span class="site-footer__logo-text-night">{{ GeneralConfig.siteNameWords[0] }}</span><span class="site-footer__logo-text-owl">{{ GeneralConfig.siteNameWords[1] }}</span>
+                    </div>
+                    <div class="site-footer__tagline">
+                        {{ GeneralConfig.siteTagLine|smartypants|widont }}
+                    </div>
+                    <div class="site-footer__description">
+                        <p>
+                            {{ GeneralConfig.siteShortDescription|smartypants|widont }}
+                        </p>
+                    </div>
+                </div>
+                <div class="site-footer__upper-right">
+                    <nav class="site-footer__nav">
+                        <ul class="site-footer__nav-list">
+                            <li class="site-footer__nav-item site-footer__nav-item--heading">
+                                <a href="#" class="site-footer__nav-link">Shows</a>
+                            </li>
+                            {% for show in shows %}
+                                <li class="site-footer__nav-item">
+                                    <a
+                                        href="{{ show.publicUrl }}"
+                                        class="site-footer__nav-link"
+                                    >
+                                        {{ show.title|smartypants|widont }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <ul class="site-footer__nav-list">
+                            <li class="site-footer__nav-item site-footer__nav-item--heading">
+                                <a href="/people" class="site-footer__nav-link">People</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/people#hosts" class="site-footer__nav-link">Hosts</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/people#guests" class="site-footer__nav-link">Guests</a>
+                            </li>
+                        </ul>
+                        <ul class="site-footer__nav-list">
+                            <li class="site-footer__nav-item site-footer__nav-item--heading">
+                                <a href="/about" class="site-footer__nav-link">About</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/about" class="site-footer__nav-link">The Network</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/about/production-tools" class="site-footer__nav-link">Production Tools</a>
+                            </li>
+                            {#<li class="site-footer__nav-item">
+                                <a href="/contact" class="site-footer__nav-link">Contact Us</a>
+                            </li>#}
+                        </ul>
+                        <ul class="site-footer__nav-list">
+                            <li class="site-footer__nav-item site-footer__nav-item--heading">
+                                <a href="/subscribe" class="site-footer__nav-link">Subscribe</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/masterfeed" class="site-footer__nav-link">Master Feed</a>
+                            </li>
+                            <li class="site-footer__nav-item">
+                                <a href="/subscribe" class="site-footer__nav-link">RSS Feeds</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="site-footer__lower">
+        <div class="site-footer__inner-wrapper">
+            <div class="site-footer__lower-row">
+                <div class="site-footer__lower-right">
+                    <div class="site-footer__copyright">
+                        &copy; BuzzingPixel, LLC {{ 'now'|date('Y') }}. All Rights Reserved. <span class="site-footer__copyright-secondary">Yep, all of them.</span>
+                    </div>
+                    <div class="site-footer__colophon">
+                        Hosting managed by TJ Draper. The CMS is was created specifically for Night Owl by TJ Draper. Design meticulously created by Joe Darnell. HTML, CSS, JavaScript, and custom PHP lovingly handmade by TJ Draper.
+                    </div>
+                </div>
+                <div class="site-footer__lower-left">
+                    <div class="site-footer__ticker">
+                        <div class="site-footer__ticker-row">
+                            <div class="site-footer__ticker-min">
+                                {{ getTotalMinutesPodcasted()|number_format(null, null, ',') }}
+                            </div>
+                            <div class="site-footer__ticker-legend">
+                                minutes podcasted
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

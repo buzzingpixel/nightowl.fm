@@ -17,6 +17,9 @@ use function getenv;
  * @method string pathToEpisodesDirectory()
  * @method string siteUrl()
  * @method string siteName()
+ * @method string[] siteNameWords()
+ * @method string siteTagLine()
+ * @method string siteShortDescription()
  * @method string siteEmailAddress()
  * @method string twitterHandle()
  * @method array|string[][] mainNav()
@@ -67,6 +70,16 @@ class General extends SimpleModel
     public static string $siteUrl = 'https://www.nightowl.fm';
 
     public static string $siteName = 'Night Owl';
+
+    /** @var string[] */
+    public static array $siteNameWords = [
+        'Night',
+        'Owl',
+    ];
+
+    public static string $siteTagLine = 'Nocturnal Podcasts by Creative People';
+
+    public static string $siteShortDescription = 'We discuss filmmaking, technology, coffee, and bunches of other stuff for professionals, developers, designers, and enthusiasts. Each show is hand-crafted after hours.';
 
     public static string $siteEmailAddress = 'info@nightowl.fm';
 

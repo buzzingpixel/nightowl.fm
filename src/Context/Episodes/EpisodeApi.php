@@ -8,6 +8,7 @@ use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\Episodes\Services\DeleteEpisode;
 use App\Context\Episodes\Services\FetchEpisodes;
+use App\Context\Episodes\Services\GetTotalSecondsPodcasted;
 use App\Context\Episodes\Services\PublishPendingEpisodes;
 use App\Context\Episodes\Services\SaveEpisode;
 use App\Payload\Payload;
@@ -70,5 +71,19 @@ class EpisodeApi
         assert($service instanceof DeleteEpisode);
 
         return $service->delete($episode);
+    }
+
+    public function getTotalSecondsPodcasted(): int
+    {
+        $service = $this->di->get(GetTotalSecondsPodcasted::class);
+
+        assert($service instanceof GetTotalSecondsPodcasted);
+
+        return $service->get();
+    }
+
+    public function getTotalMinutesPodcasted(): int
+    {
+        return (int) ($this->getTotalSecondsPodcasted() / 60);
     }
 }

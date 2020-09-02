@@ -10,6 +10,8 @@ use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\FormatSimpleTablePostBackValue;
 use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
 use App\Templating\TwigExtensions\GetShowArtworkUrl;
+use App\Templating\TwigExtensions\GetShows;
+use App\Templating\TwigExtensions\GetTotalSecondsPodcasted;
 use App\Templating\TwigExtensions\PhpFunctions;
 use App\Templating\TwigExtensions\ReadJson;
 use App\Templating\TwigExtensions\TemplateExists;
@@ -97,6 +99,10 @@ class TwigEnvironmentFactory
         $twig->addExtension($di->get(GetShowArtworkUrl::class));
 
         $twig->addExtension($di->get(TimeZoneList::class));
+
+        $twig->addExtension($di->get(GetShows::class));
+
+        $twig->addExtension($di->get(GetTotalSecondsPodcasted::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
 
