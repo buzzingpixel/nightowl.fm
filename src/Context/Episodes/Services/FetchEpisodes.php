@@ -15,6 +15,7 @@ use App\Context\Series\SeriesApi;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
+use App\Context\Shows\ShowConstants;
 use App\Persistence\Constants;
 use App\Persistence\Episodes\EpisodeGuestsRecord;
 use App\Persistence\Episodes\EpisodeHostsRecord;
@@ -22,6 +23,7 @@ use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\Episodes\EpisodeSeriesRecord;
 use App\Persistence\Keywords\KeywordRecord;
+use App\Persistence\RecordQuery;
 use App\Persistence\RecordQueryFactory;
 use App\Utilities\SystemClock;
 use DateTimeZone;
@@ -203,6 +205,11 @@ class FetchEpisodes
                 '<'
             );
         }
+
+        $query = $this->checkHiddenShowsStatus(
+            $fetchModel,
+            $query
+        );
 
         /** @var EpisodeRecord[] $records */
         $records = $query->all();
@@ -467,5 +474,33 @@ class FetchEpisodes
         }
 
         return $seriesByEpisodeId;
+    }
+
+    private function checkHiddenShowsStatus(
+        FetchModel $fetchModel,
+        RecordQuery $query
+    ): RecordQuery {
+        if ($fetchModel->excludeEpisodesFromHiddenShows === false) {
+            return $query;
+        }
+
+        $showFetchModel = new ShowFetchModel();
+
+        $showFetchModel->statuses[] = ShowConstants::SHOW_STATUS_HIDDEN;
+
+        $hiddenShows = $this->showApi->fetchShows($showFetchModel);
+
+        if (count($hiddenShows) < 1) {
+            return $query;
+        }
+
+        return $query->withWhere(
+            'show_id',
+            array_map(
+                static fn (ShowModel $m) => $m->id,
+                $hiddenShows,
+            ),
+            '!IN',
+        );
     }
 }

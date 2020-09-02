@@ -44,6 +44,8 @@ class GetRandomEpisode extends AbstractExtension
 
         $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
 
+        $fetchModel->excludeEpisodesFromHiddenShows = true;
+
         return $this->episodeApi->fetchEpisode($fetchModel);
     }
 }

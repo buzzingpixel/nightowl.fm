@@ -42,4 +42,6 @@ class FetchModel
     public bool $orderByPublishedAt = false;
 
     public bool $orderByRandom = false;
+
+    public bool $excludeEpisodesFromHiddenShows = false;
 }

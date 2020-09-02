@@ -81,6 +81,8 @@ class GenerateMasterFeed
 
         $fetchModel->limit = 100;
 
+        $fetchModel->excludeEpisodesFromHiddenShows = true;
+
         $episodes = $this->episodeApi->fetchEpisodes($fetchModel);
 
         foreach ($episodes as $key => $episode) {

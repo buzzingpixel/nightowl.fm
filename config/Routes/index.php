@@ -11,6 +11,7 @@ use App\Http\Response\LogIn\PostLogOutAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
 use App\Http\Response\Show\FeedAction;
+use App\Http\Response\Shows\GetShowsAction;
 use Slim\App;
 
 return static function (App $app): void {
@@ -32,10 +33,9 @@ return static function (App $app): void {
     $cmsRoutes($app);
 
     // Site FE
-
     $app->get('/', HomeAction::class);
-
     $app->get('/masterfeed', GetMasterFeedAction::class);
+    $app->get('/shows', GetShowsAction::class);
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);

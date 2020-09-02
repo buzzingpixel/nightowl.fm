@@ -22,6 +22,9 @@ class FetchModel
     /** @var string[] */
     public array $statuses = [];
 
+    /** @var string[] */
+    public array $notStatuses = [];
+
     public ?bool $explicit = null;
 
     /** @var string[] */

@@ -49,6 +49,8 @@ class GetRecentEpisodes extends AbstractExtension
 
         $fetchModel->limit = $limit;
 
+        $fetchModel->excludeEpisodesFromHiddenShows = true;
+
         return $this->episodeApi->fetchEpisodes($fetchModel);
     }
 }

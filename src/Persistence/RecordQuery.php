@@ -219,6 +219,40 @@ class RecordQuery
             }
 
             foreach ($whereGroup as $groupKey => $groupVal) {
+                if (
+                    $groupVal['operator'] === '!IN' ||
+                    $groupVal['operator'] === 'NOT IN'
+                ) {
+                    $in = [];
+
+                    /** @var string[] $groupValVal */
+                    $groupValVal = $groupVal['val'];
+
+                    foreach ((array) $groupValVal as $val) {
+                        $idIncrement++;
+
+                        $id = $idIncrement;
+
+                        $bindKey = ':' . ((string) $groupVal['col']) . '_' . $id;
+
+                        $in[] = $bindKey;
+
+                        $bind[$bindKey] = $val;
+                    }
+
+                    if ($groupKey !== 0) {
+                        $sql .= ' AND ';
+                    }
+
+                    $sql .= ((string) $groupVal['col']) . ' NOT IN (';
+
+                    $sql .= implode(',', $in);
+
+                    $sql .= ')';
+
+                    continue;
+                }
+
                 if ($groupVal['operator'] === 'IN') {
                     $in = [];
 

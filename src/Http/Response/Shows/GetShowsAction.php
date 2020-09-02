@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\Home;
+namespace App\Http\Response\Shows;
 
-use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
-use App\Context\Episodes\Models\FetchModel;
+use App\Context\Shows\Models\FetchModel;
+use App\Context\Shows\ShowApi;
+use App\Context\Shows\ShowConstants;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -15,20 +15,20 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class HomeAction
+class GetShowsAction
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
-    private EpisodeApi $episodeApi;
+    private ShowApi $showApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
-        EpisodeApi $episodeApi
+        ShowApi $showApi
     ) {
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
-        $this->episodeApi      = $episodeApi;
+        $this->showApi         = $showApi;
     }
 
     /**
@@ -40,15 +40,9 @@ class HomeAction
     {
         $fetchModel = new FetchModel();
 
-        $fetchModel->orderByPublishedAt = true;
+        $fetchModel->notStatuses[] = ShowConstants::SHOW_STATUS_HIDDEN;
 
-        $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
-
-        $fetchModel->limit = 10;
-
-        $fetchModel->excludeEpisodesFromHiddenShows = true;
-
-        $episodes = $this->episodeApi->fetchEpisodes($fetchModel);
+        $shows = $this->showApi->fetchShows($fetchModel);
 
         $response = $this->responseFactory->createResponse();
 
@@ -56,10 +50,10 @@ class HomeAction
 
         $response->getBody()->write(
             $this->twig->render(
-                'Http/HomePage.twig',
+                'Http/Shows.twig',
                 [
                     'meta' => $meta,
-                    'episodes' => $episodes,
+                    'shows' => $shows,
                 ]
             ),
         );

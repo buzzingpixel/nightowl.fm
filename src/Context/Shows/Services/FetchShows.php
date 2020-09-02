@@ -61,6 +61,8 @@ class FetchShows
 
     /**
      * @return ShowModel[]
+     *
+     * @noinspection PhpDocMissingThrowsInspection
      */
     private function innerRun(?FetchModel $fetchModel = null): array
     {
@@ -76,7 +78,7 @@ class FetchShows
             $query = $query->withWhere(
                 'id',
                 $fetchModel->ids,
-                'IN'
+                'IN',
             );
         }
 
@@ -92,7 +94,7 @@ class FetchShows
             $query = $query->withWhere(
                 'slug',
                 $fetchModel->slugs,
-                'IN'
+                'IN',
             );
         }
 
@@ -100,14 +102,22 @@ class FetchShows
             $query = $query->withWhere(
                 'status',
                 $fetchModel->statuses,
-                'IN'
+                'IN',
+            );
+        }
+
+        if (count($fetchModel->notStatuses) > 0) {
+            $query = $query->withWhere(
+                'status',
+                $fetchModel->notStatuses,
+                '!IN',
             );
         }
 
         if ($fetchModel->explicit !== null) {
             $query = $query->withWhere(
                 'explicit',
-                $fetchModel->explicit ? '1' : '0'
+                $fetchModel->explicit ? '1' : '0',
             );
         }
 
