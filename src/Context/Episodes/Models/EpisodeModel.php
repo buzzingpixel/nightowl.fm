@@ -53,6 +53,15 @@ class EpisodeModel
 
     public string $title = '';
 
+    public function getNumberedTitle(): string
+    {
+        if ($this->episodeType === EpisodeConstants::EPISODE_TYPE_NUMBERED) {
+            return $this->number . ': ' . $this->title;
+        }
+
+        return 'Insert: ' . $this->title;
+    }
+
     public string $status = '';
 
     public string $description = '';

@@ -94,6 +94,8 @@ class FetchEpisodes
                 'published_at',
                 'desc'
             );
+        } elseif ($fetchModel->orderByRandom) {
+            $query = $query->withRandomOrder();
         } else {
             $query = $query->withOrder('is_published', 'desc')
                 ->withOrder('display_order', 'desc')

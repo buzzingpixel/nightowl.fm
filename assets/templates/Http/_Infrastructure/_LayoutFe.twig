@@ -3,9 +3,79 @@
 {% block content %}
     <div class="site-wrapper js-site-wrapper">
         {% include 'Http/FE/GlobalIncludes/Header.twig' %}
-        {% block feContent %}
-            <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-        {% endblock %}
+        <div class="primary-wrapper">
+            <div class="primary-wrapper__inner">
+                <div class="primary-wrapper__row">
+                    <div class="primary-wrapper__gutter">
+                        <aside class="site-aside">
+                            <div class="site-aside__show-1150">
+                                {# @var \App\Context\Episodes\Models\EpisodeModel randomEpisode #}
+                                {% set randomEpisode = getRandomEpisode() %}
+                                {% if randomEpisode %}
+                                    <div class="aside-layout-block">
+                                        <div class="aside-layout-block__inner">
+                                            <div class="aside-section">
+                                                <div class="aside-section__heading">
+                                                    Flashback
+                                                </div>
+                                                <a
+                                                    href="{{ randomEpisode.show.publicUrl }}"
+                                                    class="aside-section__small-heading"
+                                                >
+                                                    {{ randomEpisode.show.title|smartypants|widont }}
+                                                </a>
+                                                <a
+                                                    href="{{ randomEpisode.publicUrl }}"
+                                                    class="aside-section__sub-heading"
+                                                >
+                                                    {{ randomEpisode.numberedTitle|smartypants|widont }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {# @var \App\Context\Episodes\Models\EpisodeModel[] recentEpisodes #}
+                                {% set recentEpisodes = getRecentEpisodes() %}
+                                {% if recentEpisodes|length > 0 %}
+                                    <div class="aside-layout-block">
+                                        <div class="aside-layout-block__inner">
+                                            {% if randomEpisode %}<hr class="aside-layout-block__hr">{% endif %}
+                                            <div class="aside-section">
+                                                <div class="aside-section__heading">
+                                                    Recently
+                                                </div>
+                                                {% for episode in recentEpisodes %}
+                                                    <a
+                                                        href="{{ episode.show.publicUrl }}"
+                                                        class="aside-section__small-heading"
+                                                    >
+                                                        {{ episode.show.title|smartypants|widont }}
+                                                    </a>
+                                                    <a
+                                                        href="{{ episode.publicUrl }}"
+                                                        class="aside-section__sub-heading"
+                                                    >
+                                                        {{ episode.numberedTitle|smartypants|widont }}
+                                                    </a>
+                                                    {% if not loop.last %}
+                                                        <hr class="aside-layout-block__hr-second-class">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </aside>
+                    </div>
+                    <div class="primary-wrapper__main">
+                        <main role="main" class="site-main">
+                            {{ block('feContent') ?? '' }}
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {% include 'Http/FE/GlobalIncludes/Footer.twig' %}
 {% endblock %}

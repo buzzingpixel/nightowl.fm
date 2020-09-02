@@ -118,6 +118,19 @@ class RecordQuery
         return $clone;
     }
 
+    private bool $useRandomOrder = false;
+
+    public function withRandomOrder(): RecordQuery
+    {
+        $clone = clone $this;
+
+        $clone->order = [];
+
+        $clone->useRandomOrder = true;
+
+        return $clone;
+    }
+
     private ?int $limit = null;
 
     public function withLimit(?int $limit): RecordQuery
@@ -271,18 +284,22 @@ class RecordQuery
             $sql .= ')';
         }
 
-        /**
-         * @var array<string, string> $order
-         */
-        foreach ($this->order as $key => $order) {
-            assert(is_int($key));
-            if ($key === 0) {
-                $sql .= ' ORDER BY';
-            } else {
-                $sql .= ',';
-            }
+        if ($this->useRandomOrder) {
+            $sql .= ' ORDER BY RANDOM()';
+        } else {
+            /**
+             * @var array<string, string> $order
+             */
+            foreach ($this->order as $key => $order) {
+                assert(is_int($key));
+                if ($key === 0) {
+                    $sql .= ' ORDER BY';
+                } else {
+                    $sql .= ',';
+                }
 
-            $sql .= ' ' . $order['col'] . ' ' . $order['dir'];
+                $sql .= ' ' . $order['col'] . ' ' . $order['dir'];
+            }
         }
 
         if ($this->offset > 0) {

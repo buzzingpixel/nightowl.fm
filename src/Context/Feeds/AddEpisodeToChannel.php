@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Context\Feeds;
 
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\Series\Models\SeriesModel;
@@ -43,13 +42,7 @@ class AddEpisodeToChannel
     ): void {
         $item = $channel->addChild('item');
 
-        if ($episode->episodeType === EpisodeConstants::EPISODE_TYPE_NUMBERED) {
-            $title = $episode->number . ': ' . $episode->title;
-        } else {
-            $title = 'Insert: ' . $episode->title;
-        }
-
-        $item->addChild('title', $title);
+        $item->addChild('title', $episode->getNumberedTitle());
 
         $item->addChild('link', $episode->getPublicUrl());
 

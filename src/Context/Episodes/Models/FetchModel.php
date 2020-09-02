@@ -40,4 +40,6 @@ class FetchModel
     public bool $pastPublishedAt = false;
 
     public bool $orderByPublishedAt = false;
+
+    public bool $orderByRandom = false;
 }
