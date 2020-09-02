@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Context\People\Models;
 
 use App\Context\Links\Models\LinkModel;
+use Config\General;
 use LogicException;
 
 use function array_walk;
 use function assert;
+use function implode;
 use function is_array;
 use function pathinfo;
 
@@ -24,6 +26,15 @@ class PersonModel
     public string $lastName = '';
 
     public string $slug = '';
+
+    public function publicUrl(): string
+    {
+        return implode('/', [
+            General::$siteUrl,
+            'people',
+            $this->slug,
+        ]);
+    }
 
     public string $email = '';
 

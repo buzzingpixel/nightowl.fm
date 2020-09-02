@@ -1,0 +1,49 @@
+{# @var \App\Context\Episodes\Models\EpisodeModel episode #}
+
+<div class="episode-showcase">
+    <div class="episode-showcase__meta">
+        <a
+            href="{{ episode.publicUrl }}"
+            class="episode-meta"
+        >
+            <div class="episode-meta__artwork{% if episode.show.status == 'coming_soon' %} episode-meta__artwork--has-overlay episode-meta__artwork--coming-soon{% elseif episode.show.status == 'retired' %} episode-meta__artwork--has-overlay episode-meta__artwork--retired{% endif %}">
+                <img
+                    src="{{ getShowArtworkUrl(episode.show, {size: 550}) }}"
+                    alt="{{ episode.show.title }}"
+                    class="episode-meta__artwork-img"
+                >
+            </div>
+            <div class="episode-meta__figures">
+                {% if episode.episodeType == 'numbered' %}
+                    <span class="episode-meta__item episode-meta__item--ep-num">
+                        Ep. {{ episode.number }}
+                    </span>
+                {% endif %}
+                <span class="episode-meta__item episode-meta__item--date">
+                    {{ episode.publishedAt|date('M. j') }}
+                </span>
+                <span class="episode-meta__item episode-meta__item--time">
+                    {{ episode.humanReadableRunTime }}
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="episode-showcase__details">
+        <a href="{{ episode.show.publicUrl }}" class="episode-showcase__podcast-button">
+            {{ episode.show.title|smartypants|widont }}
+        </a>
+        <a href="{{ episode.publicUrl }}" class="episode-showcase__title">
+            {{ episode.title|smartypants|widont }}
+        </a>
+        <div class="episode-showcase__hosted-by">
+            Hosted by
+            {% for host in episode.hosts %}
+                {% if loop.last and loop.length > 1 %}and{% endif %}
+                <a href="{{ host.publicUrl }}">{{ host.fullName }}</a>{% if not loop.last and loop.length > 2 %},{% endif %}
+            {% endfor %}
+        </div>
+        <div class="episode-showcase__description">
+            <p>{{ episode.description|smartypants|widont }}</p>
+        </div>
+    </div>
+</div>

@@ -16,6 +16,7 @@ use Safe\DateTimeImmutable;
 
 use function array_walk;
 use function explode;
+use function gmdate;
 use function implode;
 use function in_array;
 use function mb_strtolower;
@@ -79,6 +80,24 @@ class EpisodeModel
     public string $newFileLocation = '';
 
     public float $fileRuntimeSeconds = 0.0;
+
+    public function getFeedRunTime(): string
+    {
+        $seconds = (int) $this->fileRuntimeSeconds;
+
+        $durationFormat = $seconds < 3600 ? 'i:s' : 'H:i:s';
+
+        return gmdate($durationFormat, $seconds);
+    }
+
+    public function getHumanReadableRunTime(): string
+    {
+        $seconds = (int) $this->fileRuntimeSeconds;
+
+        $durationFormat = $seconds < 3600 ? 'i\m s\s' : 'H\h i\m s\s';
+
+        return gmdate($durationFormat, $seconds);
+    }
 
     public string $fileSizeBytes = '';
 

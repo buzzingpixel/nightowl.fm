@@ -16,7 +16,6 @@ use SimpleXMLElement;
 use function array_map;
 use function assert;
 use function count;
-use function gmdate;
 use function htmlspecialchars;
 use function implode;
 
@@ -97,16 +96,9 @@ class AddEpisodeToChannel
 
         $enclosure->addAttribute('type', $episode->fileMimeType);
 
-        $seconds = (int) $episode->fileRuntimeSeconds;
-
-        $durationFormat = $seconds < 3600 ? 'i:s' : 'H:i:s';
-
         $item->addChild(
             'itunes:duration',
-            gmdate(
-                $durationFormat,
-                $seconds
-            ),
+            $episode->getFeedRunTime(),
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 

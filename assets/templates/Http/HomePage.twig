@@ -1,5 +1,18 @@
 {% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
 
-{#{% block feContent %}
-    Hello World
-{% endblock %}#}
+{% block feContent %}
+    {# @var \App\Context\Episodes\Models\EpisodeModel[] recentEpisodes #}
+    {% set recentEpisodes = getRecentEpisodes(10) %}
+
+    {% if recentEpisodes|length > 0 %}
+        <div class="layout-block">
+            <div class="layout-block__inner">
+                {% for episode in recentEpisodes %}
+                    {% include 'Http/FE/Episodes/EpisodeShowcase.twig' with {
+                        episode: episode
+                    } only %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
