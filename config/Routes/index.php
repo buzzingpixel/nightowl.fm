@@ -8,6 +8,7 @@ use App\Http\Response\IForgot\IForGotAction;
 use App\Http\Response\IForgot\PostIForgotAction;
 use App\Http\Response\LogIn\PostLogInAction;
 use App\Http\Response\LogIn\PostLogOutAction;
+use App\Http\Response\People\GetPeopleAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
 use App\Http\Response\Show\FeedAction;
@@ -36,6 +37,8 @@ return static function (App $app): void {
     $app->get('/', HomeAction::class);
     $app->get('/masterfeed', GetMasterFeedAction::class);
     $app->get('/shows', GetShowsAction::class);
+    $app->get('/people', GetPeopleAction::class);
+    // $app->get('/people/page/{pageNum:\d+}', GetPeopleAction::class);
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);

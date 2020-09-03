@@ -1,0 +1,69 @@
+{# @var \App\Context\People\Models\PersonModel[] hosts #}
+{# @var \App\Context\People\Models\PersonModel[] guests #}
+
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{% macro personDisplay(person) %}
+    {# @var \App\Context\People\Models\PersonModel person #}
+    <a href="{{ person.publicUrl }}" class="people-grid__item">
+        <div class="people-grid__picture-wrapper">
+            <img
+                src="{{ getPersonProfilePhotoUrl(person, {
+                    size: 434,
+                }) }}"
+                alt="{{ person.fullName }}"
+                class="people-grid__picture"
+            >
+        </div>
+        <div class="people-grid__name">
+            {{ person.fullName }}
+        </div>
+    </a>
+{% endmacro %}
+
+{% block feContent %}
+    {% if hosts|length > 0 %}
+        <div class="layout-block" id="hosts">
+            <div class="layout-block__inner">
+                <div class="people">
+                    <div class="people__left">
+                        <h1 class="heading heading--level-1">
+                            {{ 'Hosts'|smartypants|widont }}
+                        </h1>
+                        <p class="util-text-large">
+                            {{ 'Your friends that burn the midnight oil to spend some quality time on a mic with you.'|smartypants|widont }}
+                        </p>
+                    </div>
+                    <div class="people__right">
+                        <div class="people-grid">
+                            {% for person in hosts %}
+                                {{ _self.personDisplay(person) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="layout-block" id="guests">
+        <div class="layout-block__inner{% if hosts|length > 0 %} layout-block__inner--bordered-top{% endif %}">
+            <div class="people">
+                <div class="people__left">
+                    <h1 class="heading heading--level-1">
+                        {{ 'Guests'|smartypants|widont }}
+                    </h1>
+                    <p class="util-text-large">
+                        {{ 'Our friends with special abilities, keen insights, and good hearts.'|smartypants|widont }}
+                    </p>
+                </div>
+                <div class="people__right">
+                    <div class="people-grid">
+                        {% for person in guests %}
+                            {{ _self.personDisplay(person) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

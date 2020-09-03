@@ -8,6 +8,8 @@ use App\Context\People\Models\FetchModel;
 use App\Context\People\Models\PersonModel;
 use App\Context\People\Services\DeletePerson;
 use App\Context\People\Services\FetchPeople;
+use App\Context\People\Services\GetGuests;
+use App\Context\People\Services\GetHosts;
 use App\Context\People\Services\GetPersonProfilePhotoUrl;
 use App\Context\People\Services\SavePerson;
 use App\Context\People\Services\ValidateUniquePersonSlug;
@@ -106,5 +108,29 @@ class PeopleApi
             $proposedSlug,
             $existingId,
         );
+    }
+
+    /**
+     * @return PersonModel[]
+     */
+    public function getHosts(): array
+    {
+        $service = $this->di->get(GetHosts::class);
+
+        assert($service instanceof GetHosts);
+
+        return $service->get();
+    }
+
+    /**
+     * @return PersonModel[]
+     */
+    public function getGuests(): array
+    {
+        $service = $this->di->get(GetGuests::class);
+
+        assert($service instanceof GetGuests);
+
+        return $service->get();
     }
 }
