@@ -11,6 +11,7 @@ use App\Context\Shows\ShowApi;
 use App\Http\Response\CMS\Shows\Episodes\Shared\SaveEpisodeFromPost;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Safe\Exceptions\DatetimeException;
 use Slim\Exception\HttpNotFoundException;
 
 class PostEditEpisodeAction
@@ -34,6 +35,7 @@ class PostEditEpisodeAction
 
     /**
      * @throws HttpNotFoundException
+     * @throws DatetimeException
      */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {

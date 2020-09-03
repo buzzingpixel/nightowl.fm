@@ -1,0 +1,50 @@
+{# @var \App\Context\Pages\Models\PageModel page #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsPreContent %}
+    {% if deleteAction is defined and deleteAction %}
+        <form
+            method="post"
+            action="{{ deleteAction }}"
+            class="block mb-5"
+            ref="ConfirmSubmit"
+            data-submit-action-text="Delete {{ page.title }}"
+        >
+            <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+            <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+            <button
+                type="submit"
+                class="inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-700 hover:bg-red-500 focus:outline-none focus:bg-red-800 focus:shadow-outline-indigo active:bg-red-700 transition duration-150 ease-in-out"
+            >
+                Delete {{ page.title }}&hellip;
+            </button>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block cmsContent %}
+    {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+        submitContent: page is defined ? 'Save' : 'Create',
+        cancelAction: '/cms/pages',
+        inputs: [
+            {
+                label: 'Title',
+                name: 'title',
+                value: page.title ?? '',
+            },
+            {
+                label: 'uri',
+                name: 'uri',
+                value: page.uri ?? '',
+            },
+            {
+                label: 'Content',
+                name: 'content',
+                type: 'markdown',
+                value: page.content ?? '',
+            },
+        ],
+    } only %}
+{% endblock %}
+

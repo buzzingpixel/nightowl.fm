@@ -6,6 +6,12 @@ use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\IndexAction;
 use App\Http\Response\CMS\MyProfile\MyProfileAction;
 use App\Http\Response\CMS\MyProfile\PostMyProfileAction;
+use App\Http\Response\CMS\Pages\DeletePage\PostDeletePageAction;
+use App\Http\Response\CMS\Pages\EditPage\EditPageAction;
+use App\Http\Response\CMS\Pages\EditPage\PostEditPageAction;
+use App\Http\Response\CMS\Pages\NewPage\NewPageAction;
+use App\Http\Response\CMS\Pages\NewPage\PostNewPageAction;
+use App\Http\Response\CMS\Pages\PagesIndexAction;
 use App\Http\Response\CMS\People\DeletePerson\PostDeletePersonAction;
 use App\Http\Response\CMS\People\EditPerson\EditPersonAction;
 use App\Http\Response\CMS\People\EditPerson\PostEditPersonAction;
@@ -107,6 +113,16 @@ return static function (App $app): void {
         $r->get('/users/edit/{id}', EditUserAction::class);
         $r->post('/users/edit/{id}', PostEditUserAction::class);
         $r->post('/users/delete/{id}', PostDeleteUserAction::class);
+
+        /**
+         * Pages
+         */
+        $r->get('/pages', PagesIndexAction::class);
+        $r->get('/pages/new', NewPageAction::class);
+        $r->post('/pages/new', PostNewPageAction::class);
+        $r->get('/pages/edit/{id}', EditPageAction::class);
+        $r->post('/pages/edit/{id}', PostEditPageAction::class);
+        $r->post('/pages/delete/{id}', PostDeletePageAction::class);
 
         // $r->group('', function (RouteCollectorProxy $ri): void {
         //     // $this so PHPCS will be happy and not convert to static function.

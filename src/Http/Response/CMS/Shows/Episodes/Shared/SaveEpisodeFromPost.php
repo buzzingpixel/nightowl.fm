@@ -23,6 +23,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as V;
 use Safe\DateTimeImmutable;
+use Safe\Exceptions\DatetimeException;
 
 use function array_merge;
 use function assert;
@@ -58,6 +59,8 @@ class SaveEpisodeFromPost
 
     /**
      * @param PostNewEpisodeResponder|PostEditEpisodeResponder $responder
+     *
+     * @throws DatetimeException
      */
     public function save(
         ServerRequestInterface $request,
