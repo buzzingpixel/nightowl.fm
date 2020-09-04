@@ -19,6 +19,7 @@
         "adbario/php-dot-notation": "^2.2",
         "awurth/slim-validation": "^3.3",
         "buzzingpixel/cookie-api": "^2.0",
+        "buzzingpixel/twig-markdown": "^1.0",
         "buzzingpixel/twig-smartypants": "^1.0",
         "buzzingpixel/twig-switch": "^1.0",
         "buzzingpixel/twig-widont": "^1.0",

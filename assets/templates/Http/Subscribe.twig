@@ -1,0 +1,106 @@
+{# @var \App\Context\Shows\Models\ShowModel activeShows #}
+{# @var \App\Context\Shows\Models\ShowModel retiredShows #}
+
+{% extends 'Http/_Infrastructure/_LayoutFeWithLogo.twig' %}
+
+{% macro listShow(show) %}
+    {# @var \App\Context\Shows\Models\ShowModel show #}
+
+    <li class="list-of-links__item">
+        <a
+            href="{{ show.publicFeedUrl }}"
+            class="list-of-links__link"
+        >
+            <strong>{{ show.title }}</strong>: Feed
+        </a>
+    </li>
+    {% set services = [] %}
+
+    {% if show.itunesLink %}
+        {% set services = services|merge([{
+            href: show.itunesLink,
+            content: 'Subscribe, rate, or review **' ~ show.title ~ '** in iTunes',
+        }]) %}
+    {% endif %}
+
+    {% if show.googlePlayLink %}
+        {% set services = services|merge([{
+            href: show.googlePlayLink,
+            content: 'Subscribe to **' ~ show.title ~ '** on Google Play',
+        }]) %}
+    {% endif %}
+
+    {% if show.stitcherLink %}
+        {% set services = services|merge([{
+            href: show.stitcherLink,
+            content: 'Subscribe to **' ~ show.title ~ '** on Sticher',
+        }]) %}
+    {% endif %}
+
+    {% if show.spotifyLink %}
+        {% set services = services|merge([{
+            href: show.spotifyLink,
+            content: 'Subscribe to **' ~ show.title ~ '** on Spotify',
+        }]) %}
+    {% endif %}
+
+    {% for service in services %}
+        <li class="list-of-links__item{% if loop.last %} list-of-links__item--last-in-series{% endif %}">
+            <a
+                href="{{ service.href }}"
+                class="list-of-links__link"
+            >
+                {{ service.content|markdownParseParagraph|smartypants|widont }}
+            </a>
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+{% block feWithLogoContent %}
+    <div class="page-blocks__strip">
+        <h1 class="heading heading--level-1 page-blocks__heading">
+            {{ 'Subscribe to Night Owl'|smartypants|widont }}
+        </h1>
+    </div>
+    <div class="page-blocks">
+        <div class="page-blocks__strip">
+            <h2 class="heading heading--level-2 page-blocks__section-heading">
+                RSS Feeds
+            </h2>
+        </div>
+        <div class="page-blocks__strip">
+            <ul class="list-of-links">
+                <li class="list-of-links__item list-of-links__item--last-in-series">
+                    <a href="/masterfeed" class="list-of-links__link">
+                        Master Feed
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% if activeShows|length > 0 %}
+            <div class="page-blocks__strip">
+                <h3 class="heading heading--level-3 page-blocks__section-heading" style="font-size: 20px;">
+                    Active Shows
+                </h3>
+                <ul class="list-of-links">
+                    {% for show in activeShows %}
+                        {{ _self.listShow(show) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if retiredShows|length > 0 %}
+            <div class="page-blocks__strip">
+                <h3 class="heading heading--level-3 page-blocks__section-heading" style="font-size: 20px;">
+                    Retired Shows
+                </h3>
+                <ul class="list-of-links">
+                    {% for show in retiredShows %}
+                        {{ _self.listShow(show) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

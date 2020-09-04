@@ -21,6 +21,7 @@ use App\Templating\TwigExtensions\TemplateExists;
 use App\Templating\TwigExtensions\TimeZoneList;
 use App\Templating\TwigExtensions\TwigSlimFlashMessages;
 use BuzzingPixel\TwigDumper\TwigDumper;
+use BuzzingPixel\TwigMarkdown\MarkdownTwigExtension;
 use buzzingpixel\twigsmartypants\SmartypantsTwigExtension;
 use buzzingpixel\twigswitch\SwitchTwigExtension;
 use buzzingpixel\twigwidont\WidontTwigExtension;
@@ -112,6 +113,8 @@ class TwigEnvironmentFactory
         $twig->addExtension($di->get(GetRecentEpisodes::class));
 
         $twig->addExtension($di->get(GetFounders::class));
+
+        $twig->addExtension($di->get(MarkdownTwigExtension::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
 

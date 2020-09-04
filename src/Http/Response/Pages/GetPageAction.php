@@ -33,6 +33,8 @@ class GetPageAction
 
         $meta = new Meta();
 
+        $meta->title = $page->title;
+
         $template = $this->twig->createTemplate($page->content);
 
         $response->getBody()->write(

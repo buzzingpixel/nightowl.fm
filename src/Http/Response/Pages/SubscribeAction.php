@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\Shows;
+namespace App\Http\Response\Pages;
 
 use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\ShowApi;
@@ -15,7 +15,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class GetShowsAction
+class SubscribeAction
 {
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
@@ -38,25 +38,30 @@ class GetShowsAction
      */
     public function __invoke(): ResponseInterface
     {
-        $fetchModel = new FetchModel();
-
-        $fetchModel->notStatuses[] = ShowConstants::SHOW_STATUS_HIDDEN;
-
-        $shows = $this->showApi->fetchShows($fetchModel);
-
         $response = $this->responseFactory->createResponse();
 
         $meta = new Meta();
 
-        $meta->title = 'Shows';
+        $meta->title = 'Subscribe';
+
+        $activeFetchModel             = new FetchModel();
+        $activeFetchModel->statuses[] = ShowConstants::SHOW_STATUS_LIVE;
+
+        $retiredFetchModel             = new FetchModel();
+        $retiredFetchModel->statuses[] = ShowConstants::SHOW_STATUS_RETIRED;
 
         $response->getBody()->write(
             $this->twig->render(
-                'Http/Shows.twig',
+                'Http/Subscribe.twig',
                 [
                     'meta' => $meta,
-                    'shows' => $shows,
-                ]
+                    'activeShows' => $this->showApi->fetchShows(
+                        $activeFetchModel,
+                    ),
+                    'retiredShows' => $this->showApi->fetchShows(
+                        $retiredFetchModel,
+                    ),
+                ],
             ),
         );
 

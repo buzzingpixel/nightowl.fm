@@ -33,7 +33,7 @@ class ModelToRecord
 
         $record->google_play_link = $model->googlePlayLink;
 
-        $record->stitcher_link = $model->googlePlayLink;
+        $record->stitcher_link = $model->stitcherLink;
 
         $record->spotify_link = $model->spotifyLink;
 

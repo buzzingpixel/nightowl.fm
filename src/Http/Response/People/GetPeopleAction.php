@@ -53,6 +53,8 @@ class GetPeopleAction
 
         $meta = new Meta();
 
+        $meta->title = 'People';
+
         $response->getBody()->write(
             $this->twig->render(
                 'Http/People.twig',

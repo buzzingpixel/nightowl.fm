@@ -15,6 +15,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-config-collector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-di" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-markdown" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-smartypants" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-switch" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/twig-widont" />

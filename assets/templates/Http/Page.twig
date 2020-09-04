@@ -1,28 +1,12 @@
 {# @var string title #}
 
-{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+{% extends 'Http/_Infrastructure/_LayoutFeWithLogo.twig' %}
 
-{% block feContent %}
-    <div class="layout-block">
-        <div class="layout-block__inner">
-            <div class="logo-page">
-                <div class="logo-page__left">
-                    <img
-                        src="/assets/img/logos/night-owl-eye.svg"
-                        alt="Night Owl"
-                        class="logo-page__left-img"
-                    >
-                </div>
-                <div class="logo-page__right">
-                    <div class="page-blocks">
-                        <h1 class="heading heading--level-1 page-blocks__heading">
-                            {{ title|smartypants|widont }}
-                        </h1>
-                        {{ content|raw|smartypants }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{% block feWithLogoContent %}
+    <h1 class="heading heading--level-1 page-blocks__heading">
+        {{ title|smartypants|widont }}
+    </h1>
+
+    {{ content|raw|smartypants }}
 {% endblock %}
 

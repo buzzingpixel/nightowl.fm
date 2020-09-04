@@ -1,0 +1,23 @@
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{% block feContent %}
+    <div class="layout-block">
+        <div class="layout-block__inner">
+            <div class="logo-page">
+                <div class="logo-page__left">
+                    <img
+                        src="/assets/img/logos/night-owl-eye.svg"
+                        alt="Night Owl"
+                        class="logo-page__left-img"
+                    >
+                </div>
+                <div class="logo-page__right">
+                    <div class="page-blocks">
+                        {{ block('feWithLogoContent') ?? '' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
