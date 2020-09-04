@@ -1,0 +1,26 @@
+{# @var \App\Context\People\Models\PersonModel[] founders #}
+{% set founders = getFounders() %}
+
+<div class="page-blocks__strip">
+    <div class="page-block__users">
+        <div class="page-block__users-row">
+            {% for founder in founders %}
+                <a
+                    href="{{ founder.publicUrl }}"
+                    class="page-block__user-item"
+                >
+                    <div class="page-block__user-picture-wrapper">
+                        <img
+                            src="{{ getPersonProfilePhotoUrl(founder, {
+                                size: 520,GetShowAction
+                            }) }}"
+                            alt="{{ founder.fullName }}"
+                            class="page-block__user-picture"
+                        >
+                    </div>
+                    {{ founder.fullName|smartypants|widont }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

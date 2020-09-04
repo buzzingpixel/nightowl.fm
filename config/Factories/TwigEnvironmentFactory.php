@@ -8,6 +8,7 @@ use App\Globals;
 use App\Http\Utilities\Segments\ExtractUriSegments;
 use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\FormatSimpleTablePostBackValue;
+use App\Templating\TwigExtensions\GetFounders;
 use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
 use App\Templating\TwigExtensions\GetRandomEpisode;
 use App\Templating\TwigExtensions\GetRecentEpisodes;
@@ -109,6 +110,8 @@ class TwigEnvironmentFactory
         $twig->addExtension($di->get(GetRandomEpisode::class));
 
         $twig->addExtension($di->get(GetRecentEpisodes::class));
+
+        $twig->addExtension($di->get(GetFounders::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
 

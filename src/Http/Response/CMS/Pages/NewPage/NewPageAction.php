@@ -34,7 +34,7 @@ class NewPageAction
     {
         $meta = new Meta();
 
-        $meta->title = 'Create New Show | CMS';
+        $meta->title = 'Create New Page | CMS';
 
         $response = $this->responseFactory->createResponse();
 

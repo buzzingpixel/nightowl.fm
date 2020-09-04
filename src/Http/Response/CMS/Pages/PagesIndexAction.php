@@ -38,7 +38,7 @@ class PagesIndexAction
     {
         $meta = new Meta();
 
-        $meta->title = 'Shows | CMS';
+        $meta->title = 'Pages | CMS';
 
         $response = $this->responseFactory->createResponse();
 
@@ -47,7 +47,7 @@ class PagesIndexAction
                 'Http/CMS/Pages/Index.twig',
                 [
                     'meta' => $meta,
-                    'title' => 'Shows',
+                    'title' => 'Pages',
                     'activeNavHref' => '/cms/pages',
                     'pages' => $this->pagesApi->fetchPages(),
                 ],

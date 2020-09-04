@@ -1,0 +1,7 @@
+{% set content = block('content') ?? content %}
+
+<div class="page-blocks__strip">
+    <h2 class="heading heading--level-2 page-blocks__section-heading">
+        {{ content|smartypants|widont }}
+    </h2>
+</div>

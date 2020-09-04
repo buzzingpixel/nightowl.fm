@@ -11,6 +11,7 @@ use App\Http\Response\LogIn\PostLogOutAction;
 use App\Http\Response\People\GetPeopleAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
+use App\Http\Response\ResolveShowOrPage;
 use App\Http\Response\Show\FeedAction;
 use App\Http\Response\Shows\GetShowsAction;
 use Slim\App;
@@ -42,4 +43,6 @@ return static function (App $app): void {
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);
+    $app->get('/{showSlug}/page/{pageNum:\d+}', ResolveShowOrPage::class);
+    $app->get('/{showSlugOrPageSegment:.*}', ResolveShowOrPage::class);
 };
