@@ -50,7 +50,8 @@ class HomeAction
 
         $episodes = $this->episodeApi->fetchEpisodes($fetchModel);
 
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('EnableStaticCache', 'true');
 
         $meta = new Meta();
 

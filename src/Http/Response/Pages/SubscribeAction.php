@@ -38,7 +38,8 @@ class SubscribeAction
      */
     public function __invoke(): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('EnableStaticCache', 'true');
 
         $meta = new Meta();
 

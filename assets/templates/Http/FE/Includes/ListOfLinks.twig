@@ -1,0 +1,29 @@
+{# @var array items #}
+
+{#
+{% set example = [
+    {
+        href: '/some/url',
+        content: 'Some Link',
+    },
+    {
+        content: 'Some Not Link',
+    },
+] %}
+#}
+
+<ul class="list-of-links">
+    {% for item in items %}
+        <li class="list-of-links__item{% if item.lastInSeries is defined and item.lastInSeries %} list-of-links__item--last-in-series{% endif %}">
+            {% if item.href is defined %}
+                <a href="{{ item.href|raw }}" class="list-of-links__link">
+                    {{ item.content|raw }}
+                </a>
+            {% else %}
+                <span class="list-of-links__link">
+                    {{ item.content|raw }}
+                </span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

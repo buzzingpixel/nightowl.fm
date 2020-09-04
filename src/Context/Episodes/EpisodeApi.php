@@ -8,6 +8,7 @@ use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\Episodes\Services\DeleteEpisode;
 use App\Context\Episodes\Services\FetchEpisodes;
+use App\Context\Episodes\Services\GetTotal;
 use App\Context\Episodes\Services\GetTotalSecondsPodcasted;
 use App\Context\Episodes\Services\PublishPendingEpisodes;
 use App\Context\Episodes\Services\SaveEpisode;
@@ -53,6 +54,15 @@ class EpisodeApi
         $fetchModel->limit = 1;
 
         return $this->fetchEpisodes($fetchModel)[0] ?? null;
+    }
+
+    public function getTotal(?FetchModel $fetchModel = null): int
+    {
+        $service = $this->di->get(GetTotal::class);
+
+        assert($service instanceof GetTotal);
+
+        return $service->get($fetchModel);
     }
 
     public function publishPendingEpisodes(): void

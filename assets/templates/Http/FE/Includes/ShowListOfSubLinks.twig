@@ -1,0 +1,43 @@
+{# @var \App\Context\Shows\Models\ShowModel show #}
+
+{#{
+    link: '/contact?subject=' ~ podcastAsset.title|url_encode(),
+    title: 'Contact'
+}#}
+{# Set up podcast links #}
+{% set subLinks = [{
+    href: show.publicFeedUrl,
+    content: 'Subscribe via RSS'
+}] %}
+
+{% if show.itunesLink %}
+    {% set subLinks = subLinks|merge([{
+        href: show.itunesLink,
+        content: 'Subscribe on Apple Podcasts'
+    }]) %}
+{% endif %}
+
+{% if show.googlePlayLink %}
+    {% set subLinks = subLinks|merge([{
+        href: show.googlePlayLink,
+        content: 'Subscribe on Google Play'
+    }]) %}
+{% endif %}
+
+{% if show.stitcherLink %}
+    {% set subLinks = subLinks|merge([{
+        href: show.stitcherLink,
+        content: 'Subscribe on Stitcher'
+    }]) %}
+{% endif %}
+
+{% if show.spotifyLink %}
+    {% set subLinks = subLinks|merge([{
+        href: show.spotifyLink,
+        content: 'Subscribe on Spotify'
+    }]) %}
+{% endif %}
+
+{% include 'Http/FE/Includes/ListOfLinks.twig' with {
+    items: subLinks
+} only %}

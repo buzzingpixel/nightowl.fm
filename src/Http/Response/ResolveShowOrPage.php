@@ -9,7 +9,7 @@ use App\Context\Pages\PagesApi;
 use App\Context\Shows\Models\FetchModel as ShowsFetchModel;
 use App\Context\Shows\ShowApi;
 use App\Http\Response\Pages\GetPageAction;
-use App\Http\Response\Shows\GetShowAction;
+use App\Http\Response\Show\GetShowAction;
 use App\Http\Utilities\Segments\ExtractUriSegments;
 use App\Http\Utilities\Segments\UriSegments;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +53,10 @@ class ResolveShowOrPage
                 throw new HttpNotFoundException($request);
             }
 
-            $response = $this->resolveShow($uriSegments);
+            $response = $this->resolveShow(
+                $uriSegments,
+                $request,
+            );
 
             if ($response === null) {
                 throw new HttpNotFoundException($request);
@@ -77,7 +80,10 @@ class ResolveShowOrPage
          * Resolve show first, if no show, resolve page
          */
 
-        $response = $this->resolveShow($uriSegments);
+        $response = $this->resolveShow(
+            $uriSegments,
+            $request,
+        );
 
         if ($response !== null) {
             return $response;
@@ -92,8 +98,10 @@ class ResolveShowOrPage
         throw new HttpNotFoundException($request);
     }
 
-    private function resolveShow(UriSegments $uriSegments): ?ResponseInterface
-    {
+    private function resolveShow(
+        UriSegments $uriSegments,
+        ServerRequestInterface $request
+    ): ?ResponseInterface {
         $fetchModel = new ShowsFetchModel();
 
         $fetchModel->slugs[] = (string) $uriSegments->getSegment(1);
@@ -106,7 +114,8 @@ class ResolveShowOrPage
 
         return $this->getShowAction->get(
             $uriSegments,
-            $show
+            $show,
+            $request
         );
     }
 

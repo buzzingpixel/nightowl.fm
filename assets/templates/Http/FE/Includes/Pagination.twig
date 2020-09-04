@@ -1,0 +1,35 @@
+{# @var \App\Http\Models\Pagination pagination #}
+
+{% if pagination.totalPages > 1 %}
+    <ul class="pagination">
+        <li class="pagination__item">
+            {% if pagination.firstPageLink %}
+                <a href="{{ pagination.firstPageLink }}" class="pagination__link pagination__link--first">
+                    &lsaquo;
+                </a>
+            {% endif %}
+        </li>
+
+        {% for page in pagination.pagesArray %}
+            <li class="pagination__item">
+                {% if page.isActive %}
+                    <span class="pagination__link">
+                        {{ page.label }}
+                    </span>
+                {% else %}
+                    <a href="{{ page.target }}" class="pagination__link">
+                        {{ page.label }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+
+        <li class="pagination__item">
+            {% if pagination.lastPageLink %}
+                <a href="{{ pagination.lastPageLink }}" class="pagination__link pagination__link--last">
+                    &rsaquo;
+                </a>
+            {% endif %}
+        </li>
+    </ul>
+{% endif %}

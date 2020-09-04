@@ -6,6 +6,7 @@ namespace App\Context\Episodes\Services;
 
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
+use App\Context\Episodes\Services\Internal\BuildFetchQuery;
 use App\Context\Episodes\Transformers\RecordToModel;
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\FetchModel as PeopleFetchModel;
@@ -15,18 +16,13 @@ use App\Context\Series\SeriesApi;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
-use App\Context\Shows\ShowConstants;
-use App\Persistence\Constants;
 use App\Persistence\Episodes\EpisodeGuestsRecord;
 use App\Persistence\Episodes\EpisodeHostsRecord;
 use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\Episodes\EpisodeSeriesRecord;
 use App\Persistence\Keywords\KeywordRecord;
-use App\Persistence\RecordQuery;
 use App\Persistence\RecordQueryFactory;
-use App\Utilities\SystemClock;
-use DateTimeZone;
 use Safe\Exceptions\DatetimeException;
 use Throwable;
 
@@ -47,7 +43,7 @@ class FetchEpisodes
     private ShowApi $showApi;
     private PeopleApi $peopleApi;
     private SeriesApi $seriesApi;
-    private SystemClock $systemClock;
+    private BuildFetchQuery $buildFetchQuery;
 
     public function __construct(
         RecordQueryFactory $recordQueryFactory,
@@ -55,14 +51,14 @@ class FetchEpisodes
         ShowApi $showApi,
         PeopleApi $peopleApi,
         SeriesApi $seriesApi,
-        SystemClock $systemClock
+        BuildFetchQuery $buildFetchQuery
     ) {
         $this->recordQueryFactory = $recordQueryFactory;
         $this->recordToModel      = $recordToModel;
         $this->showApi            = $showApi;
         $this->peopleApi          = $peopleApi;
         $this->seriesApi          = $seriesApi;
-        $this->systemClock        = $systemClock;
+        $this->buildFetchQuery    = $buildFetchQuery;
     }
 
     /**
@@ -86,8 +82,7 @@ class FetchEpisodes
     {
         $fetchModel ??= new FetchModel();
 
-        $query = $this->recordQueryFactory
-            ->make(new EpisodeRecord())
+        $query = $this->buildFetchQuery->build($fetchModel)
             ->withLimit($fetchModel->limit)
             ->withOffset($fetchModel->offset);
 
@@ -104,22 +99,6 @@ class FetchEpisodes
                 ->withOrder('created_at', 'desc');
         }
 
-        if (count($fetchModel->ids) > 0) {
-            $query = $query->withWhere(
-                'id',
-                $fetchModel->ids,
-                'IN'
-            );
-        }
-
-        if (count($fetchModel->showIds) > 0) {
-            $query = $query->withWhere(
-                'show_id',
-                $fetchModel->showIds,
-                'IN'
-            );
-        }
-
         $showIds = [];
 
         $showsById = [];
@@ -129,87 +108,7 @@ class FetchEpisodes
                 $showIds[]            = $show->id;
                 $showsById[$show->id] = $show;
             }
-
-            $query = $query->withWhere(
-                'show_id',
-                $showIds,
-                'IN'
-            );
         }
-
-        if (count($fetchModel->titles) > 0) {
-            $query = $query->withWhere(
-                'title',
-                $fetchModel->titles,
-                'IN'
-            );
-        }
-
-        if (count($fetchModel->statuses) > 0) {
-            $query = $query->withWhere(
-                'status',
-                $fetchModel->statuses,
-                'IN'
-            );
-        }
-
-        if (count($fetchModel->episodeTypes) > 0) {
-            $query = $query->withWhere(
-                'episode_type',
-                $fetchModel->episodeTypes,
-                'IN'
-            );
-        }
-
-        if ($fetchModel->isExplicit !== null) {
-            $query = $query->withWhere(
-                'explicit',
-                $fetchModel->isExplicit ? '1' : '0'
-            );
-        }
-
-        if ($fetchModel->isPublished !== null) {
-            $query = $query->withWhere(
-                'is_published',
-                $fetchModel->isPublished ? '1' : '0'
-            );
-        }
-
-        if (count($fetchModel->episodeNumbers) > 0) {
-            $query = $query->withWhere(
-                'number',
-                $fetchModel->episodeNumbers,
-                'IN'
-            );
-        }
-
-        if ($fetchModel->pastPublishedAt) {
-            $query = $query->withWhere(
-                'publish_at',
-                'NULL',
-                '!='
-            );
-
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $datetime = $this->systemClock->getCurrentTime()
-                ->setTimezone(new DateTimeZone('UTC'));
-
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $format = $datetime->format(
-                Constants::POSTGRES_OUTPUT_FORMAT
-            );
-
-            $query = $query->withWhere(
-                'publish_at',
-                $format,
-                '<'
-            );
-        }
-
-        $query = $this->checkHiddenShowsStatus(
-            $fetchModel,
-            $query
-        );
 
         /** @var EpisodeRecord[] $records */
         $records = $query->all();
@@ -474,33 +373,5 @@ class FetchEpisodes
         }
 
         return $seriesByEpisodeId;
-    }
-
-    private function checkHiddenShowsStatus(
-        FetchModel $fetchModel,
-        RecordQuery $query
-    ): RecordQuery {
-        if ($fetchModel->excludeEpisodesFromHiddenShows === false) {
-            return $query;
-        }
-
-        $showFetchModel = new ShowFetchModel();
-
-        $showFetchModel->statuses[] = ShowConstants::SHOW_STATUS_HIDDEN;
-
-        $hiddenShows = $this->showApi->fetchShows($showFetchModel);
-
-        if (count($hiddenShows) < 1) {
-            return $query;
-        }
-
-        return $query->withWhere(
-            'show_id',
-            array_map(
-                static fn (ShowModel $m) => $m->id,
-                $hiddenShows,
-            ),
-            '!IN',
-        );
     }
 }

@@ -1,0 +1,258 @@
+{# @var \App\Context\Shows\Models\ShowModel show #}
+{# @var \App\Context\Series\Models\SeriesModel series #}
+{# @var \App\Context\Episodes\Models\EpisodeModel[] episodes #}
+{# @var \App\Http\Models\Pagination pagination #}
+
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{# Set series links #}
+{% set seriesLinks = [] %}
+{% for series in series %}
+    {% set seriesLinks = seriesLinks|merge([{
+        href: show.publicUrl ~ '/series/' ~ series.slug,
+        content: series.title
+    }]) %}
+{% endfor %}
+
+{% block feContent %}
+    <div class="podcast-layout">
+        <div class="podcast-layout__row">
+
+            {# Left Column #}
+            <div class="podcast-layout__left-col">
+
+                {# Podcast Cover #}
+                <div class="podcast-layout__strip podcast-layout__strip--is-not-padded">
+                    <div class="podcast-layout__cover{% if show.status == 'coming_soon' %} podcast-layout__cover--has-overlay podcast-layout__cover--coming-soon{% elseif show.status == 'retired' %} podcast-layout__cover--has-overlay podcast-layout__cover--retired{% endif %}">
+                        <div class="podcast-layout__cover-inner">
+                            <img
+                                src="{{ getShowArtworkUrl(show, {size: 560}) }}"
+                                alt="{{ show.title }}"
+                                class="podcast-layout__cover-img"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="podcast-layout__episode-layout-desktop-hide">
+
+                    {# Mobile Description #}
+                    <div class="podcast-layout__strip">
+                        <p class="util-text-large">
+                            Welcome to the online home of {{ show.title|smartypants }}, hosted by
+                            {% for host in show.hosts %}
+                            {% if loop.last and loop.length > 1 %}and{% endif %}
+                            <a href="{{ host.publicUrl }}">{{ host.fullName }}</a>{% if not loop.last and loop.length > 2 %},{% endif %}{% endfor %}.
+                        </p>
+                    </div>
+
+                    {# TODO: Trending Topics #}
+                    {# Mobile Trending Topics #}
+                    {#{% if tags|length %}
+                        <div class="podcast-layout__strip">
+                            <div class="podcast-layout__trending-topics">
+                                <div class="trending-topics">
+                                    <div class="trending-topics__title">
+                                        Trending Topics
+                                    </div>
+                                    {% for tag in tags %}
+                                        <span class="trending-topics__item">
+                                            #<a href="/topics/{{ tag.slug }}" class="trending-topics__link">{{ tag.title|lower }}</a>
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}#}
+
+                    {# Podcast Description #}
+                    <div class="podcast-layout__strip">
+                        <p>{{ show.description|smartypants|widont }}</p>
+                    </div>
+
+                    {# Mobile Hosts #}
+                    <div class="podcast-layout__strip">
+                        <div class="podcast-layout__hosts">
+                            {% include 'Http/FE/Includes/HostsBlock.twig' with {
+                                hosts: show.hosts
+                            } only %}
+                        </div>
+                    </div>
+
+                    {# Mobile Show Links #}
+                    <div class="podcast-layout__strip">
+                        <div class="podcast-layout__show-links">
+                            {% include 'Http/FE/Includes/ShowListOfSubLinks.twig' with {
+                                show: show
+                            } only %}
+                        </div>
+                    </div>
+
+                    {# Mobile Episode Series #}
+                    {% if seriesLinks|length %}
+                        <div class="podcast-layout__strip">
+                            <div class="podcast-layout__show-links">
+                                <h2 class="heading heading--level-4 util-margin-bottom-none">Episode Series</h2>
+                                {% include 'Http/FE/Includes/ListOfLinks.twig' with {
+                                    items: seriesLinks
+                                } only %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>{# /END Left Column #}
+
+            {# Right Column #}
+            <div class="podcast-layout__right-col podcast-layout__episode-layout-mobile-hide">
+
+                <div class="podcast-layout__desktop-large-split">
+
+                    <div class="podcast-layout__desktop-large-left">
+
+                        {# Desktop Description #}
+                        <div class="podcast-layout__strip">
+                            <p class="util-text-large">
+                                Welcome to the online home of {{ show.title|smartypants }}, hosted by
+                                {% for host in show.hosts %}
+                                {% if loop.last and loop.length > 1 %}and{% endif %}
+                                <a href="{{ host.publicUrl }}">{{ host.fullName }}</a>{% if not loop.last and loop.length > 2 %},{% endif %}{% endfor %}.
+                            </p>
+                        </div>
+
+                        {# TODO: Trending Topics #}
+                        {# Desktop Trending Topic #}
+                        {#{% if tags|length %}
+                            <div class="podcast-layout__strip">
+                                <div class="podcast-layout__trending-topics">
+                                    <div class="trending-topics">
+                                        <div class="trending-topics__title">
+                                            Trending Topics
+                                        </div>
+                                        {% for tag in tags %}
+                                            <span class="trending-topics__item">
+                                                #<a href="/topics/{{ tag.slug }}" class="trending-topics__link">{{ tag.title|lower }}</a>
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}#}
+
+                        {# Desktop Description #}
+                        <div class="podcast-layout__strip">
+                            <p>{{ show.description|smartypants|widont }}</p>
+                        </div>
+
+                    </div>
+
+                    <div class="podcast-layout__desktop-large-right">
+
+                        <div class="podcast-layout__desktop-split">
+                            <div class="podcast-layout__desktop-split-left">
+                                {# Desktop Hosts #}
+                                <div class="podcast-layout__strip">
+                                    <div class="podcast-layout__hosts">
+                                        {% include 'Http/FE/Includes/HostsBlock.twig' with {
+                                            hosts: show.hosts
+                                        } only %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="podcast-layout__desktop-split-right">
+                                {# Desktop Show Links #}
+                                <div class="podcast-layout__strip">
+                                    <div class="podcast-layout__show-links">
+                                        {% include 'Http/FE/Includes/ShowListOfSubLinks.twig' with {
+                                            show: show
+                                        } only %}
+                                    </div>
+                                </div>
+                                {# Desktop Episode Series #}
+                                {% if seriesLinks|length %}
+                                    <div class="podcast-layout__strip">
+                                        <div class="podcast-layout__show-links">
+                                            <h2 class="heading heading--level-4 util-margin-bottom-none">Episode Series</h2>
+                                            {% include 'Http/FE/Includes/ListOfLinks.twig' with {
+                                                items: seriesLinks
+                                            } only %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>{# /END Right Column #}
+
+        </div>
+    </div>
+
+
+    {# Episode listing #}
+    <div>
+        {% if show.status == 'coming_soon' or episodes|length < 1 %}
+            <div class="layout-block">
+                <div class="layout-block__inner util-text-align-center">
+                    <h2 class="heading heading--level-2">Great things are happening!</h2>
+                    <p>This show is under construction so please check back soon!</p>
+                </div>
+            </div>
+        {% else %}
+            {% for episode in episodes %}
+                <div class="podcast-layout podcast-layout--episode-listing">
+                    <div class="podcast-layout__row">
+                        {# Left Column #}
+                        <div class="podcast-layout__left-col">
+                            <div class="podcast-layout__strip">
+                                <div class="episode-meta episode-meta--no-art">
+                                    <a href="{{ episode.publicUrl }}" class="episode-meta__title">
+                                        {{ episode.title|smartypants|widont }}
+                                    </a>
+                                    <div class="episode-meta__figures">
+                                        <span class="episode-meta__item episode-meta__item--ep-num">
+                                            {% if episode.number > 0 %}
+                                                Ep. {{ episode.number }}
+                                            {% else %}
+                                                Insert
+                                            {% endif %}
+                                        </span>
+                                        <span class="episode-meta__item episode-meta__item--date">
+                                            {{ episode.publishedAt|date('M. j') }}
+                                        </span>
+                                        <span class="episode-meta__item episode-meta__item--time">
+                                            {{ episode.humanReadableRunTime }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Right Column #}
+                        <div class="podcast-layout__right-col">
+                            <div class="podcast-layout__strip">
+                                <p>{{ episode.description|smartypants|widont }}</p>
+
+                                <a href="{{ episode.publicUrl }}">Play episode &rsaquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if pagination.totalPages > 1 %}
+        <div class="podcast-layout">
+            <div class="podcast-layout__strip">
+                {% include 'Http/FE/Includes/Pagination.twig' with {
+                    pagination: pagination,
+                } only %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{# @var \App\Context\People\Models\PersonModel[] hosts #}
+
+<div class="hosts-block">
+    <div class="hosts-block__row">
+        {% for host in hosts %}
+            <a
+                href="{{ host.publicUrl }}"
+                class="hosts-block__item"
+            >
+                <div
+                    class="hosts-block__picture-wrapper"
+                >
+                    <img
+                        src="{{ getPersonProfilePhotoUrl(host, {
+                            size: 254,
+                        }) }}"
+                        alt="{{ host.fullName }}"
+                        class="hosts-block__picture"
+                    >
+                </div>
+                {{ host.fullName|smartypants|widont }}
+            </a>
+
+        {% endfor %}
+    </div>
+    <div class="hosts-block__follow">
+        {% for host in hosts %}
+            {% if host.twitterHandle %}
+                <div class="hosts-block__follow__item">
+                    <a href="https://twitter.com/{{ host.twitterHandle }}" class="hosts-block__follow-link">
+                        Follow @{{ host.twitterHandle }}
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

@@ -44,7 +44,8 @@ class GetShowsAction
 
         $shows = $this->showApi->fetchShows($fetchModel);
 
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('EnableStaticCache', 'true');
 
         $meta = new Meta();
 
