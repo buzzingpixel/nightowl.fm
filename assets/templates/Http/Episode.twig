@@ -1,0 +1,190 @@
+{# @var \App\Context\Episodes\Models\EpisodeModel episode #}
+
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{% block feContent %}
+    <div class="podcast-layout">
+        <div class="podcast-layout__row">
+
+            {# Left Column #}
+            <div class="podcast-layout__left-col">
+
+                {# Podcast Cover #}
+                <div class="podcast-layout__strip podcast-layout__strip--is-not-padded">
+                    <div class="podcast-layout__cover{% if episode.show.status == 'coming_soon' %} podcast-layout__cover--has-overlay podcast-layout__cover--coming-soon{% elseif episode.show.status == 'retired' %} podcast-layout__cover--has-overlay podcast-layout__cover--retired{% endif %}">
+                        <div class="podcast-layout__cover-inner">
+                            <img
+                                src="{{ getShowArtworkUrl(episode.show, {size: 560}) }}"
+                                alt="{{ episode.show.title }}"
+                                class="podcast-layout__cover-img"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                {# Podcast Meta #}
+                <div class="podcast-layout__meta podcast-layout__mobile-hide">
+
+                    {# Podcast Description #}
+                    <div class="podcast-layout__strip">
+                        <div class="podcast-layout__podcast-desc">
+                            Welcome to the online home of <a href="{{ episode.show.publicUrl }}">{{ episode.show.title|smartypants }}</a>, hosted by
+                            {% for host in episode.show.hosts %}
+                            {% if loop.last and loop.length > 1 %}and{% endif %}
+                            <a href="{{ host.publicUrl }}">{{ host.fullName }}</a>{% if not loop.last and loop.length > 2 %},{% endif %}{% endfor %}.
+                        </div>
+                    </div>
+
+                    {% if episode.series|length %}
+                        <div class="podcast-layout__strip">
+                            <div class="podcast-layout__trending-topics">
+                                <div class="trending-topics">
+                                    <div class="trending-topics__title trending-topics__title--no-icon">
+                                        Episode Series
+                                    </div>
+                                    {% set seriesLinks = [] %}
+                                    {% for series in episode.series %}
+                                        {% set seriesLinks = seriesLinks|merge([{
+                                            href: series.publicUrl,
+                                            content: series.title,
+                                        }]) %}
+                                    {% endfor %}
+                                    {% include 'Http/FE/Includes/ListOfLinks.twig' with {
+                                        items: seriesLinks
+                                    } only %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if episode.keywords|length %}
+                        <div class="podcast-layout__strip">
+                            <div class="podcast-layout__trending-topics">
+                                <div class="trending-topics">
+                                    <div class="trending-topics__title">
+                                        Episode Topics
+                                    </div>
+                                    {% for keyword in episode.keywords %}
+                                        <span class="trending-topics__item">
+                                            #<a href="{{ keyword.publicUrl }}" class="trending-topics__link">{{ keyword.keyword }}</a>
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {# Show Links #}
+                    <div class="podcast-layout__strip">
+                        <div class="podcast-layout__show-links">
+                            {% include 'Http/FE/Includes/ShowListOfSubLinks.twig' with {
+                                show: episode.show
+                            } only %}
+                        </div>
+                    </div>
+
+                    {# Hosts #}
+                    <div class="podcast-layout__strip">
+                        <div class="podcast-layout__hosts">
+                            {% include 'Http/FE/Includes/HostsBlock.twig' with {
+                                hosts: episode.show.hosts
+                            } only %}
+                        </div>
+                    </div>
+
+                </div>{# /END Podcast Meta #}
+
+            </div>{# /END Left Column #}
+
+            {# Right Column #}
+            <div class="podcast-layout__right-col">
+
+                {# Podcast Title Label Button Thing #}
+                <div class="podcast-layout__strip podcast-layout__mobile-hide">
+                    <a href="{{ episode.show.publicUrl }}" class="orange-button">
+                        {{ episode.show.title|smartypants|widont }}
+                    </a>
+                </div>
+
+                {# Episode Title #}
+                <div class="podcast-layout__strip">
+                    <h1 class="heading heading--level-1 podcast-layout__title">
+                        {{ episode.title|smartypants|widont }}
+                    </h1>
+                </div>
+
+                {# Episode Details #}
+                <div class="podcast-layout__strip">
+                    <div class="podcast-layout__ep-details">
+                        {% if episode.number > 0 %}
+                        <span class="podcast-layout__ep-details-item">Episode #{{ episode.number }}</span>
+                        {% endif %}
+                        <span class="podcast-layout__ep-details-item">{{ episode.publishedAt|date('F. j, Y') }}</span>
+                        <span class="podcast-layout__ep-details-item">
+                            {{ episode.humanReadableRunTime }}
+                        </span>
+                        <span class="podcast-layout__ep-details-item">
+                            <a href="{{ episode.publicFileUrl }}" download>Download</a>
+                        </span>
+                    </div>
+                </div>
+
+                {# In this episode #}
+                <div class="podcast-layout__strip">
+                    <div class="podcast-layout__in-this-ep">
+                        In this episode:
+                        {% for host in episode.allPeopleInEpisode %}
+                            {% if loop.last and loop.length > 1 %}and{% endif %}
+                            <a href="{{ host.publicUrl }}">{{ host.fullName }}</a>{% if not loop.last and loop.length > 2 %},{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="podcast-layout__strip podcast-layout__strip--podcast-player">
+                    <audio
+                        src="{{ episode.publicFileUrl }}"
+                        type="audio/mp3"
+                        controls="controls"
+                        preload="none"
+                        class="js-audio-player"
+                    ></audio>
+                </div>
+
+                {# Episode Description #}
+                <div class="podcast-layout__strip">
+                    {{ episode.description|smartypants|widont }}
+                </div>
+
+                {# Episode Sponsors #}
+                {#{% if entry.sponsors|length %}
+                    <div class="podcast-layout__strip podcast-layout__strip--is-not-padded">
+                        <div class="sponsor-block">
+                            <div class="sponsor-block__title">
+                                This episode of Techtonic is sponsored by:
+                            </div>
+                            {% for sponsor in entry.sponsors %}
+                                <div class="sponsor-block__sponsor">
+                                    {% filter typogrify %}
+                                        <a href="{{ sponsor.sponsorLink|raw }}" class="sponsor-block__sponsor-title">{{ sponsor.sponsorName|raw }}</a>: {{ sponsor.description|raw }}
+                                    {% endfilter %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}#}
+
+                {# Shownotes #}
+                {% if episode.showNotes %}
+                    <div class="podcast-layout__strip">
+                    <h2 class="heading heading--level-2">Highlights and Show Notes</h2>
+
+                    {{ episode.showNotes|markdownParse|smartypants|widont }}
+
+                    </div>{# /END Shownotes #}
+                {% endif %}
+
+            </div>{# /END Right Column #}
+
+        </div>
+    </div>
+{% endblock %}

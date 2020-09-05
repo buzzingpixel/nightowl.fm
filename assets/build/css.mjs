@@ -123,6 +123,8 @@ export default (prod) => {
                 whitelistPatternsChildren: [
                     /rich-text/,
                     /choices/,
+                    /audio-player/,
+                    /js-hide/,
                 ],
             }),
             // Allow us to use hex in RGBA

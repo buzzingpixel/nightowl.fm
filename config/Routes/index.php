@@ -12,10 +12,15 @@ use App\Http\Response\Pages\SubscribeAction;
 use App\Http\Response\People\GetPeopleAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
-use App\Http\Response\ResolveShowOrPage;
 use App\Http\Response\Show\FeedAction;
 use App\Http\Response\Shows\GetShowsAction;
+use App\Http\RouteMiddleware\RouteResolution\ResolveEpisode;
+use App\Http\RouteMiddleware\RouteResolution\ResolvePage;
+use App\Http\RouteMiddleware\RouteResolution\ResolveShow;
+use Config\NoOp;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
+use Slim\Exception\HttpNotFoundException;
 
 return static function (App $app): void {
     // Match all integers except 0 or 1
@@ -45,6 +50,17 @@ return static function (App $app): void {
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);
-    $app->get('/{showSlug}/page/{pageNum:\d+}', ResolveShowOrPage::class);
-    $app->get('/{showSlugOrPageSegment:.*}', ResolveShowOrPage::class);
+
+    // Well this is gross
+    $app->get(
+        '/{catch:.*}',
+        function (ServerRequestInterface $request): void {
+            /** @phpstan-ignore-next-line */
+            $this->get(NoOp::class);
+
+            throw new HttpNotFoundException($request);
+        }
+    )->add(ResolvePage::class)
+        ->add(ResolveEpisode::class)
+        ->add(ResolveShow::class);
 };

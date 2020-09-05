@@ -9,6 +9,7 @@ use LogicException;
 use function ceil;
 use function http_build_query;
 use function ltrim;
+use function mb_strpos;
 use function range;
 use function rtrim;
 
@@ -106,7 +107,14 @@ class Pagination
     {
         $clone = clone $this;
 
-        $clone->base = '/' . rtrim(ltrim($val, '/'), '/');
+        $http  = mb_strpos($val, 'http://');
+        $https = mb_strpos($val, 'https://');
+
+        if ($http === 0 || $https === 0) {
+            $clone->base = rtrim($val, '/');
+        } else {
+            $clone->base = '/' . rtrim(ltrim($val, '/'), '/');
+        }
 
         return $clone;
     }

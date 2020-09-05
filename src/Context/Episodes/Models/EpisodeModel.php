@@ -14,6 +14,7 @@ use DateTimeZone;
 use LogicException;
 use Safe\DateTimeImmutable;
 
+use function array_merge;
 use function array_walk;
 use function explode;
 use function gmdate;
@@ -61,6 +62,11 @@ class EpisodeModel
         }
 
         return 'Insert: ' . $this->title;
+    }
+
+    public function getNumberedTitleWithShow(): string
+    {
+        return $this->show->title . ' ' . $this->getNumberedTitle();
     }
 
     public string $status = '';
@@ -180,6 +186,17 @@ class EpisodeModel
     public function getGuests(): array
     {
         return $this->guests;
+    }
+
+    /**
+     * @return PersonModel[]
+     */
+    public function getAllPeopleInEpisode(): array
+    {
+        return array_merge(
+            $this->getHosts(),
+            $this->getGuests(),
+        );
     }
 
     /** @var KeywordModel[] */

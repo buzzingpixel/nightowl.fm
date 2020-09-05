@@ -1,0 +1,40 @@
+<script type="text/template" id="jsTemplate__audioPlayer">
+    <div class="audio-player js-audio-player">
+        <div class="audio-player__inner">
+            <div class="audio-player__play-pause">
+                <span class="audio-player__play-pause-button audio-player__play-pause-button--stopped js-play-pause"></span>
+            </div>
+            <div class="audio-player__roll-back">
+                <div class="audio-player__roll-back-inner js-roll-back" data-amount="30">
+                    <svg class="audio-player__roll-back-icon" viewBox="0 0 24 27"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g><path d="M12.6989746,3 C12.6989746,4.09240723 12.6989746,4.25085449 12.6989746,5 C16.7452393,4.98901367 22.0371094,8.27392578 22,14.5 C22.0371094,20.7200928 16.4042969,24.0354004 12.5,24 C7.62438967,24.0354004 2.90405276,19.9309082 3,14.5 C2.38891604,14.534668 1.76574709,14.534668 1,14.5 C0.975952171,21.00354 6.20678713,25.9858398 12.5,26 C19.1911621,25.9858398 24,20.2697754 24,14.5 C24,5.51379395 16.0184326,2.98046875 12.6989746,3 Z" fill="#000"></path><path d="M2.01,14.5 L5,14.5" stroke="#000" stroke-width="2" stroke-linecap="square"></path><path d="M19.9090909,14.5 L22.9490909,14.5" stroke="#000" stroke-width="2" stroke-linecap="square"></path><path d="M12.5454545,24.5454545 L12.5454545,22.0909091" stroke="#000" stroke-width="2" stroke-linecap="square"></path><polygon fill="#000" points="6.81818182 4.09090909 13.3636364 7.36363636 13.3636364 0.818181818"></polygon></g></g></svg>
+                    <span class="audio-player__roll-back-text">30</span>
+                </div>
+            </div>
+            <div class="audio-player__time audio-player__time--current">
+                <div class="audio-player__time-inner audio-player__time-inner--current js-current-time">
+                    -:--
+                </div>
+            </div>
+            <div class="audio-player__bar">
+                <div class="audio-player__bar-inner">
+                    <div class="audio-player__bar-played js-bar-played"></div>
+                    <div class="audio-player__bar-scrubber js-bar-scrubber"></div>
+                </div>
+                <div class="audio-player__bar-scrub-hover js-scrub-hover">-:--</div>
+                <div class="audio-player__bar-scrub-area js-scrub-area"></div>
+            </div>
+            <div class="audio-player__time audio-player__time--total">
+                <div class="audio-player__time-inner audio-player__time-inner--total js-total-time">
+                    -:--
+                </div>
+            </div>
+            <div class="audio-player__roll-forward">
+                <div class="audio-player__roll-forward-inner js-roll-forward" data-amount="30">
+                    <svg class="audio-player__roll-forward-icon" viewBox="0 0 24 27"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g><path d="M11.6989746,3 C11.6989746,4.09240723 11.6989746,4.25085449 11.6989746,5 C15.7452393,4.98901367 21.0371094,8.27392578 21,14.5 C21.0371094,20.7200928 15.4042969,24.0354004 11.5,24 C6.62438967,24.0354004 1.90405276,19.9309082 2,14.5 C1.38891604,14.534668 0.765747093,14.534668 -1.49658064e-13,14.5 C-0.024047829,21.00354 5.20678713,25.9858398 11.5,26 C18.1911621,25.9858398 23,20.2697754 23,14.5 C23,5.51379395 15.0184326,2.98046875 11.6989746,3 Z" fill="#000" transform="translate(11.499959, 14.499944) scale(-1, 1) translate(-11.499959, -14.499944) "></path><path d="M1.1,14 L4,14" stroke="#000" stroke-width="2" stroke-linecap="square" transform="translate(2.550000, 14.000000) scale(-1, 1) translate(-2.550000, -14.000000) "></path><path d="M18.9090909,14.5 L22,14.5" stroke="#000" stroke-width="2" stroke-linecap="square" transform="translate(20.454545, 14.500000) scale(-1, 1) translate(-20.454545, -14.500000) "></path><path d="M11.5454545,24.5454545 L11.5454545,22.0909091" stroke="#000" stroke-width="2" stroke-linecap="square" transform="translate(11.545455, 23.318182) scale(-1, 1) translate(-11.545455, -23.318182) "></path><polygon fill="#000" transform="translate(14.090909, 4.090909) scale(-1, 1) translate(-14.090909, -4.090909) " points="10.8181818 4.09090909 17.3636364 7.36363636 17.3636364 0.818181818"></polygon></g></g></svg>
+                    <span class="audio-player__roll-forward-text">30</span>
+                </div>
+            </div>
+            <div class="audio-player__speed js-player-speed">1x</div>
+        </div>
+    </div>
+</script>
