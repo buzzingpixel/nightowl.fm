@@ -104,12 +104,12 @@ class RecordToModel
 
         $model->displayOrder = (int) $record->display_order;
 
+        $model->oldGuid = $record->old_guid;
+
         $createdAt = DateTimeImmutable::createFromFormat(
             Constants::POSTGRES_OUTPUT_FORMAT,
             $record->created_at
         );
-
-        $model->oldGuid = $record->old_guid;
 
         $model->createdAt = $createdAt;
 

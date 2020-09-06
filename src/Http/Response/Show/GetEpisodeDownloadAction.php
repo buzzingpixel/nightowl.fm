@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Response\Show;
 
+use App\Context\EpisodeDownloadStats\EpisodeDownloadStatsApi;
+use App\Context\EpisodeDownloadStats\LibraryImplementations\ResourceServlet;
+use App\Context\EpisodeDownloadStats\Models\EpisodeDownloadTrackerModel;
 use App\Context\Episodes\Models\EpisodeModel;
 use DaveRandom\Resume\FileResource;
 use DaveRandom\Resume\InvalidRangeHeaderException;
 use DaveRandom\Resume\NonExistentFileException;
 use DaveRandom\Resume\RangeSet;
-use DaveRandom\Resume\ResourceServlet;
 use DaveRandom\Resume\SendFileFailureException;
 use DaveRandom\Resume\UnreadableFileException;
 use DaveRandom\Resume\UnsatisfiableRangeException;
@@ -17,14 +19,19 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+use function mb_strtolower;
+
 class GetEpisodeDownloadAction
 {
     private ResponseFactoryInterface $responseFactory;
+    private EpisodeDownloadStatsApi $episodeDownloadStatsApi;
 
     public function __construct(
-        ResponseFactoryInterface $responseFactory
+        ResponseFactoryInterface $responseFactory,
+        EpisodeDownloadStatsApi $episodeDownloadStatsApi
     ) {
-        $this->responseFactory = $responseFactory;
+        $this->responseFactory         = $responseFactory;
+        $this->episodeDownloadStatsApi = $episodeDownloadStatsApi;
     }
 
     public function get(
@@ -52,6 +59,12 @@ class GetEpisodeDownloadAction
             $servlet = new ResourceServlet($resource);
 
             $servlet->sendResource($rangeSet);
+
+            $this->saveToTracker(
+                $rangeSet,
+                $episode,
+                $request
+            );
 
             exit;
         } catch (InvalidRangeHeaderException $e) {
@@ -82,5 +95,64 @@ class GetEpisodeDownloadAction
         }
 
         return $response;
+    }
+
+    private function saveToTracker(
+        ?RangeSet $rangeSet,
+        EpisodeModel $episode,
+        ServerRequestInterface $request
+    ): void {
+        if (mb_strtolower($request->getMethod()) === 'head') {
+            return;
+        }
+
+        $bytes = (int) $episode->fileSizeBytes;
+
+        $bytesZero = $bytes - 1;
+
+        if ($rangeSet === null) {
+            $model = new EpisodeDownloadTrackerModel();
+
+            $model->episode = $episode;
+
+            $model->isFullRange = true;
+
+            $model->rangeStart = 0;
+
+            $model->rangeEnd = $bytesZero;
+
+            $this->episodeDownloadStatsApi->saveTracker($model);
+
+            return;
+        }
+
+        $ranges = $rangeSet->getRangesForSize($bytes);
+
+        foreach ($ranges as $range) {
+            $model = new EpisodeDownloadTrackerModel();
+
+            $model->episode = $episode;
+
+            if (
+                $range->getStart() === 0 &&
+                ($range->getEnd() === null || $range->getEnd() >= $bytesZero)
+            ) {
+                $model->isFullRange = true;
+
+                $model->rangeStart = 0;
+
+                $model->rangeEnd = $bytesZero;
+
+                $this->episodeDownloadStatsApi->saveTracker($model);
+
+                continue;
+            }
+
+            $model->rangeStart = $range->getStart();
+
+            $model->rangeEnd = $range->getEnd() ?? $bytesZero;
+
+            $this->episodeDownloadStatsApi->saveTracker($model);
+        }
     }
 }
