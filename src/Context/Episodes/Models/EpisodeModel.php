@@ -75,6 +75,14 @@ class EpisodeModel
 
     public string $fileLocation = '';
 
+    public function getFullFilePath(): string
+    {
+        return implode('/', [
+            General::$pathToEpisodesDirectory,
+            $this->fileLocation,
+        ]);
+    }
+
     public function getFileName(): string
     {
         $pathInfo = pathinfo($this->fileLocation);

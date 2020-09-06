@@ -15,6 +15,7 @@ use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
 use App\Http\Response\Show\FeedAction;
 use App\Http\Response\Shows\GetShowsAction;
 use App\Http\RouteMiddleware\RouteResolution\ResolveEpisode;
+use App\Http\RouteMiddleware\RouteResolution\ResolveEpisodeDownload;
 use App\Http\RouteMiddleware\RouteResolution\ResolvePage;
 use App\Http\RouteMiddleware\RouteResolution\ResolveShow;
 use Config\NoOp;
@@ -61,6 +62,7 @@ return static function (App $app): void {
             throw new HttpNotFoundException($request);
         }
     )->add(ResolvePage::class)
+        ->add(ResolveEpisodeDownload::class)
         ->add(ResolveEpisode::class)
         ->add(ResolveShow::class);
 };

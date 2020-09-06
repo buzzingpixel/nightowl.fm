@@ -1,7 +1,7 @@
 ############
 # Build base
 ############
-FROM php:7.4.5-fpm as base
+FROM php:7.4.10-fpm as base
 
 # Update bash profile
 COPY ./docker/.profile /root/.profile
@@ -26,6 +26,8 @@ RUN apt-get update && apt-get install -my --no-install-recommends \
     postgresql \
     postgresql-contrib \
     unzip \
+    libcurl4 \
+    libcurl4-openssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-jpeg --with-freetype --with-xpm --with-webp \
