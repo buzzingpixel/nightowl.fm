@@ -6,6 +6,7 @@ namespace App\Context\EpisodeDownloadStats\Transformers;
 
 use App\Context\EpisodeDownloadStats\Models\EpisodeDownloadStatsModel;
 use App\Persistence\EpisodeDownloadStats\EpisodeDownloadStatsRecord;
+use DateTimeInterface;
 
 // phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
 
@@ -27,6 +28,10 @@ class StatsModelToRecord
         $record->downloads_past_sixty_days = $model->downloadsPastSixtyDays;
 
         $record->downloads_past_year = $model->downloadsPastYear;
+
+        $record->last_updated_at = $model->lastUpdatedAt->format(
+            DateTimeInterface::ATOM
+        );
 
         return $record;
     }

@@ -24,7 +24,8 @@ final class CreateEpisodeDownloadTrackerTable extends AbstractMigration
                 ['default' => 0],
             )
             ->addColumn('range_start', 'integer')
-            ->addColumn('range_end', 'integer')->addColumn(
+            ->addColumn('range_end', 'integer')
+            ->addColumn(
                 'downloaded_at',
                 'datetime',
                 ['timezone' => true]

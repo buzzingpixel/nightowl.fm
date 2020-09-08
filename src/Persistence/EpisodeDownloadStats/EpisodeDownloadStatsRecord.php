@@ -25,4 +25,6 @@ class EpisodeDownloadStatsRecord extends Record
 
     /** @var int|bool|string */
     public $downloads_past_year = '0';
+
+    public string $last_updated_at;
 }

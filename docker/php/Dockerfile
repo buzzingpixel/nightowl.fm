@@ -45,7 +45,8 @@ RUN apt-get update && apt-get install -my --no-install-recommends \
     && docker-php-ext-install xmlrpc \
     && docker-php-ext-install zip \
     && pecl install imagick \
-    && docker-php-ext-enable imagick
+    && docker-php-ext-enable imagick \
+    && docker-php-ext-install pcntl
 
 # Add base PHP config
 COPY ./docker/php/php-custom-config.ini /usr/local/etc/php/conf.d/php-custom-config.ini

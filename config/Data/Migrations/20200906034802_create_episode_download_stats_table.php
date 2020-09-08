@@ -22,6 +22,11 @@ final class CreateEpisodeDownloadStatsTable extends AbstractMigration
             ->addColumn('downloads_past_thirty_days', 'integer')
             ->addColumn('downloads_past_sixty_days', 'integer')
             ->addColumn('downloads_past_year', 'integer')
+            ->addColumn(
+                'last_updated_at',
+                'datetime',
+                ['timezone' => true]
+            )
             ->create();
     }
 }
