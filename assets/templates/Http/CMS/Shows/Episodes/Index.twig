@@ -42,6 +42,9 @@
                                         Publish At
                                     </th>
                                 {% endif %}
+                                {% if sectionTitle == 'Published' %}
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                                {% endif %}
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
@@ -78,6 +81,11 @@
                                         <div class="text-sm leading-5 text-gray-900">
                                             {{ episode.publishAt.setTimezone(user.model.timezone).format('Y-m-d h:i A') }}
                                         </div>
+                                    </td>
+                                {% endif %}
+                                {% if sectionTitle == 'Published' %}
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/episodes/{{ episode.show.id }}/stats/{{ episode.id }}" class="text-indigo-600 hover:text-indigo-900">Stats</a>
                                     </td>
                                 {% endif %}
                                 <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">

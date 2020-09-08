@@ -1,0 +1,68 @@
+{# @var \App\Context\EpisodeDownloadStats\Models\EpisodeDownloadStatsModel episodeStats #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{# @var \App\Context\Users\Models\LoggedInUser user #}
+{% set loggedInUser = fetchLoggedInUser() %}
+
+{% block cmsContent %}
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">
+                Stats for {{ episode.numberedTitle }}
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+                Stats auto-calculation runs every day at midnight
+            </p>
+        </div>
+        <div class="px-4 py-5 sm:p-0">
+            <dl>
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                    <dt class="text-sm leading-5 font-medium text-gray-500">
+                        Stats last calculated at:
+                    </dt>
+                    <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                        {% if episodeStats != null %}
+                            {{ episodeStats.lastUpdatedAt.setTimezone(loggedInUser.model.timezone).format('Y-m-d h:i a') }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </dd>
+                </div>
+                <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+                    <dt class="text-sm leading-5 font-medium text-gray-500">
+                        Total Downloads (all time)
+                    </dt>
+                    <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                        {{ episodeStats.totalDownloads ?? 0 }}
+                    </dd>
+                </div>
+                <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+                    <dt class="text-sm leading-5 font-medium text-gray-500">
+                        Downloads for the past 30 days
+                    </dt>
+                    <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                        {{ episodeStats.downloadsPastThirtyDays ?? 0 }}
+                    </dd>
+                </div>
+                <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+                    <dt class="text-sm leading-5 font-medium text-gray-500">
+                        Downloads for the past 60 days
+                    </dt>
+                    <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                        {{ episodeStats.downloadsPastSixtyDays ?? 0 }}
+                    </dd>
+                </div>
+                <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+                    <dt class="text-sm leading-5 font-medium text-gray-500">
+                        Downloads for the past year
+                    </dt>
+                    <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                        {{ episodeStats.downloadsPastYear ?? 0 }}
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+{% endblock %}
+
