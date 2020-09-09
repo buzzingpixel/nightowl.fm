@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Response\CMS\Ajax\GetTwitterAuthAction;
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
+use App\Http\Response\CMS\Analytics\AnalyticsViewAction;
 use App\Http\Response\CMS\IndexAction;
 use App\Http\Response\CMS\MyProfile\MyProfileAction;
 use App\Http\Response\CMS\MyProfile\PostMyProfileAction;
@@ -139,5 +140,10 @@ return static function (App $app): void {
         $r->get('/twitter/error', ErrorAction::class);
         $r->get('/twitter/callback', TwitterOauthCallbackAction::class);
         $r->post('/twitter/reset-auth', ResetTwitterAuthAction::class);
+
+        /**
+         * Analytics
+         */
+        $r->get('/analytics', AnalyticsViewAction::class);
     })->add(RequireLogInAction::class);
 };
