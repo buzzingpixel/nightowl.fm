@@ -10,6 +10,7 @@ import MarkdownTextArea from './Components/MarkdownTextArea.js';
 import SetGlobalData from './SetUp/SetGlobalData.js';
 import Selects from './Components/Selects.js';
 import SimpleTable from './Components/SimpleTable.js';
+import TwitterAuth from './Components/TwitterAuth.js';
 
 // Setup
 Events();
@@ -41,3 +42,11 @@ const flatpickrEls = document.querySelectorAll(
 if (flatpickrEls.length > 0) {
     new Flatpickr(flatpickrEls);
 }
+
+// Twitter Auth
+const twitterAuthForm = document.querySelectorAll(
+    '[ref="TwitterAuth"]',
+);
+twitterAuthForm.forEach((formEl) => {
+    new TwitterAuth(formEl);
+});

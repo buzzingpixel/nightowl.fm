@@ -1,0 +1,21 @@
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsContent %}
+    <div class="py-20 md:py-32 px-3">
+        <div class="mx-auto max-w-xl">
+            <div class="bg-white dark:bg-blue-smoke shadow sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-light-red dark:text-red">
+                        Error
+                    </h3>
+                    <div class="mt-2 max-w-xl text-sm leading-5 text-gray-500 dark:text-gray-100">
+                        <p>
+                            There was an error authorizing Twitter.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,3 +1,4 @@
+{% set formRef = formRef ?? '' %}
 {% set submitContent = submitContent ?? 'Submit' %}
 {% set cancelAction = cancelAction ?? '' %}
 {% set inputs = inputs ?? [] %}
@@ -23,6 +24,9 @@
     method="POST"
     accept-charset="UTF-8"
     enctype="multipart/form-data"
+    {% if formRef %}
+    ref="{{ formRef }}"
+    {% endif %}
 >
     <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
     <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">

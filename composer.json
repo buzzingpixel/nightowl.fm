@@ -16,6 +16,7 @@
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
+        "abraham/twitteroauth": "^1.1",
         "adbario/php-dot-notation": "^2.2",
         "awurth/slim-validation": "^3.3",
         "buzzingpixel/cookie-api": "^2.0",

@@ -2,45 +2,53 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Response\CMS\MyProfile;
+namespace App\Http\Response\CMS\Twitter;
 
-use App\Context\Users\Models\LoggedInUser;
+use App\Context\Twitter\TwitterApi;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment as TwigEnvironment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
-class MyProfileAction
+class TwitterAction
 {
-    private LoggedInUser $loggedInUser;
+    private TwitterApi $twitterApi;
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twigEnvironment;
 
     public function __construct(
-        LoggedInUser $loggedInUser,
+        TwitterApi $twitterApi,
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twigEnvironment
     ) {
-        $this->loggedInUser    = $loggedInUser;
+        $this->twitterApi      = $twitterApi;
         $this->responseFactory = $responseFactory;
         $this->twigEnvironment = $twigEnvironment;
     }
 
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function __invoke(): ResponseInterface
     {
         $meta = new Meta();
 
-        $meta->title = 'Edit Your Profile | CMS';
+        $meta->title = 'Authorize Twitter | CMS';
 
         $response = $this->responseFactory->createResponse();
 
         $response->getBody()->write($this->twigEnvironment->render(
-            'Http/CMS/MyProfile/MyProfile.twig',
+            'Http/CMS/Twitter/TwitterAuth.twig',
             [
                 'meta' => $meta,
-                'title' => 'Edit Your Profile',
-                'activeNavHref' => '',
-                'user' => $this->loggedInUser->model(),
+                'title' => 'Authorize Twitter',
+                'activeNavHref' => '/cms/twitter',
+                'twitterSettings' => $this->twitterApi->fetchTwitterSettings(),
             ]
         ));
 

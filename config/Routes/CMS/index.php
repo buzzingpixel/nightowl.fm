@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Response\CMS\Ajax\GetTwitterAuthAction;
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\IndexAction;
 use App\Http\Response\CMS\MyProfile\MyProfileAction;
@@ -36,6 +37,10 @@ use App\Http\Response\CMS\Shows\Series\NewSeries\NewSeriesAction;
 use App\Http\Response\CMS\Shows\Series\NewSeries\PostNewSeriesAction;
 use App\Http\Response\CMS\Shows\Series\SeriesIndexAction;
 use App\Http\Response\CMS\Shows\ShowsIndexAction;
+use App\Http\Response\CMS\Twitter\ErrorAction;
+use App\Http\Response\CMS\Twitter\ResetTwitterAuthAction;
+use App\Http\Response\CMS\Twitter\TwitterAction;
+use App\Http\Response\CMS\Twitter\TwitterOauthCallbackAction;
 use App\Http\Response\CMS\Users\DeletePerson\PostDeleteUserAction;
 use App\Http\Response\CMS\Users\EditUser\EditUserAction;
 use App\Http\Response\CMS\Users\EditUser\PostEditUserAction;
@@ -126,10 +131,13 @@ return static function (App $app): void {
         $r->post('/pages/edit/{id}', PostEditPageAction::class);
         $r->post('/pages/delete/{id}', PostDeletePageAction::class);
 
-        // $r->group('', function (RouteCollectorProxy $ri): void {
-        //     // $this so PHPCS will be happy and not convert to static function.
-        //     $this->get(NoOp::class)();
-        //     $ri->get('/shows/new', NewShowAction::class);
-        // })->add(RequireAdminAction::class);
+        /**
+         * Twitter
+         */
+        $r->get('/twitter', TwitterAction::class);
+        $r->post('/ajax/twitter-auth', GetTwitterAuthAction::class);
+        $r->get('/twitter/error', ErrorAction::class);
+        $r->get('/twitter/callback', TwitterOauthCallbackAction::class);
+        $r->post('/twitter/reset-auth', ResetTwitterAuthAction::class);
     })->add(RequireLogInAction::class);
 };

@@ -1,0 +1,40 @@
+{# @var \App\Context\Twitter\Models\TwitterSettingsModel twitterSettings #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{% block cmsContent %}
+    {% if twitterSettings.twitterAuth %}
+        Authorized as <a href="https://twitter.com/{{ twitterSettings.twitterScreenName }}">{{ twitterSettings.twitterScreenName }}</a>
+        <form
+            action="/cms/twitter/reset-auth"
+            method="POST"
+            accept-charset="UTF-8"
+        >
+            <input type="hidden" name="{!--csrfTokenNameKey--}" value="{!--csrfTokenName--}">
+            <input type="hidden" name="{!--csrfTokenValueKey--}" value="{!--csrfTokenValue--}">
+            <div class="mt-5">
+                <button
+                    type="submit"
+                    class="inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 focus:outline-none focus:border-red-300 focus:shadow-outline-red active:bg-red-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                >
+                    Clear Auth
+                </button>
+            </div>
+        </form>
+    {% else %}
+        {% include 'Http/CMS/_Infrastructure/Forms/_LabelsOnLeftForm.twig' with {
+            formRef: 'TwitterAuth',
+            submitContent: 'Authorize',
+            inputs: [
+                {
+                    label: 'Consumer Key (API Key)',
+                    name: 'twitterConsumerKey',
+                },
+                {
+                    label: 'Consumer Secret (API Secret)',
+                    name: 'twitterConsumerSecret',
+                },
+            ],
+        } only %}
+    {% endif %}
+{% endblock %}
