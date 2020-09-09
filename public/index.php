@@ -38,7 +38,7 @@ $request = ServerRequestCreatorFactory::create()
 
 Globals::setRequest($request);
 
-// Register error handlers is Whoops does not exists
+// Register error handlers if Whoops does not exist
 if (! class_exists(WhoopsRun::class)) {
     $errorMiddleware = $app->addErrorMiddleware(
         false,
