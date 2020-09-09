@@ -9,6 +9,7 @@ use LogicException;
 use PDO;
 use PDOStatement;
 
+use function array_values;
 use function assert;
 use function count;
 use function get_class;
@@ -37,6 +38,21 @@ class RecordQuery
         $this->isInstantiated = true;
         $this->recordClass    = $recordClass;
         $this->pdo            = $pdo;
+    }
+
+    /** @var array<array-key, mixed[]> */
+    private array $search = [];
+
+    public function withSearch(string $col, string $val): RecordQuery
+    {
+        $clone = clone $this;
+
+        $clone->search[] = [
+            'col' => $col,
+            'val' => $val,
+        ];
+
+        return $clone;
     }
 
     /** @var mixed[] */
@@ -207,11 +223,16 @@ class RecordQuery
 
         $idIncrement = 0;
 
+        $whereSet = false;
+
         /**
          * @var array<int, array<string, string|null>> $whereGroup
          */
         foreach ($this->where as $key => $whereGroup) {
             assert(is_int($key));
+
+            $whereSet = true;
+
             if ($key === 0) {
                 $sql .= ' WHERE (';
             } else {
@@ -313,6 +334,40 @@ class RecordQuery
                         ' '
                         . $bindKey;
                 }
+            }
+
+            $sql .= ')';
+        }
+
+        $searchTotal = count($this->search);
+
+        if ($searchTotal > 0) {
+            $searchTotalIndex = $searchTotal - 1;
+
+            if ($whereSet) {
+                $sql .= ' AND (';
+            } else {
+                $sql .= ' WHERE (';
+            }
+
+            foreach (array_values($this->search) as $i => $searchItem) {
+                $idIncrement++;
+                $id = $idIncrement;
+
+                $col = (string) $searchItem['col'];
+                $val = (string) $searchItem['val'];
+
+                $bindKey = ':' . $col . '_' . $id;
+
+                $bind[$bindKey] = $val;
+
+                $sql .= $col . ' LIKE ' . $bindKey;
+
+                if ($i === $searchTotalIndex) {
+                    continue;
+                }
+
+                $sql .= ' OR ';
             }
 
             $sql .= ')';

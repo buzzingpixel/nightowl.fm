@@ -87,6 +87,10 @@ class BuildFetchQuery
             );
         }
 
+        if ($fetchModel->status !== '') {
+            $query = $query->withWhere('status', $fetchModel->status);
+        }
+
         if (count($fetchModel->episodeTypes) > 0) {
             $query = $query->withWhere(
                 'episode_type',
@@ -144,6 +148,15 @@ class BuildFetchQuery
             $fetchModel,
             $query
         );
+
+        if ($fetchModel->search !== '') {
+            foreach (EpisodeRecord::getSearchableFields() as $field) {
+                $query = $query->withSearch(
+                    $field,
+                    $fetchModel->search
+                );
+            }
+        }
 
         return $query;
     }

@@ -23,7 +23,6 @@ use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\Episodes\EpisodeSeriesRecord;
 use App\Persistence\Keywords\KeywordRecord;
 use App\Persistence\RecordQueryFactory;
-use Safe\Exceptions\DatetimeException;
 use Throwable;
 
 use function array_map;
@@ -75,8 +74,6 @@ class FetchEpisodes
 
     /**
      * @return EpisodeModel[]
-     *
-     * @throws DatetimeException
      */
     private function innerRun(?FetchModel $fetchModel = null): array
     {

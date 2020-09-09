@@ -54,4 +54,16 @@ class EpisodeRecord extends Record
     public string $created_at;
 
     public string $old_guid = '';
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getSearchableFields(): array
+    {
+        return [
+            'title' => 'title',
+            'description' => 'description',
+            'show_notes' => 'show_notes',
+        ];
+    }
 }

@@ -70,7 +70,7 @@ class GetShowAction
 
         $episodeFetchModel             = new EpisodeFetchModel();
         $episodeFetchModel->shows      = [$show];
-        $episodeFetchModel->limit      = 10;
+        $episodeFetchModel->limit      = self::LIMIT;
         $episodeFetchModel->offset     = $offset;
         $episodeFetchModel->statuses[] = EpisodeConstants::EPISODE_STATUS_LIVE;
 

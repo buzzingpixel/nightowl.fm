@@ -57,7 +57,7 @@ class HomeAction
 
         $response->getBody()->write(
             $this->twig->render(
-                'Http/HomePage.twig',
+                'Http/EpisodeShowcase.twig',
                 [
                     'meta' => $meta,
                     'episodes' => $episodes,

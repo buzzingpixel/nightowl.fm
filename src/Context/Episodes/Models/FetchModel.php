@@ -27,6 +27,8 @@ class FetchModel
     /** @var string[] */
     public array $statuses = [];
 
+    public string $status = '';
+
     /** @var string[] */
     public array $episodeTypes = [];
 
@@ -44,4 +46,6 @@ class FetchModel
     public bool $orderByRandom = false;
 
     public bool $excludeEpisodesFromHiddenShows = false;
+
+    public string $search = '';
 }

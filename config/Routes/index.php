@@ -13,6 +13,7 @@ use App\Http\Response\People\GetPeopleAction;
 use App\Http\Response\PostAnalyticsPageViewAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
+use App\Http\Response\Search\SearchAction;
 use App\Http\Response\Show\FeedAction;
 use App\Http\Response\Shows\GetShowsAction;
 use App\Http\RouteMiddleware\RouteResolution\ResolveEpisode;
@@ -54,6 +55,10 @@ return static function (App $app): void {
 
     // Shows
     $app->get('/{showSlug}/feed', FeedAction::class);
+
+    // Search
+    // $app->get('/search', SearchAction::class);
+    $app->get('/search[/page/{pageNum:\d+}]', SearchAction::class);
 
     // Well this is gross
     $app->get(
