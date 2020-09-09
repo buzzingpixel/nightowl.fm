@@ -10,6 +10,7 @@ use App\Http\Response\LogIn\PostLogInAction;
 use App\Http\Response\LogIn\PostLogOutAction;
 use App\Http\Response\Pages\SubscribeAction;
 use App\Http\Response\People\GetPeopleAction;
+use App\Http\Response\PostAnalyticsPageViewAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
 use App\Http\Response\Show\FeedAction;
@@ -29,6 +30,8 @@ return static function (App $app): void {
 
     // Match anything except a forward slash
     // {slug:[^\/]+}
+
+    $app->post('/ajax/analytics/page-view', PostAnalyticsPageViewAction::class);
 
     $app->post('/log-in', PostLogInAction::class);
     $app->post('/log-out', PostLogOutAction::class);

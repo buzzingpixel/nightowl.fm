@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 
-// import Analytics from './SetUp/Analytics.js';
+import Analytics from './SetUp/Analytics.js';
 import ConfirmSubmit from './Components/ConfirmSubmit.js';
 import Events from './Events.js';
 import FileUploadField from './Components/FileUploadField.js';
@@ -16,7 +16,7 @@ import TwitterAuth from './Components/TwitterAuth.js';
 Events();
 LoadAxios();
 SetGlobalData();
-// Analytics();
+Analytics();
 window.Methods.FileUploadField = FileUploadField;
 window.Methods.MarkdownTextArea = MarkdownTextArea;
 window.Methods.SimpleTable = SimpleTable;
