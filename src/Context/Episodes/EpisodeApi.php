@@ -12,6 +12,7 @@ use App\Context\Episodes\Services\GetTotal;
 use App\Context\Episodes\Services\GetTotalSecondsPodcasted;
 use App\Context\Episodes\Services\PublishPendingEpisodes;
 use App\Context\Episodes\Services\SaveEpisode;
+use App\Context\Episodes\Services\TweetEpisode;
 use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
 
@@ -95,5 +96,14 @@ class EpisodeApi
     public function getTotalMinutesPodcasted(): int
     {
         return (int) ($this->getTotalSecondsPodcasted() / 60);
+    }
+
+    public function tweetEpisode(EpisodeModel $episode): void
+    {
+        $service = $this->di->get(TweetEpisode::class);
+
+        assert($service instanceof TweetEpisode);
+
+        $service->tweet($episode);
     }
 }

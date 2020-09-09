@@ -42,6 +42,7 @@ class EpisodeModel
 
     public function __construct()
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->createdAt = new DateTimeImmutable(
             'now',
             new DateTimeZone('UTC')
@@ -130,6 +131,8 @@ class EpisodeModel
     public ?DateTimeImmutable $publishedAt = null;
 
     public bool $isPublished = false;
+
+    public bool $tweetEpisode = false;
 
     public int $number = 0;
 

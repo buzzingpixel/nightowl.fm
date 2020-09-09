@@ -82,8 +82,20 @@ class SaveEpisode
 
         if ($isNew) {
             $payload = $this->saveNew->save($episode);
+
+            if ($payload->getStatus() !== Payload::STATUS_CREATED) {
+                $this->transactionManager->rollBack();
+
+                return $payload;
+            }
         } else {
             $payload = $this->saveExisting->save($episode);
+
+            if ($payload->getStatus() !== Payload::STATUS_UPDATED) {
+                $this->transactionManager->rollBack();
+
+                return $payload;
+            }
         }
 
         $afterEvent = new SaveEpisodeAfterSave($episode);

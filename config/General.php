@@ -10,6 +10,7 @@ use function dirname;
 use function getenv;
 
 /**
+ * @method bool tweetNewEpisodes()
  * @method bool devMode()
  * @method string rootPath()
  * @method string publicPath()
@@ -31,6 +32,8 @@ class General extends SimpleModel
     public function __construct()
     {
         $rootPath = dirname(__DIR__);
+
+        static::$tweetNewEpisodes = getenv('TWEET_NEW_EPISODES') === 'true';
 
         static::$devMode = getenv('DEV_MODE') === 'true';
 
@@ -56,6 +59,8 @@ class General extends SimpleModel
 
         static::$siteUrl = 'https://' . $_SERVER['HTTP_HOST'];
     }
+
+    public static bool $tweetNewEpisodes = false;
 
     public static bool $devMode = false;
 

@@ -24,12 +24,7 @@ class SetEpisodePublishedState
         }
 
         if ($episode->publishAt === null) {
-            $episode->isPublished = true;
-
-            $episode->publishedAt = new DateTimeImmutable(
-                'now',
-                new DateTimeZone('UTC'),
-            );
+            $this->publishEpisode($episode);
 
             return;
         }
@@ -38,12 +33,19 @@ class SetEpisodePublishedState
             return;
         }
 
+        $this->publishEpisode($episode);
+    }
+
+    private function publishEpisode(EpisodeModel $episode): void
+    {
+        $episode->isPublished = true;
+
+        $episode->tweetEpisode = true;
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $episode->publishedAt = new DateTimeImmutable(
             'now',
             new DateTimeZone('UTC'),
         );
-
-        $episode->isPublished = true;
     }
 }
