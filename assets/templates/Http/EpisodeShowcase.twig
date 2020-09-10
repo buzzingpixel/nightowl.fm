@@ -1,6 +1,7 @@
 {# @var string searchQuery #}
 {# @var \App\Context\Episodes\Models\EpisodeModel[] episodes #}
 {# @var \App\Http\Models\Pagination pagination #}
+{# @var \App\Context\Keywords\Models\KeywordModel topic #}
 
 {% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
 
@@ -11,6 +12,15 @@
                 <h1 class="heading heading--level-1">Your search results</h1>
                 <p class="util-text-large">
                     You searched for episodes with: &ldquo;{{ searchQuery }}&rdquo;
+                </p>
+            </div>
+        </div>
+    {% endif %}
+    {% if topic is defined %}
+        <div class="layout-block">
+            <div class="layout-block__inner">
+                <p class="util-text-large">
+                    Episodes related to topic: <strong>{{ topic.keyword }}</strong>
                 </p>
             </div>
         </div>

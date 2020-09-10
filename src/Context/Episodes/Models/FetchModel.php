@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Context\Episodes\Models;
 
+use App\Context\Keywords\Models\KeywordModel;
 use App\Context\Shows\Models\ShowModel;
 
 class FetchModel
@@ -48,4 +49,7 @@ class FetchModel
     public bool $excludeEpisodesFromHiddenShows = false;
 
     public string $search = '';
+
+    /** @var KeywordModel[] */
+    public array $keywords = [];
 }

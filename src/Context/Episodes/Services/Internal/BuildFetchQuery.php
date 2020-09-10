@@ -5,19 +5,24 @@ declare(strict_types=1);
 namespace App\Context\Episodes\Services\Internal;
 
 use App\Context\Episodes\Models\FetchModel;
+use App\Context\Keywords\Models\KeywordModel;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
 use App\Context\Shows\ShowConstants;
 use App\Persistence\Constants;
+use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\RecordQuery;
 use App\Persistence\RecordQueryFactory;
 use App\Utilities\SystemClock;
 use DateTimeZone;
+use Exception;
 
 use function array_map;
 use function count;
+
+// phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
 
 class BuildFetchQuery
 {
@@ -158,6 +163,13 @@ class BuildFetchQuery
             }
         }
 
+        if (count($fetchModel->keywords) > 0) {
+            $query = $this->buildKeywordsQuery(
+                $fetchModel,
+                $query
+            );
+        }
+
         return $query;
     }
 
@@ -186,6 +198,44 @@ class BuildFetchQuery
                 $hiddenShows,
             ),
             '!IN',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function buildKeywordsQuery(
+        FetchModel $fetchModel,
+        RecordQuery $query
+    ): RecordQuery {
+        $relatedKeywordIds = array_map(
+            static fn (KeywordModel $k) => $k->id,
+            $fetchModel->keywords,
+        );
+
+        /** @var EpisodeKeywordsRecord[] $relatedKeywordRecords */
+        $relatedKeywordRecords = $this->recordQueryFactory
+            ->make(new EpisodeKeywordsRecord())
+            ->withWhere(
+                'keyword_id',
+                $relatedKeywordIds,
+                'IN'
+            )
+            ->all();
+
+        $episodeIds = array_map(
+            static fn (EpisodeKeywordsRecord $r) => $r->episode_id,
+            $relatedKeywordRecords,
+        );
+
+        if (count($episodeIds) < 1) {
+            throw new Exception();
+        }
+
+        return $query->withWhere(
+            'id',
+            $episodeIds,
+            'IN',
         );
     }
 }
