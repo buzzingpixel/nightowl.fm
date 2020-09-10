@@ -6,6 +6,7 @@ namespace App\Context\Episodes\Models;
 
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\Series\Models\SeriesModel;
 use App\Context\Shows\Models\ShowModel;
 
 class FetchModel
@@ -65,4 +66,7 @@ class FetchModel
 
     /** @var PersonModel[] */
     public array $guests = [];
+
+    /** @var SeriesModel[] */
+    public array $series = [];
 }

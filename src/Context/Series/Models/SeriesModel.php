@@ -30,4 +30,13 @@ class SeriesModel
             $this->slug,
         ]);
     }
+
+    public function getTitleWithShowTitle(): string
+    {
+        return implode(' ', [
+            $this->show->title,
+            'Series:',
+            $this->title,
+        ]);
+    }
 }

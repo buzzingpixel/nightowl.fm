@@ -7,6 +7,7 @@ namespace App\Context\Episodes\Services\Internal;
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\Keywords\Models\KeywordModel;
 use App\Context\People\Models\PersonModel;
+use App\Context\Series\Models\SeriesModel;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
@@ -16,6 +17,7 @@ use App\Persistence\Episodes\EpisodeGuestsRecord;
 use App\Persistence\Episodes\EpisodeHostsRecord;
 use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\Episodes\EpisodeRecord;
+use App\Persistence\Episodes\EpisodeSeriesRecord;
 use App\Persistence\RecordQuery;
 use App\Persistence\RecordQueryFactory;
 use App\Utilities\SystemClock;
@@ -213,6 +215,13 @@ class BuildFetchQuery
             );
         }
 
+        if (count($fetchModel->series) > 0) {
+            $query = $this->buildSeriesQuery(
+                $fetchModel,
+                $query,
+            );
+        }
+
         return $query;
     }
 
@@ -345,6 +354,44 @@ class BuildFetchQuery
         $episodeIds = array_map(
             static fn (EpisodeGuestsRecord $r) => $r->episode_id,
             $relatedGuestRecords,
+        );
+
+        if (count($episodeIds) < 1) {
+            throw new Exception();
+        }
+
+        return $query->withWhere(
+            'id',
+            $episodeIds,
+            'IN',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function buildSeriesQuery(
+        FetchModel $fetchModel,
+        RecordQuery $query
+    ): RecordQuery {
+        $relatedSeriesIds = array_map(
+            static fn (SeriesModel $s) => $s->id,
+            $fetchModel->series,
+        );
+
+        /** @var EpisodeSeriesRecord[] $relatedSeriesRecords */
+        $relatedSeriesRecords = $this->recordQueryFactory
+            ->make(new EpisodeSeriesRecord())
+            ->withWhere(
+                'series_id',
+                $relatedSeriesIds,
+                'IN',
+            )
+            ->all();
+
+        $episodeIds = array_map(
+            static fn (EpisodeSeriesRecord $r) => $r->episode_id,
+            $relatedSeriesRecords,
         );
 
         if (count($episodeIds) < 1) {

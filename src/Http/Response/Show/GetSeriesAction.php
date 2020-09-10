@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Response\Show;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\FetchModel as EpisodeFetchModel;
-use App\Context\Series\Models\FetchModel as SeriesFetchModel;
-use App\Context\Series\SeriesApi;
-use App\Context\Shows\Models\ShowModel;
+use App\Context\Series\Models\SeriesModel;
 use App\Context\Shows\ShowApi;
 use App\Http\Models\Meta;
 use App\Http\Models\Pagination;
@@ -25,26 +22,23 @@ use Twig\Error\SyntaxError;
 
 use function count;
 
-class GetShowAction
+class GetSeriesAction
 {
     private const LIMIT = 10;
 
     private ResponseFactoryInterface $responseFactory;
     private TwigEnvironment $twig;
-    private SeriesApi $seriesApi;
     private EpisodeApi $episodeApi;
     private ShowApi $showApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
-        SeriesApi $seriesApi,
         EpisodeApi $episodeApi,
         ShowApi $showApi
     ) {
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
-        $this->seriesApi       = $seriesApi;
         $this->episodeApi      = $episodeApi;
         $this->showApi         = $showApi;
     }
@@ -57,29 +51,28 @@ class GetShowAction
      */
     public function get(
         UriSegments $uriSegments,
-        ShowModel $show,
+        SeriesModel $series,
         ServerRequestInterface $request
     ): ResponseInterface {
         $meta = new Meta();
 
-        $meta->title = $show->title;
+        $meta->title = $series->getTitleWithShowTitle();
 
-        $meta->description = $show->description;
+        $meta->description = $series->description;
 
         $meta->twitterCardType = 'summary_large_image';
 
-        $meta->shareImage = $this->showApi->getShowArtworkUrl($show);
-
-        $seriesFetchModel        = new SeriesFetchModel();
-        $seriesFetchModel->shows = [$show];
+        $meta->shareImage = $this->showApi->getShowArtworkUrl(
+            $series->show
+        );
 
         $offset = ($uriSegments->getPageNum() * self::LIMIT) - self::LIMIT;
 
-        $episodeFetchModel             = new EpisodeFetchModel();
-        $episodeFetchModel->shows      = [$show];
-        $episodeFetchModel->limit      = self::LIMIT;
-        $episodeFetchModel->offset     = $offset;
-        $episodeFetchModel->statuses[] = EpisodeConstants::EPISODE_STATUS_LIVE;
+        $episodeFetchModel         = new EpisodeFetchModel();
+        $episodeFetchModel->shows  = [$series->show];
+        $episodeFetchModel->series = [$series];
+        $episodeFetchModel->limit  = self::LIMIT;
+        $episodeFetchModel->offset = $offset;
 
         $episodes = $this->episodeApi->fetchEpisodes(
             $episodeFetchModel,
@@ -94,7 +87,7 @@ class GetShowAction
         );
 
         $pagination = (new Pagination())
-            ->withBase($show->getPublicUrl())
+            ->withBase($series->getPublicUrl())
             ->withCurrentPage($uriSegments->getPageNum())
             ->withPerPage(self::LIMIT)
             ->withTotalResults($totalEpisodes);
@@ -104,13 +97,10 @@ class GetShowAction
 
         $response->getBody()->write(
             $this->twig->render(
-                'Http/Show.twig',
+                'Http/Series.twig',
                 [
                     'meta' => $meta,
-                    'show' => $show,
-                    'series' => $this->seriesApi->fetchSeries(
-                        $seriesFetchModel
-                    ),
+                    'series' => $series,
                     'episodes' => $episodes,
                     'pagination' => $pagination,
                 ],

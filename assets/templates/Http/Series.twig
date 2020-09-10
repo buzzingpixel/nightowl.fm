@@ -1,0 +1,49 @@
+{# @var \App\Context\Series\Models\SeriesModel series #}
+
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{% block feContent %}
+    <div class="podcast-layout">
+        <div class="podcast-layout__row">
+
+            {# Left Column #}
+            <div class="podcast-layout__left-col">
+
+                {# Podcast Cover #}
+                <div class="podcast-layout__strip podcast-layout__strip--is-not-padded">
+                    <div class="podcast-layout__cover{% if series.show.status == 'coming_soon' %} podcast-layout__cover--has-overlay podcast-layout__cover--coming-soon{% elseif series.show.status == 'retired' %} podcast-layout__cover--has-overlay podcast-layout__cover--retired{% endif %}">
+                        <div class="podcast-layout__cover-inner">
+                            <img
+                                src="{{ getShowArtworkUrl(series.show, {size: 560}) }}"
+                                alt="{{ series.show.title }}"
+                                class="podcast-layout__cover-img"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+            </div>{# /END Left Column #}
+
+            {# Right Column #}
+            <div class="podcast-layout__right-col">
+                {# Podcast Title Label Button Thing #}
+                <div class="podcast-layout__strip podcast-layout__mobile-hide">
+                    <a href="{{ series.show.publicUrl }}" class="orange-button">
+                        {{ series.show.title|smartypants|widont }}
+                    </a>
+                </div>
+                <h1 class="heading heading--level-1">{{ series.titleWithShowTitle }}</h1>
+                <p class="util-text-large">
+                    {{ series.description|smartypants|widont }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {# Episode listing #}
+    {% include 'Http/FE/Episodes/EpisodeListing.twig' with {
+        show: series.show,
+        episodes: episodes,
+        pagination: pagination,
+    } only %}
+{% endblock %}

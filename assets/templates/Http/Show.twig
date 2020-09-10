@@ -1,5 +1,5 @@
 {# @var \App\Context\Shows\Models\ShowModel show #}
-{# @var \App\Context\Series\Models\SeriesModel series #}
+{# @var \App\Context\Series\Models\SeriesModel[] series #}
 {# @var \App\Context\Episodes\Models\EpisodeModel[] episodes #}
 {# @var \App\Http\Models\Pagination pagination #}
 
@@ -192,67 +192,10 @@
         </div>
     </div>
 
-
     {# Episode listing #}
-    <div>
-        {% if show.status == 'coming_soon' or episodes|length < 1 %}
-            <div class="layout-block">
-                <div class="layout-block__inner util-text-align-center">
-                    <h2 class="heading heading--level-2">Great things are happening!</h2>
-                    <p>This show is under construction so please check back soon!</p>
-                </div>
-            </div>
-        {% else %}
-            {% for episode in episodes %}
-                <div class="podcast-layout podcast-layout--episode-listing">
-                    <div class="podcast-layout__row">
-                        {# Left Column #}
-                        <div class="podcast-layout__left-col">
-                            <div class="podcast-layout__strip">
-                                <div class="episode-meta episode-meta--no-art">
-                                    <a href="{{ episode.publicUrl }}" class="episode-meta__title">
-                                        {{ episode.title|smartypants|widont }}
-                                    </a>
-                                    <div class="episode-meta__figures">
-                                        <span class="episode-meta__item episode-meta__item--ep-num">
-                                            {% if episode.number > 0 %}
-                                                Ep. {{ episode.number }}
-                                            {% else %}
-                                                Insert
-                                            {% endif %}
-                                        </span>
-                                        <span class="episode-meta__item episode-meta__item--date">
-                                            {{ episode.publishedAt|date('M. j') }}
-                                        </span>
-                                        <span class="episode-meta__item episode-meta__item--time">
-                                            {{ episode.humanReadableRunTime }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {# Right Column #}
-                        <div class="podcast-layout__right-col">
-                            <div class="podcast-layout__strip">
-                                <p>{{ episode.description|smartypants|widont }}</p>
-
-                                <a href="{{ episode.publicUrl }}">Play episode &rsaquo;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
-
-    {% if pagination.totalPages > 1 %}
-        <div class="podcast-layout">
-            <div class="podcast-layout__strip">
-                {% include 'Http/FE/Includes/Pagination.twig' with {
-                    pagination: pagination,
-                } only %}
-            </div>
-        </div>
-    {% endif %}
+    {% include 'Http/FE/Episodes/EpisodeListing.twig' with {
+        show: show,
+        episodes: episodes,
+        pagination: pagination,
+    } only %}
 {% endblock %}

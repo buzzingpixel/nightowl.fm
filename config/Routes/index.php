@@ -22,6 +22,7 @@ use App\Http\RouteMiddleware\RouteResolution\ResolveEpisode;
 use App\Http\RouteMiddleware\RouteResolution\ResolveEpisodeDownload;
 use App\Http\RouteMiddleware\RouteResolution\ResolvePage;
 use App\Http\RouteMiddleware\RouteResolution\ResolveShow;
+use App\Http\RouteMiddleware\RouteResolution\ResolveShowSeries;
 use Config\NoOp;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
@@ -77,5 +78,6 @@ return static function (App $app): void {
     )->add(ResolvePage::class)
         ->add(ResolveEpisodeDownload::class)
         ->add(ResolveEpisode::class)
+        ->add(ResolveShowSeries::class)
         ->add(ResolveShow::class);
 };
