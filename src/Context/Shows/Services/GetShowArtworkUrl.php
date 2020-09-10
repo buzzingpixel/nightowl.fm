@@ -7,9 +7,7 @@ namespace App\Context\Shows\Services;
 use App\Context\Shows\Models\ShowModel;
 use Config\General;
 use Gumlet\ImageResize;
-use GuzzleHttp\Client as GuzzleClient;
 use League\Flysystem\Filesystem;
-use Psr\Cache\CacheItemPoolInterface;
 
 use function pathinfo;
 
@@ -17,19 +15,13 @@ use const IMAGETYPE_JPEG;
 
 class GetShowArtworkUrl
 {
-    private CacheItemPoolInterface $cachePool;
-    private GuzzleClient $guzzleClient;
     private General $generalConfig;
     private Filesystem $filesystem;
 
     public function __construct(
-        CacheItemPoolInterface $cachePool,
-        GuzzleClient $guzzleClient,
         General $generalConfig,
         Filesystem $filesystem
     ) {
-        $this->cachePool     = $cachePool;
-        $this->guzzleClient  = $guzzleClient;
         $this->generalConfig = $generalConfig;
         $this->filesystem    = $filesystem;
     }

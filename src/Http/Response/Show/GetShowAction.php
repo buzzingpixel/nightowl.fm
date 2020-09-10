@@ -10,6 +10,7 @@ use App\Context\Episodes\Models\FetchModel as EpisodeFetchModel;
 use App\Context\Series\Models\FetchModel as SeriesFetchModel;
 use App\Context\Series\SeriesApi;
 use App\Context\Shows\Models\ShowModel;
+use App\Context\Shows\ShowApi;
 use App\Http\Models\Meta;
 use App\Http\Models\Pagination;
 use App\Http\Utilities\Segments\UriSegments;
@@ -32,17 +33,20 @@ class GetShowAction
     private TwigEnvironment $twig;
     private SeriesApi $seriesApi;
     private EpisodeApi $episodeApi;
+    private ShowApi $showApi;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         TwigEnvironment $twig,
         SeriesApi $seriesApi,
-        EpisodeApi $episodeApi
+        EpisodeApi $episodeApi,
+        ShowApi $showApi
     ) {
         $this->responseFactory = $responseFactory;
         $this->twig            = $twig;
         $this->seriesApi       = $seriesApi;
         $this->episodeApi      = $episodeApi;
+        $this->showApi         = $showApi;
     }
 
     /**
@@ -59,6 +63,12 @@ class GetShowAction
         $meta = new Meta();
 
         $meta->title = $show->title;
+
+        $meta->description = $show->description;
+
+        $meta->twitterCardType = 'summary_large_image';
+
+        $meta->shareImage = $this->showApi->getShowArtworkUrl($show);
 
         $response = $this->responseFactory->createResponse()
             ->withHeader('EnableStaticCache', 'true');
