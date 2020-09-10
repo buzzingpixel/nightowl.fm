@@ -10,6 +10,7 @@ use App\Http\Response\LogIn\PostLogInAction;
 use App\Http\Response\LogIn\PostLogOutAction;
 use App\Http\Response\Pages\SubscribeAction;
 use App\Http\Response\People\GetPeopleAction;
+use App\Http\Response\People\GetPersonAction;
 use App\Http\Response\PostAnalyticsPageViewAction;
 use App\Http\Response\ResetPasswordWithToken\PostResetPasswordWithTokenAction;
 use App\Http\Response\ResetPasswordWithToken\ResetPasswordWithTokenAction;
@@ -51,6 +52,7 @@ return static function (App $app): void {
     $app->get('/masterfeed', GetMasterFeedAction::class);
     $app->get('/shows', GetShowsAction::class);
     $app->get('/people', GetPeopleAction::class);
+    $app->get('/people/{personSlug}', GetPersonAction::class);
     $app->get('/subscribe', SubscribeAction::class);
     // $app->get('/people/page/{pageNum:\d+}', GetPeopleAction::class);
 

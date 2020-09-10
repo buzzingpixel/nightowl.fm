@@ -6,11 +6,14 @@ namespace App\Context\Episodes\Services\Internal;
 
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\Keywords\Models\KeywordModel;
+use App\Context\People\Models\PersonModel;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
 use App\Context\Shows\Models\ShowModel;
 use App\Context\Shows\ShowApi;
 use App\Context\Shows\ShowConstants;
 use App\Persistence\Constants;
+use App\Persistence\Episodes\EpisodeGuestsRecord;
+use App\Persistence\Episodes\EpisodeHostsRecord;
 use App\Persistence\Episodes\EpisodeKeywordsRecord;
 use App\Persistence\Episodes\EpisodeRecord;
 use App\Persistence\RecordQuery;
@@ -18,6 +21,7 @@ use App\Persistence\RecordQueryFactory;
 use App\Utilities\SystemClock;
 use DateTimeZone;
 use Exception;
+use Throwable;
 
 use function array_map;
 use function count;
@@ -40,6 +44,9 @@ class BuildFetchQuery
         $this->showApi            = $showApi;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function build(FetchModel $fetchModel): RecordQuery
     {
         $query = $this->recordQueryFactory->make(
@@ -62,6 +69,14 @@ class BuildFetchQuery
             );
         }
 
+        if (count($fetchModel->notShowIds) > 0) {
+            $query = $query->withWhere(
+                'show_id',
+                $fetchModel->notShowIds,
+                '!IN'
+            );
+        }
+
         if (count($fetchModel->shows) > 0) {
             $showIds = [];
 
@@ -73,6 +88,20 @@ class BuildFetchQuery
                 'show_id',
                 $showIds,
                 'IN'
+            );
+        }
+
+        if (count($fetchModel->notShows) > 0) {
+            $notShowIds = [];
+
+            foreach ($fetchModel->notShows as $show) {
+                $notShowIds[] = $show->id;
+            }
+
+            $query = $query->withWhere(
+                'show_id',
+                $notShowIds,
+                '!IN'
             );
         }
 
@@ -170,6 +199,20 @@ class BuildFetchQuery
             );
         }
 
+        if (count($fetchModel->hosts) > 0) {
+            $query = $this->buildHostsQuery(
+                $fetchModel,
+                $query,
+            );
+        }
+
+        if (count($fetchModel->guests) > 0) {
+            $query = $this->buildGuestsQuery(
+                $fetchModel,
+                $query,
+            );
+        }
+
         return $query;
     }
 
@@ -219,13 +262,89 @@ class BuildFetchQuery
             ->withWhere(
                 'keyword_id',
                 $relatedKeywordIds,
-                'IN'
+                'IN',
             )
             ->all();
 
         $episodeIds = array_map(
             static fn (EpisodeKeywordsRecord $r) => $r->episode_id,
             $relatedKeywordRecords,
+        );
+
+        if (count($episodeIds) < 1) {
+            throw new Exception();
+        }
+
+        return $query->withWhere(
+            'id',
+            $episodeIds,
+            'IN',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function buildHostsQuery(
+        FetchModel $fetchModel,
+        RecordQuery $query
+    ): RecordQuery {
+        $relatedHostIds = array_map(
+            static fn (PersonModel $p) => $p->id,
+            $fetchModel->hosts,
+        );
+
+        /** @var EpisodeHostsRecord[] $relatedHostRecords */
+        $relatedHostRecords = $this->recordQueryFactory
+            ->make(new EpisodeHostsRecord())
+            ->withWhere(
+                'person_id',
+                $relatedHostIds,
+                'IN',
+            )
+            ->all();
+
+        $episodeIds = array_map(
+            static fn (EpisodeHostsRecord $r) => $r->episode_id,
+            $relatedHostRecords,
+        );
+
+        if (count($episodeIds) < 1) {
+            throw new Exception();
+        }
+
+        return $query->withWhere(
+            'id',
+            $episodeIds,
+            'IN',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function buildGuestsQuery(
+        FetchModel $fetchModel,
+        RecordQuery $query
+    ): RecordQuery {
+        $relatedGuestIds = array_map(
+            static fn (PersonModel $p) => $p->id,
+            $fetchModel->guests,
+        );
+
+        /** @var EpisodeGuestsRecord[] $relatedGuestRecords */
+        $relatedGuestRecords = $this->recordQueryFactory
+            ->make(new EpisodeGuestsRecord())
+            ->withWhere(
+                'person_id',
+                $relatedGuestIds,
+                'IN',
+            )
+            ->all();
+
+        $episodeIds = array_map(
+            static fn (EpisodeGuestsRecord $r) => $r->episode_id,
+            $relatedGuestRecords,
         );
 
         if (count($episodeIds) < 1) {

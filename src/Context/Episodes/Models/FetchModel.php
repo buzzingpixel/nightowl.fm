@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Context\Episodes\Models;
 
 use App\Context\Keywords\Models\KeywordModel;
+use App\Context\People\Models\PersonModel;
 use App\Context\Shows\Models\ShowModel;
 
 class FetchModel
@@ -19,8 +20,14 @@ class FetchModel
     /** @var string[] */
     public array $showIds = [];
 
+    /** @var string[] */
+    public array $notShowIds = [];
+
     /** @var ShowModel[] */
     public array $shows = [];
+
+    /** @var ShowModel[] */
+    public array $notShows = [];
 
     /** @var string[] */
     public array $titles = [];
@@ -52,4 +59,10 @@ class FetchModel
 
     /** @var KeywordModel[] */
     public array $keywords = [];
+
+    /** @var PersonModel[] */
+    public array $hosts = [];
+
+    /** @var PersonModel[] */
+    public array $guests = [];
 }

@@ -1,0 +1,142 @@
+{# @var \App\Context\People\Models\PersonModel person #}
+{# @var \App\Context\Shows\Models\ShowModel hostShows #}
+{# @var \App\Context\Episodes\Models\EpisodeModel guestEpisodes #}
+
+{% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
+
+{% block feContent %}
+    <div class="layout-block">
+        <div class="layout-block__inner">
+            <div class="people-single">
+                <div class="people-single__left">
+                    <div class="people-single__strip">
+                        <div class="people-single__photo">
+                            <img
+                                src="{{ getPersonProfilePhotoUrl(person) }}"
+                                alt="{{ person.fullName }}"
+                                class="people-single__photo-img"
+                            >
+                        </div>
+                        <h1 class="heading heading--level-1 people-single__name">
+                            {{ person.fullName }}
+                        </h1>
+                        {% set linkItems = [] %}
+
+                        {% if person.links|length > 0 %}
+                            {% for item in person.links %}
+                                {% set linkItems = linkItems|merge([
+                                    {
+                                        href: item.url,
+                                        content: item.title
+                                    }
+                                ]) %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if person.twitterHandle %}
+                            {% set linkItems = linkItems|merge([
+                                {
+                                    href: 'https://twitter.com/' ~ person.twitterHandle,
+                                    content: '@' ~ person.twitterHandle ~ ' on Twitter'
+                                }
+                            ]) %}
+                        {% endif %}
+
+                        {% if person.facebookPageSlug %}
+                            {% set linkItems = linkItems|merge([
+                                {
+                                    href: 'https://facebook.com/' ~ person.facebookPageSlug,
+                                    content: person.fullName ~ ' on Facebook'
+                                }
+                            ]) %}
+                        {% endif %}
+
+                        {% if person.location %}
+                            {% set linkItems = linkItems|merge([
+                                {
+                                    content: person.location
+                                }
+                            ]) %}
+                        {% endif %}
+
+                        {% include 'Http/FE/Includes/ListOfLinks.twig' with {
+                            items: linkItems
+                        } only %}
+                    </div>
+
+                </div>
+
+                <div class="people-single__right">
+
+                    <div class="people-single__strip">
+                        {{ person.bio|markdownParse|smartypants|widont }}
+                    </div>
+
+                    {% if hostShows|length > 0 %}
+                        <div class="people-single__strip">
+                            <div class="people-single__hosting">
+                                <h2 class="heading heading-level-2 people-single__hosting-heading">
+                                    Host Of
+                                </h2>
+                                {% for show in hostShows %}
+                                    <div class="people-single__hosting-section">
+                                        {# @var \App\Context\Episodes\Models\EpisodeModel[] episodes #}
+                                        {% set episodes = getEpisodesForShow(show, 3) %}
+                                        {% set totalEpisodes = getEpisodesForShowCount(show) %}
+
+                                        <div class="people-single__hosting-title-area">
+                                            <a href="/{{ show.publicUrl }}" class="people-single__hosting-title-link">
+                                                {{ show.title }}
+                                            </a>
+                                            {% if totalEpisodes > 0 %}
+                                                &bull;
+                                                <span class="people-single__count">
+                                                    {{ totalEpisodes }} Episode{% if totalEpisodes > 1 %}s{% endif %}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if totalEpisodes > 0 %}
+                                            <div class="people-single__recent-episodes">
+                                                <div class="people-single__recent-episodes-title">{% if episodes|length < 2 %}Most {% endif %}Recent Episode{% if episodes|length > 1 %}s{% endif %}:</div>
+                                                <ul class="people-single__recent-episodes-list">
+                                                    {% for episode in episodes %}
+                                                        <li class="people-single__recent-episodes-item">
+                                                            <a href="{{ episode.publicUrl }}" class="people-single__recent-episodes-link">
+                                                                Episode {{ episode.numberedTitle }}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if guestEpisodes|length > 0 %}
+                        <div class="people-single__strip">
+                            <h2 class="heading heading-level-2 people-single__hosting-heading">
+                                Guest Appearances
+                            </h2>
+                            <div class="people-single__recent-episodes">
+                                <div class="people-single__recent-episodes-title">{% if guestEpisodes|length < 2 %}Most {% endif %}Recent Episode{% if guestEpisodes|length > 1 %}s{% endif %}:</div>
+                                <ul class="people-single__recent-episodes-list">
+                                    {% for episode in guestEpisodes %}
+                                        <li class="people-single__recent-episodes-item">
+                                            <a href="{{ episode.publicUrl }}" class="people-single__recent-episodes-link">
+                                                {{ episode.numberedTitleWithShow }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

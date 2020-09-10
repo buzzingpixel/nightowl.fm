@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Context\Shows\Models;
 
+use App\Context\Keywords\Models\KeywordModel;
+use App\Context\People\Models\PersonModel;
+
 class FetchModel
 {
     public ?int $limit = null;
@@ -12,6 +15,9 @@ class FetchModel
 
     /** @var string[] */
     public array $ids = [];
+
+    /** @var string[] */
+    public array $notIds = [];
 
     /** @var string[] */
     public array $titles = [];
@@ -27,6 +33,12 @@ class FetchModel
 
     public ?bool $explicit = null;
 
-    /** @var string[] */
+    /** @var KeywordModel[] */
     public array $keywords = [];
+
+    /** @var PersonModel[] */
+    public array $hosts = [];
+
+    /** @var PersonModel[] */
+    public array $guests = [];
 }
