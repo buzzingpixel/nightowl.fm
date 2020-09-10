@@ -138,6 +138,14 @@
     value: guests,
 },]) %}
 
+{% if episode is defined %}
+    {% set keywordsArray = [] %}
+    {% for item in episode.keywords %}
+        {% set keywordsArray = keywordsArray|merge([item.keyword]) %}
+    {% endfor %}
+    {% set keywords = keywordsArray|join(', ') %}
+{% endif %}
+
 {% set inputs = inputs|merge([{
     label: 'Keywords',
     subLabel: "Comma seperated list. Keywords will be normalized without capitalization.",

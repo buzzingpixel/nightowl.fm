@@ -46,6 +46,8 @@ class SaveKeyword
 
         $record->keyword = $keyword->keyword;
 
+        $record->slug = $keyword->getSlug();
+
         $this->saveRecord->save($record);
     }
 

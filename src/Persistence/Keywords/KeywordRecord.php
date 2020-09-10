@@ -12,5 +12,7 @@ class KeywordRecord extends Record
 {
     protected static string $tableName = 'keywords';
 
-    public string $keyword;
+    public string $keyword = '';
+
+    public string $slug = '';
 }
