@@ -79,7 +79,9 @@ class SeriesIndexAction
                         ],
                     ],
                     'show' => $show,
-                    'series' => $this->seriesApi->fetchSeries(),
+                    'series' => $this->seriesApi->fetchSeries(
+                        $seriesFetchModel
+                    ),
                 ],
             ),
         );

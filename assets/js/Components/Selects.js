@@ -10,9 +10,11 @@ class Selects {
      * @param {NodeList} els
      */
     constructor (els) {
-        Loader.loadCss(
-            'https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css',
-        );
+        // Loader.loadCss(
+        //     'https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css',
+        // );
+
+        Loader.loadCss('/assets/lib/choices.css');
 
         Loader.loadJs('https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js').then(() => {
             els.forEach((el) => {

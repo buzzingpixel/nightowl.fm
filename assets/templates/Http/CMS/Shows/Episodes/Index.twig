@@ -44,6 +44,7 @@
                                 {% endif %}
                                 {% if sectionTitle == 'Published' %}
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                                 {% endif %}
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
@@ -85,11 +86,14 @@
                                 {% endif %}
                                 {% if sectionTitle == 'Published' %}
                                     <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                        <a href="/cms/shows/episodes/{{ episode.show.id }}/stats/{{ episode.id }}" class="text-indigo-600 hover:text-indigo-900">Stats</a>
+                                        <a href="{{ episode.publicUrl }}" class="text-night-owl-red hover:text-night-owl-dark-red">View Page</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a href="/cms/shows/episodes/{{ episode.show.id }}/stats/{{ episode.id }}" class="text-night-owl-red hover:text-night-owl-dark-red">Stats</a>
                                     </td>
                                 {% endif %}
                                 <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                    <a href="/cms/shows/episodes/{{ episode.show.id }}/edit/{{ episode.id }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="/cms/shows/episodes/{{ episode.show.id }}/edit/{{ episode.id }}" class="text-night-owl-red hover:text-night-owl-dark-red">Edit</a>
                                 </td>
                             </tr>
                         {% endfor %}
