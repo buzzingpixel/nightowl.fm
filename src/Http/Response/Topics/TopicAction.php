@@ -15,6 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 use Twig\Environment as TwigEnvironment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 use function count;
 
@@ -39,6 +42,12 @@ class TopicAction
         $this->twig            = $twig;
     }
 
+    /**
+     * @throws HttpNotFoundException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $pageNum = $this->getPageNumber($request);
@@ -86,7 +95,8 @@ class TopicAction
 
         $meta->title = 'Episodes related to topic: ' . $topic->keyword;
 
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('EnableStaticCache', 'true');
 
         $response->getBody()->write(
             $this->twig->render(

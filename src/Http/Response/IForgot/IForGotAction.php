@@ -8,6 +8,9 @@ use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment as TwigEnvironment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class IForGotAction
 {
@@ -22,6 +25,11 @@ class IForGotAction
         $this->twigEnvironment = $twigEnvironment;
     }
 
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function __invoke(): ResponseInterface
     {
         $meta = new Meta();

@@ -17,6 +17,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 use Twig\Environment as TwigEnvironment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class GetPersonAction
 {
@@ -40,6 +43,12 @@ class GetPersonAction
         $this->episodeApi      = $episodeApi;
     }
 
+    /**
+     * @throws HttpNotFoundException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $slug = (string) $request->getAttribute('personSlug');
