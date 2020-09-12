@@ -27,6 +27,7 @@ use function array_walk;
 use function file_exists;
 use function file_put_contents;
 use function implode;
+use function is_array;
 use function pathinfo;
 use function preg_replace;
 use function Safe\json_decode;
@@ -66,13 +67,14 @@ class Step1ImporterPeopleCommand extends Command
         $this->setName('import-from-old-cms:step-1-people');
     }
 
+    /** @psalm-suppress PropertyNotSetInConstructor */
     private OutputInterface $output;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->output = $output;
 
-        $output->writeln('<fg=yellow>Beginning import...</>');
+        $output->writeln('<fg=yellow>Beginning people import...</>');
 
         $response = $this->guzzle->get(
             implode('/', [
@@ -82,14 +84,16 @@ class Step1ImporterPeopleCommand extends Command
             ['verify' => false],
         );
 
+        /** @psalm-suppress MixedAssignment */
         $json = json_decode((string) $response->getBody(), true);
 
+        /** @psalm-suppress MixedArgument */
         array_walk(
             $json,
-            [$this, 'processPerson'],
+            [$this, 'processItem'],
         );
 
-        $output->writeln('<fg=green>Import finished!</>');
+        $output->writeln('<fg=green>People import finished!</>');
 
         return 0;
     }
@@ -97,7 +101,7 @@ class Step1ImporterPeopleCommand extends Command
     /**
      * @param mixed[] $data
      */
-    protected function processPerson(array $data): void
+    protected function processItem(array $data): void
     {
         $name = ((string) $data['firstName']) . ' ' . ((string) $data['lastName']);
 
@@ -117,24 +121,26 @@ class Step1ImporterPeopleCommand extends Command
 
         $links = [];
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($data['links'] as $link) {
+            $link = is_array($link) ? $link : [];
+
             $links[] = new LinkModel(
-                $link['linkTitle'],
-                $link['linkUrl'],
+                (string) $link['linkTitle'],
+                (string) $link['linkUrl'],
             );
         }
 
-        $person            = new PersonModel();
-        $person->firstName = $data['firstName'];
-        $person->lastName  = $data['lastName'];
-        $person->slug      = $data['slug'];
-        $person->email     = $data['email'];
-        // $person->newPhotoFileLocation = $data['photo_file_path'];
+        $person                   = new PersonModel();
+        $person->firstName        = (string) $data['firstName'];
+        $person->lastName         = (string) $data['lastName'];
+        $person->slug             = (string) $data['slug'];
+        $person->email            = (string) $data['email'];
         $person->photoPreference  = $data['photoPreference'] === 'gravatar' ? 'gravatar' : 'cms';
-        $person->bio              = $data['bio'];
-        $person->location         = $data['location'];
-        $person->facebookPageSlug = $data['facebookPageSlug'];
-        $person->twitterHandle    = $data['twitterHandle'];
+        $person->bio              = (string) $data['bio'];
+        $person->location         = (string) $data['location'];
+        $person->facebookPageSlug = (string) $data['facebookPageSlug'];
+        $person->twitterHandle    = (string) $data['twitterHandle'];
         $person->setLinks($links);
 
         try {
@@ -142,10 +148,11 @@ class Step1ImporterPeopleCommand extends Command
                 throw new Exception();
             }
 
+            /** @phpstan-ignore-next-line */
             $url = (string) preg_replace(
                 '/\?.*/',
                 '',
-                $data['photo']
+                (string) $data['photo']
             );
 
             $timeStamp = $this->clock->getCurrentTime()->getTimestamp();
@@ -174,6 +181,7 @@ class Step1ImporterPeopleCommand extends Command
                 ['verify' => false],
             );
 
+            /** @phpstan-ignore-next-line */
             file_put_contents(
                 $filePath,
                 (string) $response->getBody(),
@@ -194,7 +202,5 @@ class Step1ImporterPeopleCommand extends Command
         }
 
         $this->output->writeln('<fg=green>' . $name . ' was saved to the CMS!</>');
-
-        // sleep(1);
     }
 }

@@ -85,7 +85,7 @@
                                         {% set totalEpisodes = getEpisodesForShowCount(show) %}
 
                                         <div class="people-single__hosting-title-area">
-                                            <a href="/{{ show.publicUrl }}" class="people-single__hosting-title-link">
+                                            <a href="{{ show.publicUrl }}" class="people-single__hosting-title-link">
                                                 {{ show.title }}
                                             </a>
                                             {% if totalEpisodes > 0 %}
