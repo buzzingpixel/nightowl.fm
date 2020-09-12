@@ -10,6 +10,8 @@ services:
   php:
     build:
       target: dev
+    environment:
+      PHP_IDE_CONFIG: "serverName=nightowl.localtest.me"
     volumes:
       - .:/opt/project:delegated
       - ./docker/php/xdebug-linux.ini:/usr/local/etc/php/conf.d/xdebug.ini

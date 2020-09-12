@@ -169,7 +169,7 @@
   </component>
   <component name="PhpProjectServersManager">
     <servers>
-      <server host="_" id="2ccb58f7-85ec-4f8d-9a60-ea86b409b350" name="_" port="27152" use_path_mappings="true">
+      <server host="_" id="2ccb58f7-85ec-4f8d-9a60-ea86b409b350" name="nightowl.localtest.me" port="27152" use_path_mappings="true">
         <path_mappings>
           <mapping local-root="$PROJECT_DIR$" remote-root="/opt/project" />
         </path_mappings>
