@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Response\CMS\Shows;
 
+use App\Context\Shows\Models\FetchModel;
 use App\Context\Shows\ShowApi;
+use App\Context\Shows\ShowConstants;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -42,6 +44,20 @@ class ShowsIndexAction
 
         $response = $this->responseFactory->createResponse();
 
+        $activeShowFetchModel              = new FetchModel();
+        $activeShowFetchModel->notStatuses = [ShowConstants::SHOW_STATUS_RETIRED];
+
+        $activeShows = $this->showApi->fetchShows(
+            $activeShowFetchModel
+        );
+
+        $retiredShowsFetchModel           = new FetchModel();
+        $retiredShowsFetchModel->statuses = [ShowConstants::SHOW_STATUS_RETIRED];
+
+        $retiredShows = $this->showApi->fetchShows(
+            $retiredShowsFetchModel
+        );
+
         $response->getBody()->write(
             $this->twig->render(
                 'Http/CMS/Shows/Index.twig',
@@ -49,7 +65,8 @@ class ShowsIndexAction
                     'meta' => $meta,
                     'title' => 'Shows',
                     'activeNavHref' => '/cms/shows',
-                    'shows' => $this->showApi->fetchShows(),
+                    'activeShows' => $activeShows,
+                    'retiredShows' => $retiredShows,
                 ],
             ),
         );
