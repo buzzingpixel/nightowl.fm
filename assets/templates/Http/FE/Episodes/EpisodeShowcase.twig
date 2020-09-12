@@ -13,19 +13,7 @@
                     class="episode-meta__artwork-img"
                 >
             </div>
-            <div class="episode-meta__figures">
-                {% if episode.episodeType == 'numbered' %}
-                    <span class="episode-meta__item episode-meta__item--ep-num">
-                        Ep. {{ episode.number }}
-                    </span>
-                {% endif %}
-                <span class="episode-meta__item episode-meta__item--date">
-                    {{ episode.publishedAt|date('M. j') }}
-                </span>
-                <span class="episode-meta__item episode-meta__item--time">
-                    {{ episode.humanReadableRunTime }}
-                </span>
-            </div>
+            <div class="episode-meta__figures">{% if episode.episodeType == 'numbered' %}<span class="episode-meta__item episode-meta__item--ep-num">Ep. {{ episode.number }}</span>{% endif %}<span class="episode-meta__item episode-meta__item--date">{{ episode.publishedAt|date('M. j') }}</span><span class="episode-meta__item episode-meta__item--time">{{ episode.humanReadableRunTime }}</span></div>
         </a>
     </div>
     <div class="episode-showcase__details">

@@ -22,21 +22,7 @@
                                 <a href="{{ episode.publicUrl }}" class="episode-meta__title">
                                     {{ episode.title|smartypants|widont }}
                                 </a>
-                                <div class="episode-meta__figures">
-                                    <span class="episode-meta__item episode-meta__item--ep-num">
-                                        {% if episode.number > 0 %}
-                                            Ep. {{ episode.number }}
-                                        {% else %}
-                                            Insert
-                                        {% endif %}
-                                    </span>
-                                    <span class="episode-meta__item episode-meta__item--date">
-                                        {{ episode.publishedAt|date('M. j') }}
-                                    </span>
-                                    <span class="episode-meta__item episode-meta__item--time">
-                                        {{ episode.humanReadableRunTime }}
-                                    </span>
-                                </div>
+                                <div class="episode-meta__figures"><span class="episode-meta__item episode-meta__item--ep-num">{% if episode.number > 0 %}Ep. {{ episode.number }}{% else %}Insert{% endif %}</span><span class="episode-meta__item episode-meta__item--date">{{ episode.publishedAt|date('M. j') }}</span><span class="episode-meta__item episode-meta__item--time">{{ episode.humanReadableRunTime }}</span></div>
                             </div>
                         </div>
                     </div>

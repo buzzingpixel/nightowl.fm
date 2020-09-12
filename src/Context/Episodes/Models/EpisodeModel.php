@@ -107,11 +107,27 @@ class EpisodeModel
 
     public function getHumanReadableRunTime(): string
     {
-        $seconds = (int) $this->fileRuntimeSeconds;
+        $totalSeconds = (int) $this->fileRuntimeSeconds;
 
-        $durationFormat = $seconds < 3600 ? 'i\m s\s' : 'H\h i\m s\s';
+        $hours   = (int) gmdate('G', $totalSeconds);
+        $minutes = (int) gmdate('i', $totalSeconds);
+        $seconds = (int) gmdate('s', $totalSeconds);
 
-        return gmdate($durationFormat, $seconds);
+        $str = '';
+
+        if ($hours > 0) {
+            $str .= ((string) $hours) . 'h ';
+        }
+
+        if ($minutes > 0) {
+            $str .= ((string) $minutes) . 'm ';
+        }
+
+        if ($seconds > 0) {
+            $str .= ((string) $seconds) . 's ';
+        }
+
+        return trim($str);
     }
 
     public string $fileSizeBytes = '';
