@@ -28,7 +28,7 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style="max-width: 30%">
                                     Title
                                 </th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -40,6 +40,9 @@
                                     </th>
                                 {% endif %}
                                 {% if sectionTitle == 'Published' %}
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Published at
+                                    </th>
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                                 {% endif %}
@@ -77,6 +80,9 @@
                                     </td>
                                 {% endif %}
                                 {% if sectionTitle == 'Published' %}
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        {{ episode.publishedAt.setTimezone(user.model.timezone).format('Y-m-d h:i A') }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                                         <a href="{{ episode.publicUrl }}" class="text-night-owl-red hover:text-night-owl-dark-red">View Page</a>
                                     </td>
