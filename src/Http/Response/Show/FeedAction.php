@@ -24,6 +24,9 @@ class FeedAction
         $this->responseFactory = $responseFactory;
     }
 
+    /**
+     * @throws HttpNotFoundException
+     */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $fetchModel = new FetchModel();

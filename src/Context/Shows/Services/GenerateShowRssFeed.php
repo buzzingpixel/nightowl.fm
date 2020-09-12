@@ -27,6 +27,7 @@ use function array_map;
 use function assert;
 use function count;
 use function explode;
+use function htmlspecialchars;
 use function implode;
 use function is_array;
 
@@ -170,14 +171,13 @@ class GenerateShowRssFeed
             $lastPubDate->format(DateTimeInterface::RFC2822),
         );
 
-        $channel->addChild(
-            'description',
-            $show->description,
-        );
+        $desc = htmlspecialchars($show->description);
+
+        $channel->addChild('description', $desc);
 
         $channel->addChild(
             'itunes:summary',
-            $show->description,
+            $desc,
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -185,7 +185,9 @@ class GenerateShowRssFeed
 
         $channel->addChild(
             'itunes:author',
-            $this->getAuthorString->get($show->hosts),
+            htmlspecialchars(
+                $this->getAuthorString->get($show->hosts)
+            ),
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -265,7 +267,10 @@ class GenerateShowRssFeed
                 'http://www.itunes.com/dtds/podcast-1.0.dtd',
             );
 
-            $item->addAttribute('text', (string) $cat['name']);
+            $item->addAttribute(
+                'text',
+                htmlspecialchars((string) $cat['name'])
+            );
 
             $this->addCategories(
                 $item,

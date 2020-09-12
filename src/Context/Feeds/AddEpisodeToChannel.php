@@ -41,7 +41,10 @@ class AddEpisodeToChannel
     ): void {
         $item = $channel->addChild('item');
 
-        $item->addChild('title', $episode->getNumberedTitle());
+        $item->addChild(
+            'title',
+            htmlspecialchars($episode->getNumberedTitle())
+        );
 
         $item->addChild('link', $episode->getPublicUrl());
 
@@ -64,7 +67,9 @@ class AddEpisodeToChannel
             )
         );
 
-        $authorString = $this->getAuthorString->get($episode->hosts);
+        $authorString = htmlspecialchars(
+            $this->getAuthorString->get($episode->hosts)
+        );
 
         $item->addChild('author', $authorString);
 
@@ -74,11 +79,13 @@ class AddEpisodeToChannel
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
-        $item->addChild('description', $episode->description);
+        $desc = htmlspecialchars($episode->description);
+
+        $item->addChild('description', $desc);
 
         $item->addChild(
             'itunes:summary',
-            $episode->description,
+            $desc,
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
@@ -132,10 +139,12 @@ class AddEpisodeToChannel
         if (count($episode->keywords) > 0) {
             $item->addChild(
                 'itunes:keywords',
-                implode(', ', array_map(
-                    static fn (KeywordModel $k) => $k->keyword,
-                    $episode->keywords,
-                )),
+                htmlspecialchars(
+                    implode(', ', array_map(
+                        static fn (KeywordModel $k) => $k->keyword,
+                        $episode->keywords,
+                    ))
+                ),
                 'http://www.itunes.com/dtds/podcast-1.0.dtd',
             );
         }
