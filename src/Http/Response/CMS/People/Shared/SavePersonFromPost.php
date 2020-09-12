@@ -16,8 +16,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as V;
 
 use function assert;
+use function filter_var;
 use function is_array;
 use function is_string;
+
+use const FILTER_VALIDATE_EMAIL;
 
 class SavePersonFromPost
 {
@@ -92,10 +95,24 @@ class SavePersonFromPost
                         }
                     )->setTemplate('Person slug must be unique'),
                 ),
-                'email' => V::allOf(
-                    V::notEmpty(),
-                    V::email(),
-                ),
+                'email' => V::callback(
+                    static function ($input): bool {
+                        if (! is_string($input)) {
+                            return false;
+                        }
+
+                        if ($input === '') {
+                            return true;
+                        }
+
+                        $valid = filter_var(
+                            $input,
+                            FILTER_VALIDATE_EMAIL
+                        );
+
+                        return $valid !== false;
+                    },
+                )->setTemplate('Must be a valid email address'),
                 'photo_preference' => V::notEmpty(),
                 'bio' => V::notEmpty(),
             ]
