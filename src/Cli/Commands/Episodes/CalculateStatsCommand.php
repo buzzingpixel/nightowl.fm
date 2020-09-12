@@ -41,12 +41,12 @@ class CalculateStatsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // $uuid = $this->questionService->ask(
-        //     '<fg=cyan>Episode UUID: </>',
-        //     false
-        // );
+        $uuid = $this->questionService->ask(
+            '<fg=cyan>Episode UUID: </>',
+            false
+        );
 
-        $uuid = '6ba38ac6-eef6-11ea-9c74-0242ac140003';
+        // $uuid = '6ba38ac6-eef6-11ea-9c74-0242ac140003';
 
         $fetchModel = new FetchModel();
 
