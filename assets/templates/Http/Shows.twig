@@ -3,20 +3,5 @@
 {% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
 
 {% block feContent %}
-    <div class="shows-listing">
-        {% for show in shows %}
-            <a
-                href="{{ show.publicUrl }}"
-                class="shows-listing__show"
-            >
-                <div class="shows-listing__show-inner{% if show.status == 'coming_soon' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--coming-soon{% elseif show.status == 'retired' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--retired{% endif %}">
-                    <img
-                        src="{{ getShowArtworkUrl(show, {size: 560}) }}"
-                        alt="{{ show.title }}"
-                        class="shows-listing__show-img"
-                    >
-                </div>
-            </a>
-        {% endfor %}
-    </div>
+    <div class="shows-listing">{% for show in shows %}<a href="{{ show.publicUrl }}" class="shows-listing__show"><div class="shows-listing__show-inner{% if show.status == 'coming_soon' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--coming-soon{% elseif show.status == 'retired' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--retired{% endif %}"><img src="{{ getShowArtworkUrl(show, {size: 560}) }}" alt="{{ show.title }}" class="shows-listing__show-img"></div></a>{% endfor %}</div>
 {% endblock %}
