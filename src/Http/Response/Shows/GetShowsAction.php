@@ -38,11 +38,23 @@ class GetShowsAction
      */
     public function __invoke(): ResponseInterface
     {
-        $fetchModel = new FetchModel();
+        $activeFetchModel = new FetchModel();
 
-        $fetchModel->notStatuses[] = ShowConstants::SHOW_STATUS_HIDDEN;
+        $activeFetchModel->notStatuses = [
+            ShowConstants::SHOW_STATUS_HIDDEN,
+            ShowConstants::SHOW_STATUS_RETIRED,
+        ];
 
-        $shows = $this->showApi->fetchShows($fetchModel);
+        $activeShows = $this->showApi->fetchShows(
+            $activeFetchModel
+        );
+
+        $retiredFetchModel           = new FetchModel();
+        $retiredFetchModel->statuses = [ShowConstants::SHOW_STATUS_RETIRED];
+
+        $retiredShows = $this->showApi->fetchShows(
+            $retiredFetchModel
+        );
 
         $response = $this->responseFactory->createResponse()
             ->withHeader('EnableStaticCache', 'true');
@@ -56,7 +68,8 @@ class GetShowsAction
                 'Http/Shows.twig',
                 [
                     'meta' => $meta,
-                    'shows' => $shows,
+                    'activeShows' => $activeShows,
+                    'retiredShows' => $retiredShows,
                 ]
             ),
         );

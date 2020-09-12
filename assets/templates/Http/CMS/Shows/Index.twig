@@ -86,15 +86,17 @@
         {{ actionButton }}
     </div>
     {% if activeShows|length > 0 %}
-        <h1 class="text-xl font-semibold text-gray-900">Active Shows</h1>
-        {{ _self.displayShows(activeShows) }}
+        <div>
+            <h2 class="text-xl font-semibold text-gray-900">Active Shows</h2>
+            {{ _self.displayShows(activeShows) }}
+        </div>
     {% endif %}
     <div class="mt-4 text-right">
         {{ actionButton }}
     </div>
     {% if retiredShows|length > 0 %}
         <div{% if activeShows|length > 0%} class="mt-16"{% endif %}>
-            <h1 class="text-xl font-semibold text-gray-900">Retired Shows</h1>
+            <h2 class="text-xl font-semibold text-gray-900">Retired Shows</h2>
             {{ _self.displayShows(retiredShows) }}
         </div>
     {% endif %}

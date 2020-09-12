@@ -44,18 +44,18 @@ class ShowsIndexAction
 
         $response = $this->responseFactory->createResponse();
 
-        $activeShowFetchModel              = new FetchModel();
-        $activeShowFetchModel->notStatuses = [ShowConstants::SHOW_STATUS_RETIRED];
+        $activeFetchModel              = new FetchModel();
+        $activeFetchModel->notStatuses = [ShowConstants::SHOW_STATUS_RETIRED];
 
         $activeShows = $this->showApi->fetchShows(
-            $activeShowFetchModel
+            $activeFetchModel
         );
 
-        $retiredShowsFetchModel           = new FetchModel();
-        $retiredShowsFetchModel->statuses = [ShowConstants::SHOW_STATUS_RETIRED];
+        $retiredFetchModel           = new FetchModel();
+        $retiredFetchModel->statuses = [ShowConstants::SHOW_STATUS_RETIRED];
 
         $retiredShows = $this->showApi->fetchShows(
-            $retiredShowsFetchModel
+            $retiredFetchModel
         );
 
         $response->getBody()->write(

@@ -1,7 +1,29 @@
-{# @var \App\Context\Shows\Models\ShowModel[] shows #}
+{# @var \App\Context\Shows\Models\ShowModel[] activeShows #}
+{# @var \App\Context\Shows\Models\ShowModel[] retiredShows #}
 
 {% extends 'Http/_Infrastructure/_LayoutFe.twig' %}
 
+{% macro displayShows(shows) %}
+    {# @var \App\Context\Shows\Models\ShowModel[] shows #}
+
+    {% for show in shows %}<a href="{{ show.publicUrl }}" class="shows-listing__show"><div class="shows-listing__show-inner{% if show.status == 'coming_soon' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--coming-soon{% elseif show.status == 'retired' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--retired{% endif %}"><img src="{{ getShowArtworkUrl(show, {size: 560}) }}" alt="{{ show.title }}" class="shows-listing__show-img"></div></a>{% endfor %}
+{% endmacro %}
+
 {% block feContent %}
-    <div class="shows-listing">{% for show in shows %}<a href="{{ show.publicUrl }}" class="shows-listing__show"><div class="shows-listing__show-inner{% if show.status == 'coming_soon' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--coming-soon{% elseif show.status == 'retired' %} shows-listing__show-inner--has-overlay shows-listing__show-inner--retired{% endif %}"><img src="{{ getShowArtworkUrl(show, {size: 560}) }}" alt="{{ show.title }}" class="shows-listing__show-img"></div></a>{% endfor %}</div>
+    {% if activeShows|length > 0 %}
+        <div class="mt-2">
+            <div class="shows-listing">
+                <h2 class="heading heading--level-2 ml-2" style="margin-bottom: 0">Active Shows</h2>
+                {{ _self.displayShows(activeShows) }}
+            </div>
+        </div>
+    {% endif %}
+    {% if retiredShows|length > 0 %}
+        <div class="mt-2">
+            <div class="shows-listing">
+                <h2 class="heading heading--level-2 ml-2" style="margin-bottom: 0">Retired Shows</h2>
+                {{ _self.displayShows(retiredShows) }}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
