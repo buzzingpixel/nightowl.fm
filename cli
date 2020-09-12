@@ -50,8 +50,11 @@ foreach ($finalIterator as $files) {
         unset($newFileNameArray[count($newFileNameArray) - 1]);
         $className = implode('\\', $newFileNameArray);
         $className = '\App\\' . $className . '\\' . $baseName;
-        $command = $container->get($className);
-        $app->add($command);
+        try {
+            $command = $container->get($className);
+            $app->add($command);
+        } catch (Throwable $e) {
+        }
     }
 }
 
