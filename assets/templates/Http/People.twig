@@ -45,25 +45,27 @@
             </div>
         </div>
     {% endif %}
-    <div class="layout-block" id="guests">
-        <div class="layout-block__inner{% if hosts|length > 0 %} layout-block__inner--bordered-top{% endif %}">
-            <div class="people">
-                <div class="people__left">
-                    <h1 class="heading heading--level-1">
-                        {{ 'Guests'|smartypants|widont }}
-                    </h1>
-                    <p class="util-text-large">
-                        {{ 'Our friends with special abilities, keen insights, and good hearts.'|smartypants|widont }}
-                    </p>
-                </div>
-                <div class="people__right">
-                    <div class="people-grid">
-                        {% for person in guests %}
-                            {{ _self.personDisplay(person) }}
-                        {% endfor %}
+    {% if guests|length %}
+        <div class="layout-block" id="guests">
+            <div class="layout-block__inner{% if hosts|length > 0 %} layout-block__inner--bordered-top{% endif %}">
+                <div class="people">
+                    <div class="people__left">
+                        <h1 class="heading heading--level-1">
+                            {{ 'Guests'|smartypants|widont }}
+                        </h1>
+                        <p class="util-text-large">
+                            {{ 'Our friends with special abilities, keen insights, and good hearts.'|smartypants|widont }}
+                        </p>
+                    </div>
+                    <div class="people__right">
+                        <div class="people-grid">
+                            {% for person in guests %}
+                                {{ _self.personDisplay(person) }}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
