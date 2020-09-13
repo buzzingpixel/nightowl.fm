@@ -6,7 +6,8 @@ namespace App\Cli\Commands\ImportFromOldCMS;
 
 interface Constants
 {
-    public const BASE_IMPORT_URL = 'https://nightowl-craft.localtest.me:29765';
+    // public const BASE_IMPORT_URL = 'https://nightowl-craft.localtest.me:29765';
+    public const BASE_IMPORT_URL = 'https://nightowl.fm';
 
     public const GET_USERS = 'index.php?p=actions/nightcast/migration/getUsers';
 
