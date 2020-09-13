@@ -149,7 +149,7 @@ class AddEpisodeToChannel
             );
         }
 
-        $channel->addChild(
+        $item->addChild(
             'itunes:image',
             $this->showApi->getShowArtworkUrlPublic(
                 $episode->show,

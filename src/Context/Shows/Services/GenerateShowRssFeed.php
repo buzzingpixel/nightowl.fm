@@ -163,7 +163,7 @@ class GenerateShowRssFeed
 
         $channel->addChild('title', $show->title);
 
-        $channel->addChild('link', $show->getPublicFeedUrl());
+        $channel->addChild('link', $show->getPublicUrl());
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $channel->addChild(

@@ -140,7 +140,7 @@ class GenerateMasterFeed
         SimpleXMLElement $feed,
         DateTimeImmutable $lastPubDate
     ): SimpleXMLElement {
-        $feedUrl = $this->generalConfig->siteUrl() . '/masterfeed';
+        $feedUrl = $this->generalConfig->siteUrl();
 
         $channel = $feed->addChild('channel');
 
