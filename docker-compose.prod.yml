@@ -1,12 +1,27 @@
 version: '3.7'
 
 services:
+  utility:
+    env_file: .env
+    image: ubuntu:18.04
+    restart: always
+    container_name: nightowl-utility
+    volumes:
+      - .:/opt/project
+      - log-volume:/log-volume
+      - episodes-volume:/episodes-volume
+      - files-volume:/files-volume
+    command: bash -c "chmod +x /opt/project/docker/utility/prod.sh && /opt/project/docker/utility/prod.sh"
+
   web:
     build:
       target: prod
     restart: always
     volumes:
+      - nginx-master_certbot-conf-volume:/etc/letsencrypt
       - log-volume:/var/log
+      - episodes-volume:/opt/project/episodes
+      - files-volume:/opt/project/public/files
 
   php:
     build:
@@ -14,6 +29,71 @@ services:
     restart: always
     volumes:
       - log-volume:/var/log
+      - episodes-volume:/opt/project/episodes
+      - files-volume:/opt/project/public/files
+
+  php-queue-runner-1:
+    env_file: .env
+    build:
+      target: prod
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+    restart: always
+    container_name: nightowl-php-queue-runner-1
+    environment:
+      HOSTNAME: nightowl-php-queue-runner-1
+      COMPOSER_HOME: /composer-home-volume
+    volumes:
+      - composer-home-volume:/composer-home-volume
+      - episodes-volume:/opt/project/episodes
+      - files-volume:/opt/project/public/files
+    command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
+    networks:
+      default:
+        aliases:
+          - nightowl-php-queue-runner-1
+
+  php-queue-runner-2:
+    env_file: .env
+    build:
+      target: prod
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+    restart: always
+    container_name: nightowl-php-queue-runner-2
+    environment:
+      HOSTNAME: nightowl-php-queue-runner-2
+      COMPOSER_HOME: /composer-home-volume
+    volumes:
+      - composer-home-volume:/composer-home-volume
+      - episodes-volume:/opt/project/episodes
+      - files-volume:/opt/project/public/files
+    command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
+    networks:
+      default:
+        aliases:
+          - nightowl-php-queue-runner-2
+
+  php-queue-runner-3:
+    env_file: .env
+    build:
+      target: prod
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+    restart: always
+    container_name: nightowl-php-queue-runner-3
+    environment:
+      HOSTNAME: nightowl-php-queue-runner-3
+      COMPOSER_HOME: /composer-home-volume
+    volumes:
+      - composer-home-volume:/composer-home-volume
+      - episodes-volume:/opt/project/episodes
+      - files-volume:/opt/project/public/files
+    command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
+    networks:
+      default:
+        aliases:
+          - nightowl-php-queue-runner-3
 
   db:
     restart: always
@@ -21,4 +101,9 @@ services:
       - log-volume:/var/log
 
 volumes:
+  episodes-volume:
+  files-volume:
   log-volume:
+  nginx-master_certbot-conf-volume:
+    external: true
+
