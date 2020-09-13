@@ -11,6 +11,7 @@ services:
       - log-volume:/log-volume
       - episodes-volume:/episodes-volume
       - files-volume:/files-volume
+      - storage-volume:/storage-volume
     command: bash -c "chmod +x /opt/project/docker/utility/prod.sh && /opt/project/docker/utility/prod.sh"
 
   web:
@@ -22,6 +23,7 @@ services:
       - log-volume:/var/log
       - episodes-volume:/opt/project/episodes
       - files-volume:/opt/project/public/files
+      - storage-volume:/opt/project/storage
 
   php:
     build:
@@ -31,6 +33,7 @@ services:
       - log-volume:/var/log
       - episodes-volume:/opt/project/episodes
       - files-volume:/opt/project/public/files
+      - storage-volume:/opt/project/storage
 
   php-queue-runner-1:
     env_file: .env
@@ -47,6 +50,7 @@ services:
       - composer-home-volume:/composer-home-volume
       - episodes-volume:/opt/project/episodes
       - files-volume:/opt/project/public/files
+      - storage-volume:/opt/project/storage
     command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
     networks:
       default:
@@ -68,6 +72,7 @@ services:
       - composer-home-volume:/composer-home-volume
       - episodes-volume:/opt/project/episodes
       - files-volume:/opt/project/public/files
+      - storage-volume:/opt/project/storage
     command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
     networks:
       default:
@@ -89,6 +94,7 @@ services:
       - composer-home-volume:/composer-home-volume
       - episodes-volume:/opt/project/episodes
       - files-volume:/opt/project/public/files
+      - storage-volume:/opt/project/storage
     command: bash -c "chmod +x /opt/project/queueRunner.sh && /opt/project/queueRunner.sh"
     networks:
       default:
@@ -104,6 +110,7 @@ volumes:
   episodes-volume:
   files-volume:
   log-volume:
+  storage-volume:
   nginx-master_certbot-conf-volume:
     external: true
 
