@@ -49,6 +49,7 @@
         "slim/psr7": "^1.1",
         "slim/slim": "^4.3",
         "symfony/console": "^5.0",
+        "thecodingmachine/safe": "^1.2",
         "twig/twig": "^3.0"
     },
     "require-dev": {
