@@ -28,6 +28,7 @@ use Throwable;
 
 use function array_walk;
 use function file_exists;
+use function file_get_contents;
 use function file_put_contents;
 use function implode;
 use function in_array;
@@ -89,16 +90,27 @@ class Step2ImportShowsCommand extends Command
 
         $output->writeln('<fg=yellow>Beginning show import...</>');
 
-        $response = $this->guzzle->get(
-            implode('/', [
-                Constants::BASE_IMPORT_URL,
-                Constants::GET_SHOWS,
-            ]),
-            ['verify' => false],
-        );
+        // $response = $this->guzzle->get(
+        //     implode('/', [
+        //         Constants::BASE_IMPORT_URL,
+        //         Constants::GET_SHOWS,
+        //     ]),
+        //     ['verify' => false],
+        // );
+        // file_put_contents(
+        //     '/opt/project/src/Cli/Commands/ImportFromOldCMS/step2.json',
+        //     (string) $response->getBody(),
+        // );
+        // die;
+        // /** @psalm-suppress MixedAssignment */
+        // $json = json_decode((string) $response->getBody(), true);
 
-        /** @psalm-suppress MixedAssignment */
-        $json = json_decode((string) $response->getBody(), true);
+        $json = json_decode(
+            file_get_contents(
+                '/opt/project/src/Cli/Commands/ImportFromOldCMS/step2.json'
+            ),
+            true
+        );
 
         /** @psalm-suppress MixedArgument */
         array_walk(

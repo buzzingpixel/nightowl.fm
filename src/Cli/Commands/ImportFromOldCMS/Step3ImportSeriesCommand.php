@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_walk;
-use function implode;
+use function file_get_contents;
 use function Safe\json_decode;
 
 class Step3ImportSeriesCommand extends Command
@@ -53,16 +53,27 @@ class Step3ImportSeriesCommand extends Command
 
         $output->writeln('<fg=yellow>Beginning series import...</>');
 
-        $response = $this->guzzle->get(
-            implode('/', [
-                Constants::BASE_IMPORT_URL,
-                Constants::GET_SERIES,
-            ]),
-            ['verify' => false],
-        );
+        // $response = $this->guzzle->get(
+        //     implode('/', [
+        //         Constants::BASE_IMPORT_URL,
+        //         Constants::GET_SERIES,
+        //     ]),
+        //     ['verify' => false],
+        // );
+        // file_put_contents(
+        //     '/opt/project/src/Cli/Commands/ImportFromOldCMS/step3.json',
+        //     (string) $response->getBody(),
+        // );
+        // die;
+        // /** @psalm-suppress MixedAssignment */
+        // $json = json_decode((string) $response->getBody(), true);
 
-        /** @psalm-suppress MixedAssignment */
-        $json = json_decode((string) $response->getBody(), true);
+        $json = json_decode(
+            file_get_contents(
+                '/opt/project/src/Cli/Commands/ImportFromOldCMS/step3.json'
+            ),
+            true
+        );
 
         /** @psalm-suppress MixedArgument */
         array_walk(

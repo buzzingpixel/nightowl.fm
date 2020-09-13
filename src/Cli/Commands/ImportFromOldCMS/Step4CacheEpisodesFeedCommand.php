@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function file_put_contents;
 use function implode;
 use function Safe\json_decode;
 
@@ -47,6 +48,12 @@ class Step4CacheEpisodesFeedCommand extends Command
             ]),
             ['verify' => false],
         );
+
+        file_put_contents(
+            '/opt/project/src/Cli/Commands/ImportFromOldCMS/step4.json',
+            (string) $response->getBody(),
+        );
+        die;
 
         /** @psalm-suppress MixedAssignment */
         $json = json_decode((string) $response->getBody(), true);

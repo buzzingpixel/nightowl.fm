@@ -37,10 +37,12 @@ use Throwable;
 
 use function count;
 use function file_exists;
+use function file_get_contents;
 use function file_put_contents;
 use function implode;
 use function pathinfo;
 use function preg_replace;
+use function Safe\json_decode;
 
 class Step5ImportEpisodesCommand extends Command
 {
@@ -98,10 +100,16 @@ class Step5ImportEpisodesCommand extends Command
 
         $output->writeln('<fg=yellow>Beginning episode import...</>');
 
-        $cachedFeedItem = $this->cachePool->getItem('OldCMSImportEpisodesFeed');
+        // $cachedFeedItem = $this->cachePool->getItem('OldCMSImportEpisodesFeed');
+        // /** @var mixed[] $feed */
+        // $feed = $cachedFeedItem->get();
 
-        /** @var mixed[] $feed */
-        $feed = $cachedFeedItem->get();
+        $feed = json_decode(
+            file_get_contents(
+                '/opt/project/src/Cli/Commands/ImportFromOldCMS/step4.json'
+            ),
+            true
+        );
 
         /** @psalm-suppress MixedAssignment */
         foreach ($feed as $slug => $episodes) {

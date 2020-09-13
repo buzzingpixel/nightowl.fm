@@ -25,8 +25,8 @@ use Throwable;
 
 use function array_walk;
 use function file_exists;
+use function file_get_contents;
 use function file_put_contents;
-use function implode;
 use function is_array;
 use function pathinfo;
 use function preg_replace;
@@ -76,16 +76,27 @@ class Step1ImporterPeopleCommand extends Command
 
         $output->writeln('<fg=yellow>Beginning people import...</>');
 
-        $response = $this->guzzle->get(
-            implode('/', [
-                Constants::BASE_IMPORT_URL,
-                Constants::GET_USERS,
-            ]),
-            ['verify' => false],
-        );
+        // $response = $this->guzzle->get(
+        //     implode('/', [
+        //         Constants::BASE_IMPORT_URL,
+        //         Constants::GET_USERS,
+        //     ]),
+        //     ['verify' => false],
+        // );
+        // file_put_contents(
+        //     '/opt/project/src/Cli/Commands/ImportFromOldCMS/step1.json',
+        //     (string) $response->getBody(),
+        // );
+        // die;
+        // /** @psalm-suppress MixedAssignment */
+        // $json = json_decode((string) $response->getBody(), true);
 
-        /** @psalm-suppress MixedAssignment */
-        $json = json_decode((string) $response->getBody(), true);
+        $json = json_decode(
+            file_get_contents(
+                '/opt/project/src/Cli/Commands/ImportFromOldCMS/step1.json'
+            ),
+            true
+        );
 
         /** @psalm-suppress MixedArgument */
         array_walk(
