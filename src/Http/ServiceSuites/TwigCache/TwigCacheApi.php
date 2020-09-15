@@ -10,6 +10,7 @@ use ReflectionException;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
 
+use function assert;
 use function exec;
 use function rtrim;
 
@@ -43,6 +44,8 @@ class TwigCacheApi
             return false;
         }
 
+        assert($cache instanceof FilesystemCache);
+
         $reflection = new ReflectionClass($cache);
 
         $directory = $reflection->getProperty('directory');
@@ -50,7 +53,7 @@ class TwigCacheApi
         $directory->setAccessible(true);
 
         $cacheDirGlob = rtrim(
-            $directory->getValue($cache),
+            (string) $directory->getValue($cache),
             '/'
         ) . '/*';
 

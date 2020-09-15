@@ -96,6 +96,9 @@ class SavePersonFromPost
                     )->setTemplate('Person slug must be unique'),
                 ),
                 'email' => V::callback(
+                    /**
+                     * @param mixed $input
+                     */
                     static function ($input): bool {
                         if (! is_string($input)) {
                             return false;
