@@ -56,6 +56,10 @@ class SaveNewProfilePhoto
 
         $targetFullPath = $targetPath . '/' . $targetFileName;
 
+        if ($this->filesystem->has($targetFullPath)) {
+            $this->filesystem->delete($targetFullPath);
+        }
+
         $this->filesystem->copy(
             $newFileLocation,
             $targetFullPath,
