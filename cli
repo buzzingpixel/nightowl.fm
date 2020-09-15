@@ -8,6 +8,7 @@ use Config\SetupDockerDatabase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 
 // Run bootstrap and get di container
 $bootstrap = require __DIR__ . '/config/bootstrap.php';
@@ -45,15 +46,25 @@ $dirArray = explode('/', $dir);
 foreach ($finalIterator as $files) {
     foreach ($files as $file) {
         $baseName = basename($file, '.php');
+
         $fileNameArray = explode('/', $file);
+
         $newFileNameArray = array_slice($fileNameArray, count($dirArray));
+
         unset($newFileNameArray[count($newFileNameArray) - 1]);
+
         $className = implode('\\', $newFileNameArray);
+
         $className = '\App\\' . $className . '\\' . $baseName;
-        try {
+
+        $commandPosition = mb_strpos(
+            strrev($className),
+            strrev('Command'),
+        );
+
+        if ($commandPosition === 0) {
             $command = $container->get($className);
             $app->add($command);
-        } catch (Throwable $e) {
         }
     }
 }
