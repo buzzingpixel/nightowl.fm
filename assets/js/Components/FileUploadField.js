@@ -19,6 +19,10 @@ class FileUploadField {
 
         this.model = model;
 
+        this.progressBar = model.el.querySelector(
+            '[ref="progressBar"]',
+        );
+
         model.data.mode = modeReadyForUpload;
 
         // Prevent default on drag actions
@@ -74,6 +78,8 @@ class FileUploadField {
     handleDrop (e) {
         this.model.data.message = '';
 
+        this.progressBar.style.width = '0%';
+
         this.model.data.uploadInProgress = true;
 
         [...e.dataTransfer.files].forEach((file) => {
@@ -94,7 +100,17 @@ class FileUploadField {
 
         formData.append('file', file);
 
-        window.axios.post('/cms/ajax/file-upload', formData)
+        window.axios.post(
+            '/cms/ajax/file-upload',
+            formData,
+            {
+                onUploadProgress (e) {
+                    const percent = Math.round((e.loaded * 100) / e.total);
+
+                    self.progressBar.style.width = `${String(percent)}%`;
+                },
+            },
+        )
             .then((resp) => {
                 self.model.data.messageType = 'success';
                 self.model.data.message = resp.data.fileName;

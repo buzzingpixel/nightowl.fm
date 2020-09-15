@@ -159,6 +159,21 @@
                             {% endif %}
                         </div>
                     </div>
+                    <div class="mt-2 max-w-lg">
+                        <div class="h-1 w-full rounded-sm">
+                            <div
+                                class="h-1 bg-gray-100 w-full rounded-sm"
+                                style="display: none"
+                                x-show="data.uploadInProgress"
+                            >
+                                <div
+                                    class="h-1 bg-night-owl-red w-full rounded-sm transition-all duration-75"
+                                    style="width: 0"
+                                    ref="progressBar"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% case 'radio' %}
                 {% if description %}
