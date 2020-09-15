@@ -44,11 +44,8 @@ class Error500Responder
         $response = $this->responseFactory->createResponse(
             500,
             'An internal server error occurred'
-        )
-            // We'll statically cache the response so 500s can't DDOS us
-            ->withHeader('EnableStaticCache', 'true');
+        );
 
-        // TODO: Create 500 page
         $response->getBody()->write(
             $this->twig->render('Http/500.twig')
         );

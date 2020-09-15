@@ -34,11 +34,8 @@ class Error404Responder
         $response = $this->responseFactory->createResponse(
             404,
             'Page not found'
-        )
-            // We'll statically cache the response so 404s can't DDOS us
-            ->withHeader('EnableStaticCache', 'true');
+        );
 
-        // TODO: Create 404 page
         $response->getBody()->write(
             $this->twig->render('Http/404.twig')
         );
