@@ -148,6 +148,10 @@ class SaveNewFile
             $this->filesystem->delete($targetFullPath);
         }
 
+        if ($this->filesystem->has($targetFullPath)) {
+            $this->filesystem->delete($targetFullPath);
+        }
+
         $this->filesystem->copy(
             $newFileLocation,
             $targetFullPath,
