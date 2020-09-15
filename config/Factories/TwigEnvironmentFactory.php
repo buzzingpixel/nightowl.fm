@@ -89,6 +89,8 @@ class TwigEnvironmentFactory
             $twig->addExtension($twigMessages);
 
             $postMessage = $twigMessages->getMessages('PostMessage');
+
+            $twig->addGlobal('csrf', $di->get(Csrf::class));
         }
 
         $twig->addExtension($di->get(FetchLoggedInUser::class));
@@ -120,8 +122,6 @@ class TwigEnvironmentFactory
         $twig->addExtension($di->get(GetEpisodesForShow::class));
 
         $twig->addGlobal('GeneralConfig', $di->get(General::class));
-
-        $twig->addGlobal('csrf', $di->get(Csrf::class));
 
         $twig->addGlobal('PostMessage', $postMessage[0] ?? []);
 
