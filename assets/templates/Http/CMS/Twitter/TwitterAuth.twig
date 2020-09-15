@@ -2,6 +2,25 @@
 
 {% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
 
+{% block cmsLayoutPreContent %}
+    <div
+        class="pb-2 hidden"
+        ref="errorBanner"
+    >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div class="bg-red-400 py-4 px-2 rounded-b-md border-red-800 border-top-0 border-l border-r border-b">
+                <h2 class="text-xl mb-2">
+                    There was an error
+                </h2>
+                <div ref="errorMessage">
+                    <div class="font-bold mb-2">Code: 215</div>
+                    <div class="mb-4">Message: Bad Authentication data.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block cmsContent %}
     {% if twitterSettings.twitterAuth %}
         Authorized as <a href="https://twitter.com/{{ twitterSettings.twitterScreenName }}">{{ twitterSettings.twitterScreenName }}</a>
