@@ -76,9 +76,11 @@ class RenamePublishedEpisodeFile
 
         $ext = $pathInfo['extension'] ?? '';
 
+        $targetFileName .= '.' . $ext;
+
         $targetPath = $episodesDir . '/' . $episode->show->id;
 
-        $targetFullPath = $targetPath . '/' . $targetFileName . '.' . $ext;
+        $targetFullPath = $targetPath . '/' . $targetFileName;
 
         $this->filesystem->rename(
             $currentFileLocation,
