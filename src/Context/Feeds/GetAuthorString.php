@@ -35,7 +35,7 @@ class GetAuthorString
                 $str .= $person->getFullName();
 
                 if ($i === 0) {
-                    $str .= ' &amp; ';
+                    $str .= ' and ';
                 }
 
                 continue;
