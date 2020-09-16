@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Templating\TwigExtensions;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel;
 use Twig\Extension\AbstractExtension;
@@ -42,7 +41,7 @@ class GetRandomEpisode extends AbstractExtension
 
         $fetchModel->orderByRandom = true;
 
-        $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
+        $fetchModel->isPublished = true;
 
         $fetchModel->excludeEpisodesFromHiddenShows = true;
 

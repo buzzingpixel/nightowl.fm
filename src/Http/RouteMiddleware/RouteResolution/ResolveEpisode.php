@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\RouteMiddleware\RouteResolution;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\EpisodeModel;
 use App\Context\Episodes\Models\FetchModel as EpisodeFetchModel;
 use App\Context\Shows\Models\FetchModel as ShowFetchModel;
@@ -94,8 +93,9 @@ class ResolveEpisode implements MiddlewareInterface
         ShowModel $show,
         string $idOrNumber
     ): ?EpisodeModel {
-        $fetchModel             = new EpisodeFetchModel();
-        $fetchModel->statuses[] = EpisodeConstants::EPISODE_STATUS_LIVE;
+        $fetchModel = new EpisodeFetchModel();
+
+        $fetchModel->isPublished = true;
 
         $fetchModel->shows = [$show];
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Response\Search;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\FetchModel;
 use App\Http\Models\Meta;
 use App\Http\Models\Pagination;
@@ -52,11 +51,11 @@ class SearchAction
 
         $query = $this->getSearchQuery($request);
 
-        $fetchModel           = new FetchModel();
-        $fetchModel->limit    = self::LIMIT;
-        $fetchModel->offset   = $offset;
-        $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
-        $fetchModel->search   = '%' . $query . '%';
+        $fetchModel              = new FetchModel();
+        $fetchModel->limit       = self::LIMIT;
+        $fetchModel->offset      = $offset;
+        $fetchModel->isPublished = true;
+        $fetchModel->search      = '%' . $query . '%';
 
         $episodes = $this->episodeApi->fetchEpisodes($fetchModel);
 

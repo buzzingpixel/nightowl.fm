@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Response\Show;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\FetchModel as EpisodeFetchModel;
 use App\Context\Series\Models\FetchModel as SeriesFetchModel;
 use App\Context\Series\SeriesApi;
@@ -75,11 +74,11 @@ class GetShowAction
 
         $offset = ($uriSegments->getPageNum() * self::LIMIT) - self::LIMIT;
 
-        $episodeFetchModel             = new EpisodeFetchModel();
-        $episodeFetchModel->shows      = [$show];
-        $episodeFetchModel->limit      = self::LIMIT;
-        $episodeFetchModel->offset     = $offset;
-        $episodeFetchModel->statuses[] = EpisodeConstants::EPISODE_STATUS_LIVE;
+        $episodeFetchModel              = new EpisodeFetchModel();
+        $episodeFetchModel->shows       = [$show];
+        $episodeFetchModel->limit       = self::LIMIT;
+        $episodeFetchModel->offset      = $offset;
+        $episodeFetchModel->isPublished = true;
 
         $episodes = $this->episodeApi->fetchEpisodes(
             $episodeFetchModel,

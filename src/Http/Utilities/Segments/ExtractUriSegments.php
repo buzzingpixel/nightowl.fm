@@ -6,7 +6,6 @@ namespace App\Http\Utilities\Segments;
 
 use Psr\Http\Message\UriInterface;
 
-use function array_filter;
 use function array_slice;
 use function array_values;
 use function count;
@@ -22,12 +21,17 @@ class ExtractUriSegments
     public function extract(UriInterface $uri): UriSegments
     {
         /** @phpstan-ignore-next-line */
-        $segments = array_values(array_filter(
-            explode('/', $uri->getPath()),
-            static function ($item): string {
-                return $item;
+        $segments = explode('/', $uri->getPath());
+
+        foreach ($segments as $key => $val) {
+            if ($val !== '') {
+                continue;
             }
-        ));
+
+            unset($segments[$key]);
+        }
+
+        $segments = array_values($segments);
 
         $segmentsSansPagination = $segments;
 

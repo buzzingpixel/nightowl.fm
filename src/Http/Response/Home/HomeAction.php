@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Response\Home;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\FetchModel;
 use App\Http\Models\Meta;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -42,7 +41,7 @@ class HomeAction
 
         $fetchModel->orderByPublishedAt = true;
 
-        $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
+        $fetchModel->isPublished = true;
 
         $fetchModel->limit = 10;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Context\People\Services;
 
 use App\Context\Episodes\EpisodeApi;
-use App\Context\Episodes\EpisodeConstants;
 use App\Context\Episodes\Models\FetchModel;
 use App\Context\People\Models\PersonModel;
 use Safe\Exceptions\ArrayException;
@@ -54,7 +53,7 @@ class GetGuests
 
         $fetchModel = new FetchModel();
 
-        $fetchModel->statuses = [EpisodeConstants::EPISODE_STATUS_LIVE];
+        $fetchModel->isPublished = true;
 
         $fetchModel->excludeEpisodesFromHiddenShows = true;
 
