@@ -70,6 +70,12 @@ class GetPersonAction
 
         $meta->title = $person->getFullName();
 
+        $meta->twitterCardType = 'summary_large_image';
+
+        $meta->shareImage = $this->peopleApi->getPersonProfilePhotoUrl(
+            $person
+        );
+
         $hostFetchModel              = new ShowFetchModel();
         $hostFetchModel->hosts       = [$person];
         $hostFetchModel->notStatuses = [ShowConstants::SHOW_STATUS_HIDDEN];

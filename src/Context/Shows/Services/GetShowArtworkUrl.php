@@ -53,7 +53,7 @@ class GetShowArtworkUrl
 
         $showPathInfo = pathinfo($show->artworkFileLocation);
 
-        $sizedUrl = $photosUrl .
+        $sizedUrl = $this->generalConfig->siteUrl() . $photosUrl .
             '/' .
             $showPathInfo['dirname'] .
             '/' .

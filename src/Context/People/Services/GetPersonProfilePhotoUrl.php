@@ -157,7 +157,7 @@ class GetPersonProfilePhotoUrl
 
             $personPathInfo = pathinfo($person->photoFileLocation);
 
-            $sizedUrl = $photosUrl .
+            $sizedUrl = $this->generalConfig->siteUrl() . $photosUrl .
                 '/' .
                 $personPathInfo['dirname'] .
                 '/' .
@@ -170,7 +170,8 @@ class GetPersonProfilePhotoUrl
 
             $pathInfo = pathinfo($fileLocation);
 
-            $sizedUrl = $photosUrl . '/default/' . $size . '/user.jpg';
+            $sizedUrl = $this->generalConfig->siteUrl() .
+                $photosUrl . '/default/' . $size . '/user.jpg';
         }
 
         $sizedDir = $pathInfo['dirname'] .
