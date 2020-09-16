@@ -185,9 +185,15 @@ class GenerateMasterFeed
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
+        $imageUrl = $this->generalConfig->siteUrl() . '/master-feed.jpg';
+
+        $image = $channel->addChild('image');
+
+        $image->addChild('url', $imageUrl);
+
         $channel->addChild(
             'itunes:image',
-            $this->generalConfig->siteUrl() . '/master-feed.jpg',
+            $imageUrl,
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 

@@ -149,12 +149,18 @@ class AddEpisodeToChannel
             );
         }
 
+        $imageUrl = $this->showApi->getShowArtworkUrlPublic(
+            $episode->show,
+            ['size' => 1400]
+        );
+
+        $image = $item->addChild('image');
+
+        $image->addChild('url', $imageUrl);
+
         $item->addChild(
             'itunes:image',
-            $this->showApi->getShowArtworkUrlPublic(
-                $episode->show,
-                ['size' => 1400]
-            ),
+            $imageUrl,
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
     }

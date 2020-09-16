@@ -191,12 +191,18 @@ class GenerateShowRssFeed
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
+        $imageUrl = $this->showApi->getShowArtworkUrlPublic(
+            $show,
+            ['size' => 1400]
+        );
+
+        $image = $channel->addChild('image');
+
+        $image->addChild('url', $imageUrl);
+
         $channel->addChild(
             'itunes:image',
-            $this->showApi->getShowArtworkUrlPublic(
-                $show,
-                ['size' => 1400]
-            ),
+            $imageUrl,
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
 
