@@ -13,7 +13,6 @@ use App\Context\Shows\Services\GetShowArtworkUrl;
 use App\Context\Shows\Services\SaveShow;
 use App\Context\Shows\Services\ValidateUniqueShowSlug;
 use App\Payload\Payload;
-use Config\General;
 use Psr\Container\ContainerInterface;
 
 use function assert;
@@ -99,7 +98,7 @@ class ShowApi
         ShowModel $show,
         array $opt = []
     ): string {
-        return General::$siteUrl . $this->getShowArtworkUrl(
+        return $this->getShowArtworkUrl(
             $show,
             $opt
         );
