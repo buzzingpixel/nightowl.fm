@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="206.81.13.32" id="3d1322ab-a194-4019-b5bc-8e6f0fa22309" keyPath="$USER_HOME$/.ssh/id_rsa" port="22" customName="buzzingpixel-do-buzzingpixel-docker" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="buzzingpixel-do-buzzingpixel-docker" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

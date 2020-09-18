@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:27153/nightowl</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="nightowl-prod" uuid="aa50a3d0-fe8c-49b1-a569-e3e3557e4a7d">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:27153/nightowl</jdbc-url>
+    </data-source>
   </component>
 </project>
