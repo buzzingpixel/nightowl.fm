@@ -165,6 +165,7 @@
       <path value="$PROJECT_DIR$/vendor/cebe/markdown" />
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/twig-markdown" />
       <path value="$PROJECT_DIR$/vendor/daverandom/resume" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

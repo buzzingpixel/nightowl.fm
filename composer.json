@@ -41,6 +41,7 @@
         "mrclay/minify": "^3.0",
         "php-di/php-di": "^6.0",
         "psr/cache": "^1.0",
+        "ramsey/collection": "^1.1",
         "ramsey/uuid": "^3.8",
         "robmorgan/phinx": "^0.12",
         "rollbar/rollbar": "^2.0",

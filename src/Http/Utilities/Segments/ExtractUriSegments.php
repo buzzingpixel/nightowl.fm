@@ -20,7 +20,6 @@ class ExtractUriSegments
 
     public function extract(UriInterface $uri): UriSegments
     {
-        /** @phpstan-ignore-next-line */
         $segments = explode('/', $uri->getPath());
 
         foreach ($segments as $key => $val) {
@@ -35,11 +34,15 @@ class ExtractUriSegments
 
         $segmentsSansPagination = $segments;
 
+        $hasPaginationTrigger = false;
+
         $pageNum = 1;
 
         $segmentsCount = count($segments);
 
         if ($segmentsCount > 1 && $segments[$segmentsCount - 2] === 'page') {
+            $hasPaginationTrigger = true;
+
             $pageNum = (int) $segments[$segmentsCount - 1];
 
             $segmentsSansPagination = array_slice(
@@ -52,7 +55,8 @@ class ExtractUriSegments
         return new UriSegments(
             $segments,
             $segmentsSansPagination,
-            $pageNum
+            $pageNum,
+            $hasPaginationTrigger
         );
     }
 }

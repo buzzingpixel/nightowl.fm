@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Response\CMS\Ajax\GetTwitterAuthAction;
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\Analytics\AnalyticsViewAction;
+use App\Http\Response\CMS\FileManager\FileManagerAction;
 use App\Http\Response\CMS\IndexAction;
 use App\Http\Response\CMS\MyProfile\MyProfileAction;
 use App\Http\Response\CMS\MyProfile\PostMyProfileAction;
@@ -145,5 +146,10 @@ return static function (App $app): void {
          * Analytics
          */
         $r->get('/analytics', AnalyticsViewAction::class);
+
+        /**
+         * File Manager
+         */
+        $r->get('/file-manager[/page/{pageNum:\d+}]', FileManagerAction::class);
     })->add(RequireLogInAction::class);
 };

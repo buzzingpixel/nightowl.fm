@@ -22,6 +22,7 @@ class UriSegments
     /** @var array<int, string> */
     private array $segmentsSansPagination;
     private int $pageNum;
+    private bool $hasPaginationTrigger;
 
     /**
      * @param array<int, string> $segments
@@ -30,7 +31,8 @@ class UriSegments
     public function __construct(
         array $segments,
         array $segmentsSansPagination,
-        int $pageNum
+        int $pageNum,
+        bool $hasPaginationTrigger
     ) {
         if ($this->isInitialized) {
             throw new LogicException(
@@ -41,6 +43,7 @@ class UriSegments
         $this->segments               = array_values($segments);
         $this->segmentsSansPagination = array_values($segmentsSansPagination);
         $this->pageNum                = $pageNum;
+        $this->hasPaginationTrigger   = $hasPaginationTrigger;
 
         $this->isInitialized = true;
     }
@@ -118,5 +121,10 @@ class UriSegments
     public function getPageNum(): int
     {
         return $this->pageNum;
+    }
+
+    public function hasPaginationTrigger(): bool
+    {
+        return $this->hasPaginationTrigger;
     }
 }

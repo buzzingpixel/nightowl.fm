@@ -1,0 +1,110 @@
+{# @var \App\Context\FileManager\Models\FileCollection files #}
+{# @var \App\Http\Models\Pagination pagination #}
+
+{% extends 'Http/_Infrastructure/_LayoutCms.twig' %}
+
+{# @var \App\Context\Users\Models\LoggedInUser user #}
+{% set loggedInUser = fetchLoggedInUser() %}
+
+{% set actionButton %}
+    {% include 'Http/CMS/_Infrastructure/Includes/PageActionButton.twig' with {
+        content: 'New Show',
+        href: '/cms/shows/new',
+    } only %}
+{% endset %}
+
+{% block cmsContent %}
+    <div>
+        <div class="flex flex-col">
+            <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    File Name
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Size
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Date
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider text-right">
+                                    URL
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for file in files.toArray %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <a
+                                            href="{{ file.publicUrl }}"
+                                            class="block flex items-center"
+                                            target="_blank"
+                                        >
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                {% set fileArtworkUrl = getFileArtworkUrl(file, {
+                                                    size: 80,
+                                                }) %}
+                                                {% if fileArtworkUrl %}
+                                                    <img
+                                                        class="h-10 w-10 {# rounded-full #}"
+                                                        src="{{ fileArtworkUrl ?? 'test' }}"
+                                                        alt="{{ file.baseName }}"
+                                                    >
+                                                {% else %}
+                                                    <div class="text-gray-500">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60">
+                                                            <path d="M42.5,22h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S43.052,22,42.5,22z"/>
+                                                            <path d="M17.5,16h10c0.552,0,1-0.447,1-1s-0.448-1-1-1h-10c-0.552,0-1,0.447-1,1S16.948,16,17.5,16z"/>
+                                                            <path d="M42.5,30h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S43.052,30,42.5,30z"/>
+                                                            <path d="M42.5,38h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S43.052,38,42.5,38z"/>
+                                                            <path d="M42.5,46h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S43.052,46,42.5,46z"/>
+                                                            <path d="M38.914,0H6.5v60h47V14.586L38.914,0z M39.5,3.414L50.086,14H39.5V3.414z M8.5,58V2h29v14h14v42H8.5z"/>
+                                                        </svg>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm leading-5 font-medium text-gray-900">
+                                                    {{ file.baseName }}
+                                                </div>
+                                                {#<div class="text-sm leading-5 text-gray-500">
+                                                    {{ person.email }}
+                                                </div>#}
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            {{ file.humanReadableSize }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            {{ file.dateUpdated.setTimezone(loggedInUser.model.timezone).format('Y-m-d g:i A') }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                        <a
+                                            href="{{ file.publicUrl }}"
+                                            class="text-night-owl-red hover:text-night-owl-dark-red"
+                                            target="_blank"
+                                        >
+                                            File URL
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'Http/CMS/_Infrastructure/Includes/Pagination.twig' with {
+        pagination: pagination
+    } %}
+{% endblock %}
