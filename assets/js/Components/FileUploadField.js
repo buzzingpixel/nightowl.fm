@@ -23,7 +23,19 @@ class FileUploadField {
             '[ref="progressBar"]',
         );
 
+        this.manualFileUpload = model.el.querySelector(
+            '[ref="manualFileUpload"]',
+        );
+
+        this.manualFileSelectInput = model.el.querySelector(
+            '[name="manual_file_select_input"]',
+        );
+
         model.data.mode = modeReadyForUpload;
+
+        this.manualFileUpload.addEventListener('click', () => {
+            this.manualFileSelectInput.click();
+        });
 
         // Prevent default on drag actions
         [
@@ -65,6 +77,11 @@ class FileUploadField {
 
         // Drop the file listener
         model.el.addEventListener('drop', (e) => { this.handleDrop(e); });
+
+        // Manual file upload listener
+        this.manualFileSelectInput.onchange = (e) => {
+            this.handleManualFile(e);
+        };
     }
 
     setDragInProgress () {
@@ -85,6 +102,16 @@ class FileUploadField {
         [...e.dataTransfer.files].forEach((file) => {
             this.uploadFile(file);
         });
+    }
+
+    handleManualFile (e) {
+        this.model.data.message = '';
+
+        this.progressBar.style.width = '0%';
+
+        this.model.data.uploadInProgress = true;
+
+        this.uploadFile(e.target.files[0]);
     }
 
     uploadFile (file) {
