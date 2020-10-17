@@ -141,9 +141,10 @@ class FileManagerUploadField {
             .then(() => {
                 window.location.href = '/cms/file-manager';
             })
-            .catch(() => {
+            .catch((e) => {
                 self.model.data.messageType = 'error';
-                self.model.data.message = 'File upload failed';
+                self.model.data.message = e.response.data.message
+                    || 'File upload failed';
             })
             .finally(() => {
                 this.model.data.uploadInProgress = false;

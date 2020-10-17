@@ -8,7 +8,10 @@ use App\Context\FileManager\Models\FileCollection;
 use App\Context\FileManager\Models\FileModel;
 use App\Context\FileManager\Services\FetchAllFiles;
 use App\Context\FileManager\Services\GetFileArtworkUrl;
+use App\Context\FileManager\Services\SaveUploadedFile;
+use App\Payload\Payload;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 use function assert;
 
@@ -40,5 +43,14 @@ class FileManagerApi
         assert($service instanceof GetFileArtworkUrl);
 
         return $service->get($file, $opt);
+    }
+
+    public function saveUploadedFile(UploadedFileInterface $uploadedFile): Payload
+    {
+        $service = $this->di->get(SaveUploadedFile::class);
+
+        assert($service instanceof SaveUploadedFile);
+
+        return $service->save($uploadedFile);
     }
 }

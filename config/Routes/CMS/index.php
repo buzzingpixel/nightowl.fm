@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Response\CMS\Ajax\GetTwitterAuthAction;
+use App\Http\Response\CMS\Ajax\PostFileManagerUploadAction;
 use App\Http\Response\CMS\Ajax\PostFileUploadAction;
 use App\Http\Response\CMS\Analytics\AnalyticsViewAction;
 use App\Http\Response\CMS\FileManager\FileManagerAction;
@@ -65,6 +66,11 @@ return static function (App $app): void {
         $r->post(
             '/ajax/file-upload',
             PostFileUploadAction::class
+        );
+
+        $r->post(
+            '/ajax/file-manager-upload',
+            PostFileManagerUploadAction::class,
         );
 
         /**
