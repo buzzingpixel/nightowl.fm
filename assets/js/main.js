@@ -3,6 +3,7 @@
 import Analytics from './SetUp/Analytics.js';
 import ConfirmSubmit from './Components/ConfirmSubmit.js';
 import Events from './Events.js';
+import FileManagerUploadField from './Components/FileManagerUploadField.js';
 import FileUploadField from './Components/FileUploadField.js';
 import Flatpickr from './Components/Flatpickr.js';
 import LoadAxios from './SetUp/LoadAxios.js';
@@ -17,6 +18,7 @@ Events();
 LoadAxios();
 SetGlobalData();
 Analytics();
+window.Methods.FileManagerUploadField = FileManagerUploadField;
 window.Methods.FileUploadField = FileUploadField;
 window.Methods.MarkdownTextArea = MarkdownTextArea;
 window.Methods.SimpleTable = SimpleTable;

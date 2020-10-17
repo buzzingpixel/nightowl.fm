@@ -9,6 +9,7 @@ use App\Http\Utilities\Segments\ExtractUriSegments;
 use App\Templating\TwigExtensions\FetchLoggedInUser;
 use App\Templating\TwigExtensions\FormatSimpleTablePostBackValue;
 use App\Templating\TwigExtensions\GetEpisodesForShow;
+use App\Templating\TwigExtensions\GetFileArtworkUrl;
 use App\Templating\TwigExtensions\GetFounders;
 use App\Templating\TwigExtensions\GetPersonProfilePhotoUrl;
 use App\Templating\TwigExtensions\GetRandomEpisode;
@@ -104,6 +105,8 @@ class TwigEnvironmentFactory
         );
 
         $twig->addExtension($di->get(GetShowArtworkUrl::class));
+
+        $twig->addExtension($di->get(GetFileArtworkUrl::class));
 
         $twig->addExtension($di->get(TimeZoneList::class));
 

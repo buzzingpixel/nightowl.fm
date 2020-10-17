@@ -9,7 +9,7 @@ const preventDefault = (e) => {
     e.stopPropagation();
 };
 
-class FileUploadField {
+class FileManagerUploadField {
     constructor (model) {
         if (!SupportsAjaxUploadWithProgress()) {
             model.data.mode = modeIncompatible;
@@ -128,7 +128,7 @@ class FileUploadField {
         formData.append('file', file);
 
         window.axios.post(
-            '/cms/ajax/file-upload',
+            '/cms/ajax/file-manager-upload',
             formData,
             {
                 onUploadProgress (e) {
@@ -138,15 +138,13 @@ class FileUploadField {
                 },
             },
         )
-            .then((resp) => {
-                self.model.data.messageType = 'success';
-                self.model.data.message = resp.data.fileName;
-                self.model.data.filePath = resp.data.filePath;
-                self.model.data.fileName = resp.data.fileName;
+            .then(() => {
+                window.location.href = '/cms/file-manager';
             })
-            .catch(() => {
+            .catch((e) => {
                 self.model.data.messageType = 'error';
-                self.model.data.message = 'File upload failed';
+                self.model.data.message = e.response.data.message
+                    || 'File upload failed';
             })
             .finally(() => {
                 this.model.data.uploadInProgress = false;
@@ -156,5 +154,5 @@ class FileUploadField {
 
 export default (model) => {
     // eslint-disable-next-line no-new
-    new FileUploadField(model);
+    new FileManagerUploadField(model);
 };
