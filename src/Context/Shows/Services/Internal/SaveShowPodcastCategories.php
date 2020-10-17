@@ -10,6 +10,7 @@ use App\Persistence\RecordQueryFactory;
 use App\Persistence\SaveNewRecord;
 use App\Persistence\Shows\ShowPodcastCategoriesRecord;
 use App\Persistence\UuidFactoryWithOrderedTimeCodec;
+use Exception;
 use PDO;
 
 use function array_fill;
@@ -18,6 +19,8 @@ use function array_walk;
 use function count;
 use function implode;
 use function in_array;
+
+// phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
 
 class SaveShowPodcastCategories
 {
@@ -38,6 +41,9 @@ class SaveShowPodcastCategories
         $this->pdo                = $pdo;
     }
 
+    /**
+     * @throws Exception
+     */
     public function save(ShowModel $show): void
     {
         /** @var ShowPodcastCategoriesRecord[] $allPrevious */
@@ -114,6 +120,8 @@ class SaveShowPodcastCategories
 
     /**
      * @param ShowPodcastCategoriesRecord[] $allPrevious
+     *
+     * @throws Exception
      */
     private function insertNew(
         array $allPrevious,

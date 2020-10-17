@@ -52,7 +52,7 @@ class PostFileManagerUploadAction
 
         $response = $this->responseFactory->createResponse(
             $statusCode,
-            $payload->getResult()['message'] ?? '',
+            (string) ($payload->getResult()['message'] ?? ''),
         )
             ->withHeader(
                 'Content-type',
