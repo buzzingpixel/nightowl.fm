@@ -158,10 +158,12 @@ class AddEpisodeToChannel
 
         $image->addChild('url', $imageUrl);
 
-        $item->addChild(
+        $itunesImage = $item->addChild(
             'itunes:image',
-            $imageUrl,
+            '',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
+
+        $itunesImage->addAttribute('href', $imageUrl);
     }
 }

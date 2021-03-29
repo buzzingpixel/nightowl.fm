@@ -200,11 +200,13 @@ class GenerateShowRssFeed
 
         $image->addChild('url', $imageUrl);
 
-        $channel->addChild(
+        $itunesImage = $channel->addChild(
             'itunes:image',
-            $imageUrl,
+            '',
             'http://www.itunes.com/dtds/podcast-1.0.dtd',
         );
+
+        $itunesImage->addAttribute('href', $imageUrl);
 
         $owner = $channel->addChild(
             'itunes:owner',
