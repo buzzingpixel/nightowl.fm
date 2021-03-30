@@ -42,6 +42,12 @@ class SetEpisodePublishedState
 
         $episode->tweetEpisode = true;
 
+        if ($episode->publishAt !== null) {
+            $episode->publishedAt = $episode->publishAt;
+
+            return;
+        }
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $episode->publishedAt = new DateTimeImmutable(
             'now',
