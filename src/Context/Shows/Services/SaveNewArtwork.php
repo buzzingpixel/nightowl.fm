@@ -9,6 +9,8 @@ use Config\General;
 use League\Flysystem\Filesystem;
 use LogicException;
 
+use function array_walk;
+use function ltrim;
 use function pathinfo;
 
 class SaveNewArtwork
@@ -36,7 +38,7 @@ class SaveNewArtwork
 
         if (! $this->filesystem->has($newFileLocation)) {
             throw new LogicException(
-                'New profile photo does not exist'
+                'New show art does not exist'
             );
         }
 
@@ -50,6 +52,8 @@ class SaveNewArtwork
 
         $targetFullPath = $targetPath . '/' . $targetFileName;
 
+        $dirContents = $this->filesystem->listContents($targetPath);
+
         if ($this->filesystem->has($targetFullPath)) {
             $this->filesystem->delete($targetFullPath);
         }
@@ -57,6 +61,22 @@ class SaveNewArtwork
         $this->filesystem->copy(
             $newFileLocation,
             $targetFullPath,
+        );
+
+        array_walk(
+            $dirContents,
+            function (array $item): void {
+                if ($item['type'] !== 'dir') {
+                    return;
+                }
+
+                $absolutePath = '/' . ltrim(
+                    $item['path'],
+                    '/'
+                );
+
+                $this->filesystem->deleteDir($absolutePath);
+            },
         );
 
         $show->artworkFileLocation = $show->id . '/' . $targetFileName;
