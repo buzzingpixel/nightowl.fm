@@ -112,7 +112,7 @@ class ScheduleRunCommand extends Command
     {
         $shouldRun = $this->checkIfModelShouldRun->check($model);
 
-        if ($model->isRunning && $shouldRun) {
+        if ($model->isRunning && ! $shouldRun) {
             $this->output->writeln(
                 '<fg=yellow>' . $model->class . ' is currently running</>'
             );
