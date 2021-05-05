@@ -1,0 +1,4 @@
+#!/usr/local/bin/php74
+<?php
+
+include_once dirname(__DIR__, 2) . '/vendor/squizlabs/php_codesniffer/bin/phpcbf';

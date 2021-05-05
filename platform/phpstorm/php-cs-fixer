@@ -1,0 +1,4 @@
+#!/usr/local/bin/php74
+<?php
+
+include_once dirname(__DIR__, 2) . '/vendor/friendsofphp/php-cs-fixer/php-cs-fixer';

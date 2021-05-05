@@ -9,7 +9,7 @@ use PHPUnit\Runner\BeforeTestHook;
 
 final class BypassFinalListener implements BeforeTestHook
 {
-    public function executeBeforeTest(string $test) : void
+    public function executeBeforeTest(string $test): void
     {
         BypassFinals::enable();
     }
