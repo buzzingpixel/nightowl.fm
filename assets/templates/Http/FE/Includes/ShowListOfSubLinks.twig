@@ -7,34 +7,34 @@
 {# Set up podcast links #}
 {% set subLinks = [{
     href: show.publicFeedUrl,
-    content: 'Subscribe via RSS'
+    content: 'Follow via RSS'
 }] %}
 
 {% if show.itunesLink %}
     {% set subLinks = subLinks|merge([{
         href: show.itunesLink,
-        content: 'Subscribe on Apple Podcasts'
+        content: 'Open on Apple Podcasts'
     }]) %}
 {% endif %}
 
 {% if show.googlePlayLink %}
     {% set subLinks = subLinks|merge([{
         href: show.googlePlayLink,
-        content: 'Subscribe on Google Play'
+        content: 'Open on Google Podcasts'
     }]) %}
 {% endif %}
 
 {% if show.stitcherLink %}
     {% set subLinks = subLinks|merge([{
         href: show.stitcherLink,
-        content: 'Subscribe on Stitcher'
+        content: 'Open on Stitcher'
     }]) %}
 {% endif %}
 
 {% if show.spotifyLink %}
     {% set subLinks = subLinks|merge([{
         href: show.spotifyLink,
-        content: 'Subscribe on Spotify'
+        content: 'Open on Spotify'
     }]) %}
 {% endif %}
 
