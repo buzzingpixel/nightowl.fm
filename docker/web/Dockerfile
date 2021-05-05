@@ -1,7 +1,10 @@
 ############
 # Build base
 ############
-FROM nginx:1.17.5 as base
+FROM --platform=$BUILDPLATFORM nginx:1.19.9 as base
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
 
 # Update bash profile
 COPY ./docker/.profile /root/.profile

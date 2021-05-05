@@ -7,8 +7,6 @@ services:
       context: ./
       dockerfile: ./docker/web/Dockerfile
     container_name: nightowl-web
-    ports:
-      - 27152:27152
     environment:
       HOSTNAME: nightowl-web
     networks:
@@ -58,5 +56,4 @@ volumes:
 
 networks:
   default:
-    external:
       name: proxy

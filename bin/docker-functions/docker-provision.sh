@@ -2,7 +2,11 @@
 
 source ../../dev 2> /dev/null;
 
-function provision() {
+function docker-provision-help {
+    printf "(Ensures dependencies are installed and database is set up)";
+}
+
+function docker-provision() {
     docker exec -it --user root --workdir /opt/project nightowl-php bash -c "composer install";
 
     if [[ "${isMacOs}" = "true" ]]; then

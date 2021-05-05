@@ -31,31 +31,21 @@ allArgs=${@};
 allArgsExceptFirst=${@:2};
 secondArg=${2};
 
-isMacOs=false;
+# Variables
 composeFiles="-f docker-compose.yml -f docker-compose.dev.yml";
 nodeDockerImage="node:13.8.0";
 
-if [[ "$(uname)" = "Darwin" ]] || [[ "$(uname)" = "darwin" ]]; then
-    isMacOs=true;
-    composeFiles="-f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.dev.sync.yml";
-fi
-
-for f in dev_scripts/bash/*; do
+# Source all of our executable files — these should contain functions that can be run
+for f in $(find bin -name '*.sh'); do
     chmod +x ${f};
     source ${f};
 done
 
-if [[ -z "${cmd}" ]]; then
-    printf "${Green}The following commands are available:\n${Yellow}";
-
-    IFS=$'\n'
-    for f in $(declare -F); do
-       printf "  ./dev ${f:11}\n";
-    done
-
-    printf "${Reset}";
-
+# If no command/function name to run was provided, list out the functions available
+if [[ -z "${cmd}" || ${secondArg} == "help" ]]; then
+    source bin/.help;
     exit 0;
 fi
 
+# Run the specified function (${cmd}) and pass it any arguments specified (${allArgsExceptFirst})
 ${cmd} ${allArgsExceptFirst};

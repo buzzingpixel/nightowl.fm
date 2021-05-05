@@ -1,7 +1,10 @@
 ############
 # Build base
 ############
-FROM php:7.4.10-fpm as base
+FROM --platform=$BUILDPLATFORM php:7.4.18-fpm as base
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
 
 # Update bash profile
 COPY ./docker/.profile /root/.profile

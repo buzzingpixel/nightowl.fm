@@ -6,6 +6,8 @@ services:
     image: ubuntu:18.04
     restart: always
     container_name: nightowl-utility
+    ports:
+      - 27152:27152
     volumes:
       - .:/opt/project
       - log-volume:/log-volume
