@@ -78,6 +78,14 @@ class ShowModel
 
     public string $spotifyLink = '';
 
+    public string $patreonLink = '';
+
+    public string $patreonCta = '';
+
+    public string $patreonHeadline = '';
+
+    public string $patreonDescription = '';
+
     /** @var KeywordModel[] */
     private array $keywords = [];
 

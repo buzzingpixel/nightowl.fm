@@ -32,4 +32,12 @@ class ShowRecord extends Record
     public string $stitcher_link = '';
 
     public string $spotify_link = '';
+
+    public string $patreon_link = '';
+
+    public string $patreon_cta = '';
+
+    public string $patreon_headline = '';
+
+    public string $patreon_description = '';
 }
