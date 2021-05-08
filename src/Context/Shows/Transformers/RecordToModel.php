@@ -62,6 +62,14 @@ class RecordToModel
 
         $model->spotifyLink = $record->spotify_link;
 
+        $model->patreonLink = $record->patreon_link;
+
+        $model->patreonCta = $record->patreon_cta;
+
+        $model->patreonHeadline = $record->patreon_headline;
+
+        $model->patreonDescription = $record->patreon_description;
+
         $model->keywords = array_map(
             static function (
                 KeywordRecord $keywordRecord

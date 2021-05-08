@@ -37,6 +37,14 @@ class ModelToRecord
 
         $record->spotify_link = $model->spotifyLink;
 
+        $record->patreon_link = $model->patreonLink;
+
+        $record->patreon_cta = $model->patreonCta;
+
+        $record->patreon_headline = $model->patreonHeadline;
+
+        $record->patreon_description = $model->patreonDescription;
+
         return $record;
     }
 }
