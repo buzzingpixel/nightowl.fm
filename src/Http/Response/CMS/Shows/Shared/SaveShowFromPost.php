@@ -72,6 +72,10 @@ class SaveShowFromPost
             'keywords' => (string) ($post['keywords'] ?? ''),
             'hosts' => (array) ($post['hosts'] ?? []),
             'podcast_categories' => (array) ($post['podcast_categories'] ?? []),
+            'patreon_link' => (string) ($post['patreon_link'] ?? ''),
+            'patreon_cta' => (string) ($post['patreon_cta'] ?? ''),
+            'patreon_headline' => (string) ($post['patreon_headline'] ?? ''),
+            'patreon_description' => (string) ($post['patreon_description'] ?? ''),
         ];
 
         $hosts = [];
@@ -204,6 +208,10 @@ class SaveShowFromPost
         $model->googlePlayLink         = $data['google_play_link'];
         $model->stitcherLink           = $data['stitcher_link'];
         $model->spotifyLink            = $data['spotify_link'];
+        $model->patreonLink            = $data['patreon_link'];
+        $model->patreonCta             = $data['patreon_cta'];
+        $model->patreonHeadline        = $data['patreon_headline'];
+        $model->patreonDescription     = $data['patreon_description'];
         $model->setKeywordsFromCommaString($data['keywords']);
         $model->hosts = $hosts;
 

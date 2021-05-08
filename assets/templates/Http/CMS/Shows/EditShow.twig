@@ -146,6 +146,28 @@
                 options: podcastCategoryOptions,
                 value: categories,
             },
+            {
+                label: 'Patreon Link',
+                name: 'patreon_link',
+                value: show.patreonLink ?? '',
+            },
+            {
+                label: 'Patreon CTA',
+                subLabel: 'Defaults to "Support On Patreon"',
+                name: 'patreon_cta',
+                value: show.patreonCta ?? '',
+            },
+            {
+                label: 'Patreon Headline',
+                name: 'patreon_headline',
+                value: show.patreonHeadline ?? '',
+            },
+            {
+                label: 'Patreon Description',
+                name: 'patreon_description',
+                type: 'markdown',
+                value: show.patreonDescription ?? '',
+            },
         ],
     } only %}
 {% endblock %}
