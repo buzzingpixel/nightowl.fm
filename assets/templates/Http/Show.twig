@@ -14,6 +14,30 @@
     }]) %}
 {% endfor %}
 
+{% set patreonContent %}
+    {% if show.patreonLink %}
+        {% if show.patreonHeadline %}
+            <div class="podcast-layout__strip">
+                <p class="util-text-large">{{ show.patreonHeadline|smartypants }}</p>
+            </div>
+        {% endif %}
+        {% if show.patreonDescription %}
+            <div class="podcast-layout__strip">
+                {{ show.patreonDescription|markdownParse|smartypants|widont }}
+            </div>
+        {% endif %}
+        <div class="podcast-layout__strip">
+            <a
+                href="{{ show.patreonLink }}"
+                class="orange-button"
+                target="_blank"
+            >
+                {{ show.patreonCta ?: 'Support On Patreon'|smartypants }}
+            </a>
+        </div>
+    {% endif %}
+{% endset %}
+
 {% block feContent %}
     <div class="podcast-layout">
         <div class="podcast-layout__row">
@@ -69,6 +93,8 @@
                     <div class="podcast-layout__strip">
                         <p>{{ show.description|smartypants|widont }}</p>
                     </div>
+
+                    {{ patreonContent }}
 
                     {# Mobile Hosts #}
                     <div class="podcast-layout__strip">
@@ -143,6 +169,8 @@
                         <div class="podcast-layout__strip">
                             <p>{{ show.description|smartypants|widont }}</p>
                         </div>
+
+                        {{ patreonContent }}
 
                     </div>
 
