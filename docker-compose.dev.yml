@@ -1,34 +1,6 @@
 version: '3.7'
 
 services:
-  traefik:
-    container_name: nightowl-traefik
-    image: traefik:2.4.8
-    labels:
-      - traefik.enable=true
-      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
-      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-    ports:
-      - target: 443
-        published: 27152
-        mode: host
-      - target: 8080
-        published: 27154
-        mode: host
-    command:
-      - --api.insecure=true
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --providers.file.filename=traefik_dynamic_conf.yml
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --accesslog
-      - --log
-    volumes:
-      - ./docker/certs:/certs
-      - ./docker-traefik-dev-conf.yml:/traefik_dynamic_conf.yml
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
   web:
     build:
       target: dev
@@ -36,11 +8,32 @@ services:
       - .:/opt/project:delegated
       - storage-volume:/opt/project/storage
       - vendor-volume:/opt/project/vendor
+    networks:
+      - web
+      - default
     labels:
       - traefik.enable=true
-      - traefik.http.routers.app-secure-local.entrypoints=websecure
-      - traefik.http.routers.app-secure-local.tls=true
-      - traefik.http.routers.app-secure-local.rule=Host(`nightowl.localtest.me`)
+      - traefik.docker.network=traefik-dev_default
+
+      # Non-SSL Local
+      - traefik.http.routers.nightowl-local.entrypoints=web
+      - traefik.http.routers.nightowl-local.rule=Host(`nightowl.localtest.me`)
+      - traefik.http.routers.nightowl-local.middlewares=https-redirect
+
+      # Non-SSL Ngrok
+      - traefik.http.routers.nightowl-ngrok.entrypoints=web
+      - traefik.http.routers.nightowl-ngrok.rule=Host(`nightowl.ngrok.io`)
+      - traefik.http.routers.nightowl-ngrok.middlewares=https-redirect
+
+      # SSL Local
+      - traefik.http.routers.nightowl-secure-local.entrypoints=websecure
+      - traefik.http.routers.nightowl-secure-local.tls=true
+      - traefik.http.routers.nightowl-secure-local.rule=Host(`nightowl.localtest.me`)
+
+      # SSL Ngrok
+      - traefik.http.routers.nightowl-secure-ngrok.entrypoints=websecure
+      - traefik.http.routers.nightowl-secure-ngrok.tls=true
+      - traefik.http.routers.nightowl-secure-ngrok.rule=Host(`nightowl.ngrok.io`)
 
   php:
     build:
@@ -92,3 +85,7 @@ volumes:
   node-modules-volume:
   storage-volume:
   vendor-volume:
+
+networks:
+  web:
+    name: traefik-dev_default
