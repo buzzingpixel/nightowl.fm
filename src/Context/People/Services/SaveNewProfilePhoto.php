@@ -48,17 +48,17 @@ class SaveNewProfilePhoto
 
         $targetPath = $publicDir . '/files/profile-photos/' . $person->id;
 
-        $this->filesystem->createDir($targetPath);
-
         $targetFileName = $this->slugify->slugify(
             $person->getFullName()
         ) . '.' . $ext;
 
         $targetFullPath = $targetPath . '/' . $targetFileName;
 
-        if ($this->filesystem->has($targetFullPath)) {
-            $this->filesystem->delete($targetFullPath);
+        if ($this->filesystem->has($targetPath)) {
+            $this->filesystem->deleteDir($targetPath);
         }
+
+        $this->filesystem->createDir($targetPath);
 
         $this->filesystem->copy(
             $newFileLocation,
