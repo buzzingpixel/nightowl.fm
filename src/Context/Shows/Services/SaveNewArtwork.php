@@ -46,17 +46,17 @@ class SaveNewArtwork
 
         $targetPath = $publicDir . '/files/show-art/' . $show->id;
 
-        $this->filesystem->createDir($targetPath);
-
         $targetFileName = $show->slug . '.' . $ext;
 
         $targetFullPath = $targetPath . '/' . $targetFileName;
 
         $dirContents = $this->filesystem->listContents($targetPath);
 
-        if ($this->filesystem->has($targetFullPath)) {
-            $this->filesystem->delete($targetFullPath);
+        if ($this->filesystem->has($targetPath)) {
+            $this->filesystem->deleteDir($targetPath);
         }
+
+        $this->filesystem->createDir($targetPath);
 
         $this->filesystem->copy(
             $newFileLocation,
