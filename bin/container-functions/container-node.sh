@@ -27,7 +27,7 @@ function container-node() {
             -v nightowl_node-modules-volume:/app/node_modules \
             -v nightowl_yarn-cache-volume:/usr/local/share/.cache/yarn -w /app \
             --network=proxy \
-            ${nodeDockerImage} bash -c "${allArgs}";
+            ${nodeDockerImage} bash -c "${allArgsExceptFirst}";
     fi
 
     return 0;
