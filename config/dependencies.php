@@ -110,7 +110,8 @@ return [
 
         $rollBarAccessToken = getenv('ROLLBAR_ACCESS_TOKEN');
 
-        if ($rollBarAccessToken !== false) {
+        /** @phpstan-ignore-next-line */
+        if (! empty($rollBarAccessToken)) {
             Rollbar::init(
                 [
                     'access_token' => $rollBarAccessToken,

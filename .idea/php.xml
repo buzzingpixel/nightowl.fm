@@ -166,6 +166,7 @@
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/twig-markdown" />
       <path value="$PROJECT_DIR$/vendor/daverandom/resume" />
       <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/vendor/.unison.vimeo.6d3a3996866c23ea8886d118890a5326.unison.tmp/psalm" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

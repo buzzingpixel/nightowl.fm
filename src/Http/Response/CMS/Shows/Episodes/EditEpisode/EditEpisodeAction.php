@@ -94,14 +94,19 @@ class EditEpisodeAction
 
         $meta->title = $title . ' | CMS';
 
-        $deleteAction = '';
+        // $deleteAction = '';
 
-        if (! $episode->isPublished) {
-            $deleteAction = '/cms/shows/episodes/' .
-                $show->id .
-                '/delete/' .
-                $episode->id;
-        }
+        // if (! $episode->isPublished) {
+        //     $deleteAction = '/cms/shows/episodes/' .
+        //         $show->id .
+        //         '/delete/' .
+        //         $episode->id;
+        // }
+
+        $deleteAction = '/cms/shows/episodes/' .
+            $show->id .
+            '/delete/' .
+            $episode->id;
 
         $response = $this->responseFactory->createResponse();
 
