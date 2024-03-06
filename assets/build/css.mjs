@@ -182,7 +182,7 @@ export default (prod) => {
             if (prod !== true) {
                 fs.writeFileSync(
                     `${cssOutputPath}/dev-cache-break.txt`,
-                    Date.now(),
+                    Date.now().toString(),
                 );
             }
 
