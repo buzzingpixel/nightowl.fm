@@ -26,9 +26,9 @@ jobs:
           docker buildx build
           --platform=linux/amd64
           --build-arg BUILDKIT_INLINE_CACHE=1
-          --cache-from ghcr.io/tjdraper/nightowl.fm-app
+          --cache-from ghcr.io/buzzingpixel/nightowl.fm-app
           --file docker/application/Dockerfile
-          --tag ghcr.io/tjdraper/nightowl.fm-app
+          --tag ghcr.io/buzzingpixel/nightowl.fm-app
           --push
           .
 
@@ -37,9 +37,9 @@ jobs:
           docker buildx build
           --platform=linux/amd64
           --build-arg BUILDKIT_INLINE_CACHE=1
-          --cache-from ghcr.io/tjdraper/nightowl.fm-db
+          --cache-from ghcr.io/buzzingpixel/nightowl.fm-db
           --file docker/db/Dockerfile
-          --tag ghcr.io/tjdraper/nightowl.fm-db
+          --tag ghcr.io/buzzingpixel/nightowl.fm-db
           --push
           .
 
@@ -48,8 +48,8 @@ jobs:
           docker buildx build
           --platform=linux/amd64
           --build-arg BUILDKIT_INLINE_CACHE=1
-          --cache-from ghcr.io/tjdraper/nightowl.fm-utility
+          --cache-from ghcr.io/buzzingpixel/nightowl.fm-utility
           --file docker/utility/Dockerfile
-          --tag ghcr.io/tjdraper/nightowl.fm-utility
+          --tag ghcr.io/buzzingpixel/nightowl.fm-utility
           --push
           .

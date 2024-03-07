@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-app
+    image: ghcr.io/buzzingpixel/nightowl.fm-app
     container_name: nightowl-app
     environment:
       ENABLE_PHP_DEV_CONFIG: 1
@@ -33,7 +33,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-app
+    image: ghcr.io/buzzingpixel/nightowl.fm-app
     container_name: app-queue-consumer-1
     environment:
       - ENABLE_PHP_DEV_CONFIG=1
@@ -54,7 +54,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-db
+    image: ghcr.io/buzzingpixel/nightowl.fm-db
     container_name: nightowl-db
     environment:
       HOSTNAME: nightowl-db

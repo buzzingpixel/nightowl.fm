@@ -10,34 +10,34 @@ function docker-build() {
     WORK_DIR="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)";
 
     # Run the app build
-    printf "${Cyan}Building ghcr.io/tjdraper/nightowl.fm-app${Reset}\n";
+    printf "${Cyan}Building ghcr.io/buzzingpixel/nightowl.fm-app${Reset}\n";
     DOCKER_BUILDKIT=1 docker build \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
-        --cache-from ghcr.io/tjdraper/nightowl.fm-app \
+        --cache-from ghcr.io/buzzingpixel/nightowl.fm-app \
         --file docker/application/Dockerfile \
-        --tag ghcr.io/tjdraper/nightowl.fm-app \
+        --tag ghcr.io/buzzingpixel/nightowl.fm-app \
         ${WORK_DIR};
-    printf "${Green}Finished building ghcr.io/tjdraper/nightowl.fm-app${Reset}\n\n";
+    printf "${Green}Finished ghcr.io/buzzingpixel/nightowl.fm-app${Reset}\n\n";
 
     # Run the db build
-    printf "${Cyan}Building ghcr.io/tjdraper/nightowl.fm-db${Reset}\n";
+    printf "${Cyan}Building ghcr.io/buzzingpixel/nightowl.fm-db${Reset}\n";
     DOCKER_BUILDKIT=1 docker build \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
-        --cache-from ghcr.io/tjdraper/nightowl.fm-db \
+        --cache-from ghcr.io/buzzingpixel/nightowl.fm-db \
         --file docker/db/Dockerfile \
-        --tag ghcr.io/tjdraper/nightowl.fm-db \
+        --tag ghcr.io/buzzingpixel/nightowl.fm-db \
         ${WORK_DIR};
-    printf "${Green}Finished building ghcr.io/tjdraper/nightowl.fm-db${Reset}\n\n";
+    printf "${Green}Finished building ghcr.io/buzzingpixel/nightowl.fm-db${Reset}\n\n";
 
     # Run the utility build
-    printf "${Cyan}Building ghcr.io/tjdraper/nightowl.fm-utility${Reset}\n";
+    printf "${Cyan}Building ghcr.io/buzzingpixel/nightowl.fm-utility${Reset}\n";
     DOCKER_BUILDKIT=1 docker build \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
-        --cache-from ghcr.io/tjdraper/nightowl.fm-utility \
+        --cache-from ghcr.io/buzzingpixel/nightowl.fm-utility \
         --file docker/utility/Dockerfile \
-        --tag ghcr.io/tjdraper/nightowl.fm-utility \
+        --tag ghcr.io/buzzingpixel/nightowl.fm-utility \
         ${WORK_DIR};
-    printf "${Green}Finished building ghcr.io/tjdraper/nightowl.fm-utility${Reset}\n\n";
+    printf "${Green}Finished building ghcr.io/buzzingpixel/nightowl.fm-utility${Reset}\n\n";
 
     return 0;
 }

@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-utility
+    image: ghcr.io/buzzingpixel/nightowl.fm-utility
     volumes:
       - episodes-volume:/episodes-volume
       - files-volume:/files-volume
@@ -61,7 +61,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-app
+    image: ghcr.io/buzzingpixel/nightowl.fm-app
     environment:
       HOSTNAME: nightowl-app
     volumes:
@@ -81,7 +81,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-app
+    image: ghcr.io/buzzingpixel/nightowl.fm-app
     environment:
       - HOSTNAME=app-queue-consumer-1
     volumes:
@@ -105,7 +105,7 @@ services:
     env_file:
       - .env
       - .env.local
-    image: ghcr.io/tjdraper/nightowl.fm-db
+    image: ghcr.io/buzzingpixel/nightowl.fm-db
     environment:
       HOSTNAME: nightowl-db
       POSTGRES_PASSWORD: ${DB_PASSWORD}
