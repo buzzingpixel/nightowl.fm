@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+if [[ ${secondArg} == "help" ]]; then
+    if ! _function_exists ${cmd}; then
+        printf "${Red}That command does not exist.${Reset}\n";
+
+        exit 1;
+    fi
+
+    if _function_exists "${cmd}-help-extended"; then
+        printf "\n";
+        printf "${Cyan}./dev ${cmd} ${Yellow}${Reset}";
+        printf "\n";
+        ${cmd}-help-extended;
+        printf "\n";
+    elif _function_exists "${cmd}-help"; then
+        printf "${Cyan}./dev ${cmd} ${Yellow}";
+        ${cmd}-help;
+    else
+        printf "${Cyan}./dev ${cmd} ${Yellow}(no help data exists)";
+    fi
+
+    printf "${Reset}\n";
+
+    exit 0;
+fi
+
+printf "${Green}The following commands are available:\n${Reset}";
+
+IFS=$'\n'
+for f in $(declare -F); do
+    func=${f:11};
+
+    if [[ ${func} == "_function_exists" ]]; then
+        continue;
+    fi
+
+    if [[ ${func} == *-help ]]; then
+        continue;
+    fi
+
+    if [[ ${func} == *-help-extended ]]; then
+        continue;
+    fi
+
+    if [[ ${func} == _* ]]; then
+        continue;
+    fi
+
+    printf "  ${Cyan}./dev ${func} ${Yellow}";
+
+    if _function_exists "${func}-help"; then
+        ${func}-help
+    fi
+
+    printf "${Reset}\n";
+done
+
+printf "${Reset}";
+printf "To get more information about a command, use 'help' as the first argument.";
+printf "\n";

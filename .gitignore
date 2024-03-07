@@ -14,7 +14,7 @@
 
 .php_cs.cache
 .phpunit.result.cache
-/.env
+/.env.local
 /*-workspace
 /node_modules
 /*.sublime-*

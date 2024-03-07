@@ -1,0 +1,78 @@
+version: '3.7'
+
+services:
+  app:
+    restart: always
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-app
+    container_name: nightowl-app
+    environment:
+      ENABLE_PHP_DEV_CONFIG: 1
+      HOSTNAME: nightowl-app
+    ports:
+      - "27152:80"
+    volumes:
+      - .:/var/www:delegated
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-dev_default
+      - traefik.http.routers.nightowl_local.entrypoints=web
+      - traefik.http.routers.nightowl_local.rule=Host(`nightowl.localtest.me`)
+      - traefik.http.routers.nightowl_local.middlewares=https-redirect
+      - traefik.http.routers.nightowl_local-secure.entrypoints=websecure
+      - traefik.http.routers.nightowl_local-secure.tls=true
+      - traefik.http.routers.nightowl_local-secure.rule=Host(`nightowl.localtest.me`)
+    networks:
+      - traefik
+      - default
+
+  app-queue-consumer-1:
+    restart: always
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-app
+    container_name: app-queue-consumer-1
+    environment:
+      - ENABLE_PHP_DEV_CONFIG=1
+      - HOSTNAME=app-queue-consumer-1
+    volumes:
+      - .:/var/www:delegated
+    healthcheck:
+      disable: true
+      test: "1"
+    entrypoint: >-
+      /bin/bash -c
+      "echo 'while /usr/local/bin/php /var/www/cli queue:run --quiet 2>&1; do sleep 0.2; done' > /runner.sh
+      && chmod +x /runner.sh
+      && /runner.sh"
+
+  db:
+    restart: always
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-db
+    container_name: nightowl-db
+    environment:
+      HOSTNAME: nightowl-db
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "27153:5432"
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    networks:
+      traefik:
+      default:
+        aliases:
+          - nightowl-db
+
+volumes:
+  db-volume:
+
+networks:
+  traefik:
+    name: traefik-dev_default
+    external: true

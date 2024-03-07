@@ -1,0 +1,129 @@
+version: '3.7'
+
+services:
+  utility:
+    deploy:
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-utility
+    volumes:
+      - episodes-volume:/episodes-volume
+      - files-volume:/files-volume
+      - storage-volume:/storage-volume
+
+  app:
+    deploy:
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
+      labels:
+        ## Traefik config ##
+        - traefik.enable=true
+        - traefik.http.services.nightowl_prod.loadbalancer.server.port=80
+        - traefik.docker.lbswarm=true
+
+        ## Redirect non-www to www
+        # WWW Redirect Middleware
+        - traefik.http.middlewares.nightowl_www_redirect_regex.redirectregex.regex=^http(s?)://nightowl.fm/(.*)
+        - traefik.http.middlewares.nightowl_www_redirect_regex.redirectregex.replacement=https://www.nightowl.fm/$${2}
+        - traefik.http.middlewares.nightowl_www_redirect_regex.redirectregex.permanent=true
+        # Insecure redirect
+        - traefik.http.routers.nightowl_www_redirect_router.entrypoints=web
+        - traefik.http.routers.nightowl_www_redirect_router.rule=Host(`nightowl.fm`)
+        - traefik.http.routers.nightowl_www_redirect_router.middlewares=nightowl_www_redirect_regex
+        # Secure redirect
+        - traefik.http.routers.nightowl_secure_www_redirect_router.entrypoints=websecure
+        - traefik.http.routers.nightowl_secure_www_redirect_router.rule=Host(`nightowl.fm`)
+        - traefik.http.routers.nightowl_secure_www_redirect_router.tls=true
+        - traefik.http.routers.nightowl_secure_www_redirect_router.middlewares=nightowl_www_redirect_regex
+        ## END Redirect non-www to www
+
+        - traefik.http.routers.nightowl_prod.entrypoints=web
+        - traefik.http.routers.nightowl_prod.rule=Host(`www.nightowl.fm`)
+        - traefik.http.routers.nightowl_prod.middlewares=https-redirect
+        - traefik.http.routers.nightowl_prod_secure.entrypoints=websecure
+        - traefik.http.routers.nightowl_prod_secure.tls=true
+        - traefik.http.routers.nightowl_prod_secure.rule=Host(`www.nightowl.fm`)
+        ## HSTS Settings
+        - traefik.http.middlewares.nightowl_hsts.headers.stsincludesubdomains=true
+        - traefik.http.middlewares.nightowl_hsts.headers.stspreload=true
+        - traefik.http.middlewares.nightowl_hsts.headers.stsseconds=31536000
+        ## X-Content-Type-Options
+        - traefik.http.middlewares.nightowl_x_content_type.headers.contentTypeNosniff=true
+        ## Set the middlewares for HSTS and X-Content-Type-Options
+        - traefik.http.routers.nightowl_prod_secure.middlewares=nightowl_hsts,nightowl_x_content_type
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-app
+    environment:
+      HOSTNAME: nightowl-app
+    volumes:
+      - episodes-volume:/var/www/episodes
+      - files-volume:/var/www/public/files
+      - storage-volume:/var/www/storage
+    networks:
+      - traefik
+      - default
+
+  app-queue-consumer-1:
+    deploy:
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-app
+    environment:
+      - HOSTNAME=app-queue-consumer-1
+    volumes:
+      - episodes-volume:/var/www/episodes
+      - files-volume:/var/www/public/files
+      - storage-volume:/var/www/storage
+    healthcheck:
+      disable: true
+    entrypoint: >-
+      /bin/bash -c
+      "echo 'while /usr/local/bin/php /var/www/cli queue:run --quiet 2>&1; do sleep 0.2; done' > /runner.sh
+      && chmod +x /runner.sh
+      && /runner.sh"
+
+  db:
+    deploy:
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/tjdraper/nightowl.fm-db
+    environment:
+      HOSTNAME: nightowl-db
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    networks:
+      traefik:
+      default:
+        aliases:
+          - nightowl-db
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+
+volumes:
+  db-volume:
+  episodes-volume:
+  files-volume:
+  storage-volume:
