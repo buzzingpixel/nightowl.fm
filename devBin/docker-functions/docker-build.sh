@@ -19,6 +19,16 @@ function docker-build() {
         ${WORK_DIR};
     printf "${Green}Finished ghcr.io/buzzingpixel/nightowl.fm-app${Reset}\n\n";
 
+    # Run the app build
+    printf "${Cyan}Building ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner${Reset}\n";
+    DOCKER_BUILDKIT=1 docker build \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
+        --cache-from ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner \
+        --file docker/schedule-runner/Dockerfile \
+        --tag ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner \
+        ${WORK_DIR};
+    printf "${Green}Finished ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner${Reset}\n\n";
+
     # Run the db build
     printf "${Cyan}Building ghcr.io/buzzingpixel/nightowl.fm-db${Reset}\n";
     DOCKER_BUILDKIT=1 docker build \

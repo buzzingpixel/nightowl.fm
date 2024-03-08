@@ -28,6 +28,22 @@ services:
       - traefik
       - default
 
+  app-scheduled-task-runner:
+    restart: always
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner
+    container_name: nightowl-app-scheduled-task-runner
+    environment:
+      ENABLE_PHP_DEV_CONFIG: 1
+      HOSTNAME: nightowl-app-scheduled-task-runner
+    volumes:
+      - .:/var/www:delegated
+    healthcheck:
+      disable: true
+      test: "1"
+
   app-queue-consumer-1:
     restart: always
     env_file:

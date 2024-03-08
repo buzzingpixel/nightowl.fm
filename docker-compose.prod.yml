@@ -72,6 +72,25 @@ services:
       - traefik
       - default
 
+  app-scheduled-task-runner:
+    deploy:
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
+    env_file:
+      - .env
+      - .env.local
+    image: ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner
+    environment:
+      HOSTNAME: nightowl-app-scheduled-task-runner
+    volumes:
+      - episodes-volume:/var/www/episodes
+      - files-volume:/var/www/public/files
+      - storage-volume:/var/www/storage
+    healthcheck:
+      disable: true
+
   app-queue-consumer-1:
     deploy:
       rollback_config:

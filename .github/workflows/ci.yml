@@ -32,6 +32,17 @@ jobs:
           --push
           .
 
+      - name: Build schedule-runner image
+        run: >
+          docker buildx build
+          --platform=linux/amd64
+          --build-arg BUILDKIT_INLINE_CACHE=1
+          --cache-from ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner
+          --file docker/schedule-runner/Dockerfile
+          --tag ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner
+          --push
+          .
+
       - name: Build db image
         run: >
           docker buildx build
@@ -86,6 +97,7 @@ jobs:
 
             # Pull Images
             docker pull ghcr.io/buzzingpixel/nightowl.fm-app;
+            docker pull ghcr.io/buzzingpixel/nightowl.fm-app-schedule-runner;
             docker pull ghcr.io/buzzingpixel/nightowl.fm-db;
             docker pull ghcr.io/buzzingpixel/nightowl.fm-utility;
 
