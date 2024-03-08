@@ -130,4 +130,10 @@ COPY docker/application/services.d /etc/services.d/
 COPY ./docker/.profile /root/.profile
 COPY ./docker/.profile /root/.bashrc
 
+# Add composer
+COPY --from=composer:1.10.5 /usr/bin/composer /usr/bin/composer
+
+# Install composer dependencies
+RUN composer install --no-interaction --no-ansi --no-progress --no-dev --optimize-autoloader
+
 ENTRYPOINT ["/init"]
