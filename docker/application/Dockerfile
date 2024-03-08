@@ -1,3 +1,20 @@
+##################
+# frontend-builder
+##################
+FROM --platform=$TARGETPLATFORM node:20.11.1 AS frontend-builder
+
+# Set our workdir
+WORKDIR /var/www
+
+# Copy the application into the container
+COPY . /var/www
+
+# Install dependencies
+RUN yarn
+
+# Run the frontend build
+RUN yarn build
+
 ###################
 # application build
 ###################
@@ -135,5 +152,9 @@ COPY --from=composer:1.10.5 /usr/bin/composer /usr/bin/composer
 
 # Install composer dependencies
 RUN composer install --no-interaction --no-ansi --no-progress --no-dev --optimize-autoloader
+
+# Copy the front-end build
+COPY --from=frontend-builder /var/www/public/assets/css public/assets/css
+COPY --from=frontend-builder /var/www/public/assets/js public/assets/js
 
 ENTRYPOINT ["/init"]
