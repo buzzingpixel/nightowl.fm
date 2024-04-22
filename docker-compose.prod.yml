@@ -65,6 +65,7 @@ services:
     environment:
       HOSTNAME: nightowl-app
     volumes:
+      - /root/certbot/var/www/letsencrypt:/var/www/letsencrypt
       - episodes-volume:/var/www/episodes
       - files-volume:/var/www/public/files
       - storage-volume:/var/www/storage
